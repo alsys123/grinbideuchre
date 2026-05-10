@@ -320,6 +320,13 @@
         opacity: 0.7;
     }
 
+    .card-value {
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: var(--accent);
+        text-align: center;
+    }
+
     .card.playable {
         cursor: pointer;
     }
@@ -334,13 +341,29 @@
         outline-offset: -2px;
     }
 
-    /* South hand */
+    /* Hands */
+    #north-hand {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        padding-top: 4px;
+    }
+
     #south-hand {
         display: flex;
         gap: 8px;
         justify-content: center;
         align-items: flex-end;
         padding-top: 4px;
+    }
+
+    #east-hand, #west-hand {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 0 4px;
     }
 
     /* Bidding area */
@@ -352,8 +375,8 @@
         background: rgba(0,0,0,0.9);
         border-radius: 14px;
         padding: 12px 16px;
-        min-width: 260px;
-        max-width: 320px;
+        min-width: 300px;
+        max-width: 380px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.7);
         z-index: 20;
         display: none;
@@ -370,6 +393,38 @@
         font-size: 0.85rem;
         text-align: center;
         color: var(--text-muted);
+    }
+
+    #bidding-suit-section {
+        margin: 8px 0;
+        padding: 8px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    #bidding-suit-section label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+    }
+
+    #bidding-suit-select {
+        width: 100%;
+        margin-bottom: 6px;
+    }
+
+    #bidding-tricks-section {
+        margin: 8px 0;
+    }
+
+    #bidding-tricks-section label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+        text-align: center;
     }
 
     #bidding-controls {
@@ -513,7 +568,7 @@
                 <span class="label">Us (North–South)</span>
                 <span class="score" id="scoreboard-us">0</span>
             </div>
-            <div id="status-line">Welcome to Bid Euchre. Click “New Hand” to begin.</div>
+            <div id="status-line">Welcome to Bid Euchre. Click "New Hand" to begin.</div>
             <div class="team them">
                 <span class="label">Them (East–West)</span>
                 <span class="score" id="scoreboard-them">0</span>
@@ -551,8 +606,23 @@
 
             <div id="bidding-area">
                 <h3>Your Bid</h3>
-                <p>Choose a bid (tricks) or pass. Highest bid becomes declarer and chooses trump.</p>
-                <div id="bidding-controls"></div>
+                <p>Choose a suit and number of tricks to bid, or pass.</p>
+                
+                <div id="bidding-suit-section">
+                    <label for="bidding-suit-select">Trump Suit:</label>
+                    <select id="bidding-suit-select">
+                        <option value="0">Clubs ♣</option>
+                        <option value="1">Diamonds ♦</option>
+                        <option value="2">Hearts ♥</option>
+                        <option value="3">Spades ♠</option>
+                    </select>
+                </div>
+
+                <div id="bidding-tricks-section">
+                    <label>Tricks (3–6):</label>
+                    <div id="bidding-controls"></div>
+                </div>
+                
                 <div style="text-align:center;margin-top:6px;font-size:0.8rem;color:var(--text-muted);" id="bidding-info"></div>
             </div>
         </div>
@@ -765,6 +835,17 @@
         });
     }
 
+    function getCardStrength(card) {
+        let strength = 0;
+        if (RANKS[card.rank] === "A") strength = 6;
+        else if (RANKS[card.rank] === "K") strength = 5;
+        else if (RANKS[card.rank] === "Q") strength = 4;
+        else if (RANKS[card.rank] === "J") strength = 3;
+        else if (RANKS[card.rank] === "10") strength = 2;
+        else strength = 1;
+        return strength;
+    }
+
     // --- Rendering ---
     function clearTrickDisplay() {
         ["north", "east", "south", "west"].forEach(pos => {
@@ -832,9 +913,13 @@
             const cornerEl = document.createElement("div");
             cornerEl.className = "card-corner";
             cornerEl.textContent = SUIT_NAMES[card.suit];
+            const valueEl = document.createElement("div");
+            valueEl.className = "card-value";
+            valueEl.textContent = "★".repeat(getCardStrength(card));
 
             cardEl.appendChild(rankEl);
             cardEl.appendChild(suitEl);
+            cardEl.appendChild(valueEl);
             cardEl.appendChild(cornerEl);
 
             if (legalSet.has(cardToString(card))) {
@@ -998,297 +1083,218 @@
 
     function showBiddingUI(bestBid) {
         const area = $("bidding-area");
-        const controls = $("bidding-controls");
-        const info = $("bidding-info");
         area.style.display = "block";
+        const controls = $("bidding-controls");
         controls.innerHTML = "";
 
-        const currentText = bestBid
-            ? "Current best: " + bestBid.player + " (" + bestBid.tricks + " in " + SUIT_NAMES[bestBid.suit] + ")"
-            : "No bids yet. Minimum bid: 3 tricks.";
-        info.textContent = currentText;
-
-        const minBid = bestBid ? bestBid.tricks + 1 : 3;
-        for (let t = minBid; t <= 6; t++) {
+        // Add trick buttons
+        for (let t = 3; t <= 6; t++) {
             const btn = document.createElement("button");
             btn.className = "bid-btn";
-            btn.textContent = t;
+            btn.textContent = t + " tricks";
             btn.addEventListener("click", () => {
                 playClick();
-                chooseBid(t, bestBid);
+                const suit = parseInt($("bidding-suit-select").value);
+                const bid = { player: "South", tricks: t, suit };
+                if (!bestBid || bid.tricks > bestBid.tricks) {
+                    log("South bids " + t + " in " + SUIT_NAMES[suit] + ".", "bidding");
+                } else {
+                    log("South bids " + t + " in " + SUIT_NAMES[suit] + " (better bid made).", "bidding");
+                }
+                area.style.display = "none";
+                biddingRound(1, bid);
             });
             controls.appendChild(btn);
         }
 
+        // Pass button
         const passBtn = document.createElement("button");
         passBtn.id = "bidding-pass";
         passBtn.className = "bid-btn";
         passBtn.textContent = "Pass";
         passBtn.addEventListener("click", () => {
             playClick();
-            chooseBid(0, bestBid);
+            log("South passes.", "bidding");
+            area.style.display = "none";
+            biddingRound(1, bestBid);
         });
         controls.appendChild(passBtn);
     }
 
-    function chooseBid(tricks, bestBid) {
-        const area = $("bidding-area");
-        area.style.display = "none";
-        if (tricks === 0) {
-            log("South passes.", "bidding");
-        } else {
-            // choose suit via simple heuristic
-            const evalHand = evaluateHandStrength(state.hands.South);
-            const bid = { player: "South", tricks, suit: evalHand.bestSuit };
-            if (!bestBid || bid.tricks > bestBid.tricks) {
-                bestBid = bid;
-                log("South bids " + tricks + " in " + SUIT_NAMES[bid.suit] + ".", "bidding");
-            } else {
-                log("South passes (cannot overcall).", "bidding");
-            }
-        }
-        // continue bidding
-        const startIndex = (state.dealerIndex + 1) % 4;
-        const step = (PLAYERS.indexOf("South") - startIndex + 4) % 4;
-        biddingRound(step + 1, bestBid);
-    }
-
-    // --- Play ---
+    // --- Play phase ---
     function startPlay() {
         setPhase("playing");
-        clearTrickDisplay();
         state.trick = {};
-        state.tricksWon.NS = 0;
-        state.tricksWon.EW = 0;
-        // leader is left of dealer
-        const leaderIndex = (state.dealerIndex + 1) % 4;
-        state.currentPlayer = PLAYERS[leaderIndex];
-        state.trickLeader = state.currentPlayer;
+        state.trickLeader = null;
+        const startIndex = (state.dealerIndex + 1) % 4;
+        state.currentPlayer = PLAYERS[startIndex];
         renderHands();
         renderInfo();
-        setStatus("Play phase: " + state.currentPlayer + " leads.");
-        log("Play begins. " + state.currentPlayer + " leads.", "play");
-        if (state.currentPlayer !== "South") {
-            schedule(aiPlayTurn, 1);
+        setStatus("Play! " + state.currentPlayer + " leads.");
+        playRound();
+    }
+
+    function playRound() {
+        if (Object.keys(state.trick).length === 4) {
+            // trick complete
+            determineTrickWinner();
+            return;
+        }
+
+        if (state.currentPlayer === "South") {
+            // human plays
+            renderHands();
+        } else {
+            // AI plays
+            schedule(() => {
+                const hand = state.hands[state.currentPlayer];
+                const leadSuit = state.trick[state.trickLeader || ""] ? state.trick[state.trickLeader].suit : null;
+                const plays = legalPlays(hand, leadSuit);
+                if (!plays.length) return;
+                // AI tries to win if leading, otherwise plays highest trump, else highest suit
+                let choice = plays[0];
+                if (!state.trickLeader) {
+                    // leading, play highest
+                    choice = plays.reduce((best, c) => cardValue(c, leadSuit) > cardValue(best, leadSuit) ? c : best);
+                } else {
+                    // not leading
+                    const trumpCards = plays.filter(c => isTrump(c));
+                    if (trumpCards.length) {
+                        choice = trumpCards.reduce((best, c) => cardValue(c, leadSuit) > cardValue(best, leadSuit) ? c : best);
+                    } else {
+                        choice = plays[plays.length - 1]; // lowest if can't win
+                    }
+                }
+                playCard(state.currentPlayer, choice);
+            }, 1);
         }
     }
 
     function playCard(player, card) {
-        // remove from hand
-        const hand = state.hands[player];
-        const idx = hand.findIndex(c => c === card);
-        if (idx >= 0) hand.splice(idx, 1);
         state.trick[player] = card;
+        if (!state.trickLeader) state.trickLeader = player;
+        
+        // remove from hand
+        state.hands[player] = state.hands[player].filter(c => !(c.suit === card.suit && c.rank === card.rank));
+        
         renderHands();
         renderTrick();
         renderInfo();
+        
+        // next player
+        const idx = PLAYERS.indexOf(state.currentPlayer);
+        state.currentPlayer = PLAYERS[(idx + 1) % 4];
+        schedule(playRound, 1);
+    }
 
-        if (Object.keys(state.trick).length === 4) {
-            // trick complete
-            schedule(resolveTrick, 1.1);
+    function determineTrickWinner() {
+        const winnerSuit = state.trump;
+        const leftSuit = (winnerSuit === 0 || winnerSuit === 3) ? (winnerSuit === 0 ? 3 : 0) : (winnerSuit === 1 ? 2 : 1);
+        const leadSuit = state.trick[state.trickLeader].suit;
+
+        let winner = state.trickLeader;
+        let bestValue = cardValue(state.trick[winner], leadSuit);
+
+        for (const [p, c] of Object.entries(state.trick)) {
+            if (p === winner) continue;
+            const value = cardValue(c, leadSuit);
+            if (value > bestValue) {
+                winner = p;
+                bestValue = value;
+            }
+        }
+
+        // score
+        const isNS = (winner === "North" || winner === "South");
+        if (isNS) {
+            state.tricksWon.NS++;
         } else {
-            // next player
-            const next = nextPlayer(player);
-            state.currentPlayer = next;
-            renderInfo();
-            setStatus("Play phase: " + state.currentPlayer + " to play.");
-            if (next !== "South") {
-                schedule(aiPlayTurn, 1);
-            }
-        }
-    }
-
-    function nextPlayer(player) {
-        const idx = PLAYERS.indexOf(player);
-        return PLAYERS[(idx + 1) % 4];
-    }
-
-    function aiPlayTurn() {
-        const player = state.currentPlayer;
-        if (state.phase !== "playing") return;
-        const trickPlayers = Object.keys(state.trick);
-        const leadPlayer = state.trickLeader;
-        const leadCard = leadPlayer ? state.trick[leadPlayer] : null;
-        const leadSuit = leadCard ? leadCard.suit : null;
-        const hand = state.hands[player];
-        const legal = legalPlays(hand, leadSuit);
-        // simple AI: if partner winning, play low; else play highest legal
-        let chosen;
-        if (trickPlayers.length === 0) {
-            // lead: pick highest trump-like card or highest card
-            chosen = legal.slice().sort((a,b) => cardValue(b, a.suit) - cardValue(a, a.suit))[0];
-        } else {
-            const winner = currentTrickWinner();
-            const partner = (player === "North" || player === "South") ? (player === "North" ? "South" : "North") : (player === "East" ? "West" : "East");
-            if (winner === partner) {
-                // partner winning: play lowest legal
-                chosen = legal.slice().sort((a,b) => cardValue(a, leadSuit) - cardValue(b, leadSuit))[0];
-            } else {
-                // try to win: play highest legal
-                chosen = legal.slice().sort((a,b) => cardValue(b, leadSuit) - cardValue(a, leadSuit))[0];
-            }
-        }
-        playCard(player, chosen);
-    }
-
-    function currentTrickWinner() {
-        const entries = Object.entries(state.trick);
-        if (entries.length === 0) return null;
-        const leadPlayer = state.trickLeader;
-        const leadSuit = state.trick[leadPlayer].suit;
-        let bestPlayer = leadPlayer;
-        let bestCard = state.trick[leadPlayer];
-        let bestVal = cardValue(bestCard, leadSuit);
-        for (const [player, card] of entries) {
-            const val = cardValue(card, leadSuit);
-            if (val > bestVal) {
-                bestVal = val;
-                bestCard = card;
-                bestPlayer = player;
-            }
-        }
-        return bestPlayer;
-    }
-
-    function resolveTrick() {
-        const winner = currentTrickWinner();
-        const nsTeam = (winner === "North" || winner === "South");
-        if (nsTeam) state.tricksWon.NS++;
-        else state.tricksWon.EW++;
-        log(winner + " wins the trick. (NS: " + state.tricksWon.NS + ", EW: " + state.tricksWon.EW + ")", "play");
-        setStatus(winner + " wins the trick. NS: " + state.tricksWon.NS + ", EW: " + state.tricksWon.EW + ".");
-        state.trick = {};
-        clearTrickDisplay();
-        if (state.hands.North.length === 0 &&
-            state.hands.East.length === 0 &&
-            state.hands.South.length === 0 &&
-            state.hands.West.length === 0) {
-            // hand over
-            schedule(scoreHand, 1.2);
-        } else {
-            state.trickLeader = winner;
-            state.currentPlayer = winner;
-            renderHands();
-            renderInfo();
-            if (winner !== "South") {
-                schedule(aiPlayTurn, 1);
-            }
-        }
-    }
-
-    function scoreHand() {
-        const declarerTeamNS = (state.declarer === "North" || state.declarer === "South");
-        const tricksNS = state.tricksWon.NS;
-        const tricksEW = state.tricksWon.EW;
-        const bid = state.declarerBid || 3;
-        let nsDelta = 0;
-        let ewDelta = 0;
-
-        if (declarerTeamNS) {
-            if (tricksNS >= bid) {
-                nsDelta = bid;
-                log("NS made their contract (" + tricksNS + " tricks vs bid " + bid + "). +"+bid+" points.", "score");
-            } else {
-                nsDelta = -bid;
-                log("NS failed their contract (" + tricksNS + " tricks vs bid " + bid + "). -"+bid+" points.", "score");
-            }
-        } else {
-            if (tricksEW >= bid) {
-                ewDelta = bid;
-                log("EW made their contract (" + tricksEW + " tricks vs bid " + bid + "). +"+bid+" points.", "score");
-            } else {
-                ewDelta = -bid;
-                log("EW failed their contract (" + tricksEW + " tricks vs bid " + bid + "). -"+bid+" points.", "score");
-            }
+            state.tricksWon.EW++;
         }
 
-        state.scores.NS += nsDelta;
-        state.scores.EW += ewDelta;
-        renderInfo();
-
-        let msg = "Hand over. NS " + tricksNS + " tricks, EW " + tricksEW + ". ";
-        msg += "Score now NS " + state.scores.NS + " – EW " + state.scores.EW + ".";
-        setStatus(msg);
-
-        if (state.scores.NS >= 32 || state.scores.EW >= 32) {
-            const winner = state.scores.NS >= 32 ? "North–South" : "East–West";
-            log("Game over! " + winner + " win.", "game");
-            showToast("Game over! " + winner + " win.");
-            setPhase("idle");
-        } else {
-            // next dealer
-            state.dealerIndex = (state.dealerIndex + 1) % 4;
-            renderInfo();
-        }
-    }
-
-    // --- New hand / game ---
-    function newHand() {
-        clearTimeouts();
-        deal();
-        setPhase("bidding");
-        state.trump = null;
-        state.declarer = null;
-        state.declarerBid = null;
-        state.tricksWon.NS = 0;
-        state.tricksWon.EW = 0;
+        log(winner + " wins the trick.", "trick");
+        state.currentPlayer = winner;
+        state.trickLeader = null;
         state.trick = {};
         clearTrickDisplay();
         renderHands();
         renderInfo();
-        setStatus("New hand dealt. Bidding will begin.");
-        log("New hand dealt. Dealer: " + PLAYERS[state.dealerIndex] + ".", "deal");
-        startBidding();
+
+        // hand over?
+        if (state.tricksWon.NS + state.tricksWon.EW === 6) {
+            schedule(endHand, 1.5);
+        } else {
+            schedule(playRound, 1.2);
+        }
     }
 
-    function newGame() {
+    function endHand() {
+        const tricksBid = state.declarerBid;
+        const isDeclarerNS = (state.declarer === "North" || state.declarer === "South");
+
+        let pointsNS = 0, pointsEW = 0;
+        if (isDeclarerNS) {
+            if (state.tricksWon.NS >= tricksBid) {
+                pointsNS = tricksBid;
+            } else {
+                pointsEW = 6; // they euchred us
+            }
+        } else {
+            if (state.tricksWon.EW >= tricksBid) {
+                pointsEW = tricksBid;
+            } else {
+                pointsNS = 6; // we euchred them
+            }
+        }
+
+        state.scores.NS += pointsNS;
+        state.scores.EW += pointsEW;
+
+        log("Hand end. " + state.declarer + " bid " + tricksBid + " and won " + (isDeclarerNS ? state.tricksWon.NS : state.tricksWon.EW) + ". NS: " + pointsNS + ", EW: " + pointsEW + ".", "end");
+
+        renderInfo();
+        setPhase("idle");
+        setStatus("Hand over. Score: Us " + state.scores.NS + ", Them " + state.scores.EW + ".");
+
+        if (state.scores.NS >= 32) {
+            setStatus("We won the game!");
+        } else if (state.scores.EW >= 32) {
+            setStatus("They won the game!");
+        }
+    }
+
+    // --- Init & events ---
+    $("btn-new-hand").addEventListener("click", () => {
+        clearTimeouts();
+        deal();
+        state.dealerIndex = (state.dealerIndex + 1) % 4;
+        startBidding();
+    });
+
+    $("btn-new-game").addEventListener("click", () => {
         clearTimeouts();
         state.scores.NS = 0;
         state.scores.EW = 0;
         state.dealerIndex = 0;
-        renderInfo();
-        $("log").innerHTML = "";
-        setStatus("New game started. Click “New Hand” to deal.");
-        setPhase("idle");
-        clearTrickDisplay();
-        state.hands.North = [];
-        state.hands.East = [];
-        state.hands.South = [];
-        state.hands.West = [];
+        deal();
+        startBidding();
+    });
+
+    $("opt-cardback").addEventListener("change", (e) => {
+        state.options.cardback = e.target.value;
         renderHands();
-        log("New game started. First dealer: North.", "game");
-    }
+    });
 
-    // --- Options ---
-    function initOptions() {
-        $("opt-cardback").addEventListener("change", e => {
-            state.options.cardback = e.target.value;
-            renderHands();
-        });
-        $("opt-speed").addEventListener("change", e => {
-            state.options.speed = e.target.value;
-        });
-        $("opt-sound").addEventListener("change", e => {
-            state.options.sound = e.target.checked;
-        });
-    }
+    $("opt-speed").addEventListener("change", (e) => {
+        state.options.speed = e.target.value;
+    });
 
-    // --- Init ---
-    function init() {
-        $("btn-new-hand").addEventListener("click", () => {
-            playClick();
-            newHand();
-        });
-        $("btn-new-game").addEventListener("click", () => {
-            playClick();
-            newGame();
-        });
-        initOptions();
-        renderHands();
-        renderInfo();
-    }
+    $("opt-sound").addEventListener("change", (e) => {
+        state.options.sound = e.target.checked;
+    });
 
-    init();
+    // start with welcome
+    renderInfo();
 })();
 </script>
 </body>
