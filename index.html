@@ -161,6 +161,18 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
   padding:10px 36px; cursor:pointer; transition:background .15s; }
 #deal-again-btn:hover { background:var(--gold); color:#000; }
 
+/* START SCREEN */
+#start-screen { position:absolute; inset:0; background:rgba(0,0,0,.85);
+  display:flex; align-items:center; justify-content:center; z-index:50; border-radius:16px; }
+#start-screen.hidden { display:none; }
+.sbox { text-align:center; }
+.stitle { font-size:48px; font-weight:bold; color:var(--gold-light); margin-bottom:12px; text-shadow:0 2px 6px rgba(0,0,0,.8); }
+.ssub { font-size:16px; color:rgba(245,240,232,.75); margin-bottom:32px; }
+#new-game-btn { background:var(--gold-dark); border:2px solid var(--gold); border-radius:40px;
+  color:var(--cream); font-family:Georgia,serif; font-size:18px; font-weight:bold; letter-spacing:1px;
+  padding:14px 48px; cursor:pointer; transition:all .15s; box-shadow:0 6px 20px rgba(0,0,0,.6); }
+#new-game-btn:hover { background:var(--gold); color:#000; transform:scale(1.08); box-shadow:0 8px 28px rgba(0,0,0,.8); }
+
 @keyframes trickWin { 0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)} }
 @keyframes dealIn { from{transform:scale(.5) translateY(-55px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
 .din { animation:dealIn .3s cubic-bezier(.34,1.4,.64,1) both; }
@@ -206,6 +218,15 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
   <div id="message" class="hidden"></div>
   <button id="play-btn" class="hidden">Play Selected Card</button>
 
+  <!-- Start Screen -->
+  <div id="start-screen">
+    <div class="sbox">
+      <div class="stitle">♠ Bid Euchre ♥</div>
+      <div class="ssub">You vs. North vs. East &amp; West</div>
+      <button id="new-game-btn">New Game</button>
+    </div>
+  </div>
+
   <!-- Bid Modal -->
   <div id="bid-modal" class="overlay hidden">
     <div class="mbox">
@@ -233,7 +254,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 </div>
 
 <script>
-// ═══════════════════════════ BID EUCHRE — Google-Sites-safe ═══════════════════════════
+// ═══════════════════════════ BID EUCHRE — Google-Sites-safe ═════════════════════════
 
 const SUITS=['♠','♥','♦','♣'], RANKS=['9','10','J','Q','K','A'];
 const RED=new Set(['♥','♦']);
@@ -375,6 +396,7 @@ function deal(){
   $('play-btn').classList.add('hidden');
   $('result-overlay').classList.add('hidden');
   $('message').classList.add('hidden');
+  $('start-screen').classList.add('hidden');
   const dk=shuffle(deck());
   PL.forEach((p,i)=>G.H[p]=dk.slice(i*6,i*6+6));
   const di=PL.indexOf(G.dealer);
@@ -502,6 +524,7 @@ function scoreHand(){
 }
 
 $('deal-again-btn').addEventListener('click',deal);
+$('new-game-btn').addEventListener('click',deal);
 
 // Scale to fit — key for Google Sites iframe
 function scale(){
@@ -517,7 +540,6 @@ function scale(){
 }
 window.addEventListener('resize',scale);
 scale();
-deal();
 </script>
 </body>
 </html>
