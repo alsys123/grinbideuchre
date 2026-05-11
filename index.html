@@ -1,548 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bid Euchre</title>
-<style>
-:root {
-  --gold:#c9a84c; --gold-light:#e8c96a; --gold-dark:#8b6914;
-  --cream:#f5f0e8; --cw:72px; --ch:108px;
-}
-* { box-sizing:border-box; margin:0; padding:0; }
-html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
-  font-family:Georgia,'Times New Roman',serif; color:var(--cream); user-select:none; -webkit-user-select:none; }
-#wrap {
-  position:relative; width:900px; height:620px; margin:0 auto;
-  background:radial-gradient(ellipse at center,#1e6634 0%,#0e3a1e 55%,#061a0b 100%);
-  border:2px solid var(--gold-dark); border-radius:18px; overflow:hidden;
-}
-#wrap::before { content:''; position:absolute; inset:0; border-radius:16px;
-  background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 6px),
-    repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 6px);
-  pointer-events:none; z-index:0; }
-#wrap::after { content:''; position:absolute; inset:8px; border:1px solid rgba(201,168,76,.3);
-  border-radius:12px; pointer-events:none; z-index:0; }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bid Euchre</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div id="wrap">
 
-/* SCOREBOARD */
-#scoreboard { position:absolute; top:10px; left:50%; transform:translateX(-50%);
-  display:flex; z-index:10; background:rgba(0,0,0,.72); border:1px solid var(--gold-dark);
-  border-radius:10px; overflow:hidden; }
-.st { padding:6px 22px; text-align:center; border-right:1px solid var(--gold-dark); }
-.st:last-child { border-right:none; }
-.sl { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); }
-.sv { font-size:22px; font-weight:bold; color:var(--cream); line-height:1.2; }
-.sk { font-size:9px; color:rgba(245,240,232,.55); }
-
-/* PANELS */
-#trump-display,#bid-display {
-  position:absolute; top:10px; background:rgba(0,0,0,.72);
-  border:1px solid var(--gold-dark); border-radius:10px; padding:6px 12px; text-align:center; z-index:10; }
-#trump-display { right:14px; min-width:60px; }
-#bid-display   { left:14px;  min-width:80px; }
-.pl { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); }
-#trump-suit { font-size:26px; line-height:1.1; }
-#trump-hl   { font-size:9px; color:rgba(245,240,232,.6); }
-#bid-info   { font-size:11px; color:var(--cream); margin-top:2px; }
-
-/* PLAYER NAMES */
-.pname { font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
-  color:var(--gold); text-shadow:0 1px 3px rgba(0,0,0,.9); white-space:nowrap;
-  position:absolute; z-index:6; }
-.pname.active { color:#fff; text-shadow:0 0 10px var(--gold-light); }
-#name-south { bottom:122px; left:50%; transform:translateX(-50%); }
-#name-north { top:110px;   left:50%; transform:translateX(-50%); }
-#name-west  { left:24px;   top:50%; transform:translateY(-50%) rotate(-90deg); }
-#name-east  { right:24px;  top:50%; transform:translateY(-50%) rotate(90deg);  }
-
-/* HANDS */
-.hand { position:absolute; display:flex; align-items:center; z-index:5; }
-#hand-south { bottom:10px; left:50%; transform:translateX(-50%); flex-direction:row; }
-#hand-north { top:68px;    left:50%; transform:translateX(-50%); flex-direction:row; }
-#hand-west  { left:20px;   top:50%; transform:translateY(-50%);  flex-direction:column; }
-#hand-east  { right:20px;  top:50%; transform:translateY(-50%);  flex-direction:column; }
-#hand-south .card { margin-left:-16px; } #hand-south .card:first-child { margin-left:0; }
-#hand-north .card { margin-left:-20px; } #hand-north .card:first-child { margin-left:0; }
-#hand-west  .card { margin-top:-58px;  } #hand-west  .card:first-child { margin-top:0; }
-#hand-east  .card { margin-top:-58px;  } #hand-east  .card:first-child { margin-top:0; }
-
-/* CARD */
-.card { width:var(--cw); height:var(--ch); border-radius:7px; position:relative;
-  cursor:default; flex-shrink:0; filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));
-  transition:transform .16s ease,filter .16s ease; }
-.card svg { width:100%; height:100%; display:block; border-radius:7px; }
-.card.playable { cursor:pointer; }
-.card.playable:hover { transform:translateY(-16px) scale(1.05); z-index:20; filter:drop-shadow(0 10px 18px rgba(0,0,0,.7)); }
-.card.selected  { transform:translateY(-20px) scale(1.05); z-index:21; filter:drop-shadow(0 0 14px #e8c96a) drop-shadow(0 10px 18px rgba(0,0,0,.7)); }
-
-/* TRICK CENTER */
-#trick-area { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  width:320px; height:260px; z-index:6; pointer-events:none; }
-.tslot { position:absolute; width:var(--cw); height:var(--ch); }
-#ts-south { bottom:0;  left:50%; transform:translateX(-50%); }
-#ts-north { top:0;     left:50%; transform:translateX(-50%); }
-#ts-west  { left:0;    top:50%; transform:translateY(-50%); }
-#ts-east  { right:0;   top:50%; transform:translateY(-50%); }
-
-/* TRICK PILES */
-#trick-piles { position:absolute; bottom:132px; left:50%; transform:translateX(-50%);
-  display:flex; gap:36px; z-index:5; pointer-events:none; }
-.tpile { text-align:center; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(245,240,232,.5); }
-.tpc { font-size:17px; font-weight:bold; color:var(--gold); display:block; }
-
-/* PLAY BTN */
-#play-btn { position:absolute; bottom:130px; left:50%; transform:translateX(-50%);
-  background:var(--gold-dark); border:1px solid var(--gold); border-radius:30px;
-  color:var(--cream); font-family:Georgia,serif; font-size:12px; letter-spacing:1px;
-  padding:7px 26px; cursor:pointer; z-index:20; transition:background .15s; }
-#play-btn:hover { background:var(--gold); color:#000; }
-#play-btn.hidden { display:none; }
-
-/* MESSAGE */
-#message { position:absolute; bottom:150px; left:50%; transform:translateX(-50%);
-  background:rgba(0,0,0,.84); border:1px solid var(--gold-dark); border-radius:30px;
-  padding:7px 22px; font-size:13px; color:var(--gold-light); z-index:40;
-  white-space:nowrap; pointer-events:none; transition:opacity .35s; }
-#message.hidden { opacity:0; }
-
-/* SPEECH */
-.speech { position:absolute; background:rgba(0,0,0,.82); border:1px solid var(--gold-dark);
-  border-radius:8px; padding:5px 10px; font-size:11px; color:var(--cream);
-  z-index:30; pointer-events:none; white-space:nowrap; transition:opacity .35s; }
-.speech.hidden { opacity:0; }
-#sp-north { top:178px; left:50%; transform:translateX(-50%); }
-#sp-west  { left:150px; top:50%; transform:translateY(-50%); }
-#sp-east  { right:150px; top:50%; transform:translateY(-50%); }
-
-/* OVERLAYS — absolute inside #wrap, not fixed */
-.overlay { position:absolute; inset:0; background:rgba(0,0,0,.72);
-  display:flex; align-items:center; justify-content:center; z-index:50; border-radius:16px; }
-.overlay.hidden { display:none; }
-.mbox { background:linear-gradient(145deg,#0d3020,#1a5c2e); border:1px solid var(--gold);
-  border-radius:18px; padding:26px 34px; text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,.8); min-width:290px;
-  animation:mpop .28s ease both; }
-@keyframes mpop { from{transform:scale(.82);opacity:0} to{transform:scale(1);opacity:1} }
-.mtitle { font-size:20px; font-weight:bold; color:var(--gold-light); margin-bottom:4px; }
-.msub   { font-size:12px; color:rgba(245,240,232,.65); margin-bottom:18px; }
-
-#bid-buttons { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-bottom:12px; }
-.bbtn { background:rgba(0,0,0,.45); border:1px solid var(--gold-dark); border-radius:9px;
-  color:var(--cream); font-family:Georgia,serif; font-size:16px; font-weight:bold;
-  padding:9px 0; cursor:pointer; transition:background .13s,transform .13s; }
-.bbtn:hover:not(:disabled) { background:var(--gold-dark); border-color:var(--gold); transform:translateY(-2px); }
-.bbtn:disabled { opacity:.28; cursor:default; }
-.bbtn.pbtn { grid-column:1/-1; background:rgba(80,0,0,.35); border-color:#7a2020; font-size:13px; letter-spacing:1px; }
-.bbtn.pbtn:hover { background:#7a2020; border-color:#c0392b; }
-
-#trump-picker,#highlow-picker { gap:10px; justify-content:center; margin-bottom:12px; flex-wrap:wrap; }
-.tbtn { font-size:30px; padding:8px 12px; background:rgba(0,0,0,.45);
-  border:2px solid var(--gold-dark); border-radius:10px; cursor:pointer; line-height:1;
-  transition:transform .12s,border-color .12s; }
-.tbtn:hover { transform:scale(1.12); border-color:var(--gold); }
-.red-s  { color:#e03030; } .blk-s { color:#f0ece0; }
-.hlbtn { padding:10px 26px; background:rgba(0,0,0,.45); border:2px solid var(--gold-dark);
-  border-radius:10px; color:var(--cream); font-family:Georgia,serif; font-size:15px;
-  cursor:pointer; transition:background .13s,transform .13s; }
-.hlbtn:hover { background:var(--gold-dark); transform:scale(1.05); }
-
-/* RESULT */
-.rbox { background:linear-gradient(145deg,#0d3020,#1a5c2e); border:2px solid var(--gold);
-  border-radius:20px; padding:32px 48px; text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,.85); animation:mpop .35s ease both; }
-.rtitle  { font-size:28px; font-weight:bold; color:var(--gold-light); margin-bottom:6px; }
-.rdetail { font-size:14px; color:var(--cream); margin-bottom:18px; line-height:1.5; max-width:300px; }
-.rscores { display:flex; gap:34px; justify-content:center; margin-bottom:20px; }
-.rsi { text-align:center; }
-.rsit { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:3px; }
-.rsin { font-size:34px; font-weight:bold; color:#fff; }
-#deal-again-btn { background:var(--gold-dark); border:1px solid var(--gold); border-radius:30px;
-  color:var(--cream); font-family:Georgia,serif; font-size:14px; letter-spacing:1px;
-  padding:10px 36px; cursor:pointer; transition:background .15s; }
-#deal-again-btn:hover { background:var(--gold); color:#000; }
-
-/* START SCREEN */
-#start-screen { position:absolute; inset:0; background:rgba(0,0,0,.85);
-  display:flex; align-items:center; justify-content:center; z-index:50; border-radius:16px; }
-#start-screen.hidden { display:none; }
-.sbox { text-align:center; }
-.stitle { font-size:48px; font-weight:bold; color:var(--gold-light); margin-bottom:12px; text-shadow:0 2px 6px rgba(0,0,0,.8); }
-.ssub { font-size:16px; color:rgba(245,240,232,.75); margin-bottom:32px; }
-#new-game-btn { background:var(--gold-dark); border:2px solid var(--gold); border-radius:40px;
-  color:var(--cream); font-family:Georgia,serif; font-size:18px; font-weight:bold; letter-spacing:1px;
-  padding:14px 48px; cursor:pointer; transition:all .15s; box-shadow:0 6px 20px rgba(0,0,0,.6); }
-#new-game-btn:hover { background:var(--gold); color:#000; transform:scale(1.08); box-shadow:0 8px 28px rgba(0,0,0,.8); }
-
-@keyframes trickWin { 0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)} }
-@keyframes dealIn { from{transform:scale(.5) translateY(-55px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
-.din { animation:dealIn .3s cubic-bezier(.34,1.4,.64,1) both; }
-</style>
-</head>
-<body>
-<div id="wrap">
-
-  <div id="scoreboard">
-    <div class="st"><div class="sl">You &amp; North</div><div class="sv" id="score-us">0</div><div class="sk" id="tricks-us">0 tricks</div></div>
-    <div class="st"><div class="sl">East &amp; West</div><div class="sv" id="score-them">0</div><div class="sk" id="tricks-them">0 tricks</div></div>
-  </div>
-
-  <div id="trump-display"><div class="pl">Trump</div><div id="trump-suit">&#x2014;</div><div id="trump-hl"></div></div>
-  <div id="bid-display"><div class="pl">Contract</div><div id="bid-info">&#x2014;</div></div>
-
-  <div class="pname" id="name-south">You</div>
-  <div class="pname" id="name-north">North</div>
-  <div class="pname" id="name-west">West</div>
-  <div class="pname" id="name-east">East</div>
-
-  <div class="hand" id="hand-south"></div>
-  <div class="hand" id="hand-north"></div>
-  <div class="hand" id="hand-west"></div>
-  <div class="hand" id="hand-east"></div>
-
-  <div id="trick-area">
-    <div class="tslot" id="ts-south"></div>
-    <div class="tslot" id="ts-north"></div>
-    <div class="tslot" id="ts-west"></div>
-    <div class="tslot" id="ts-east"></div>
-  </div>
-
-  <div class="speech hidden" id="sp-north"></div>
-  <div class="speech hidden" id="sp-west"></div>
-  <div class="speech hidden" id="sp-east"></div>
-
-  <div id="trick-piles">
-    <div class="tpile"><span class="tpc" id="pile-us">0</span>Your Team</div>
-    <div class="tpile"><span class="tpc" id="pile-them">0</span>Opponents</div>
-  </div>
-
-  <div id="message" class="hidden"></div>
-  <button id="play-btn" class="hidden">Play Selected Card</button>
-
-  <!-- Start Screen -->
-  <div id="start-screen">
-    <div class="sbox">
-      <div class="stitle">♠ Bid Euchre ♥</div>
-      <div class="ssub">You vs. North vs. East &amp; West</div>
-      <button id="new-game-btn">New Game</button>
-    </div>
-  </div>
-
-  <!-- Bid Modal -->
-  <div id="bid-modal" class="overlay hidden">
-    <div class="mbox">
-      <div class="mtitle" id="modal-title">Your Bid</div>
-      <div class="msub"   id="modal-sub">Choose a bid or pass</div>
-      <div id="bid-buttons"></div>
-      <div id="highlow-picker" style="display:none;"></div>
-      <div id="trump-picker"   style="display:none;"></div>
-    </div>
-  </div>
-
-  <!-- Result -->
-  <div id="result-overlay" class="overlay hidden">
-    <div class="rbox">
-      <div class="rtitle"  id="result-title">Hand Complete</div>
-      <div class="rdetail" id="result-detail"></div>
-      <div class="rscores">
-        <div class="rsi"><div class="rsit">You &amp; North</div><div class="rsin" id="result-us">0</div></div>
-        <div class="rsi"><div class="rsit">East &amp; West</div><div class="rsin" id="result-them">0</div></div>
+      <div id="scoreboard">
+	<div class="st"><div class="sl">You &amp; North</div><div class="sv" id="score-us">0</div><div class="sk" id="tricks-us">0 tricks</div></div>
+	<div class="st"><div class="sl">East &amp; West</div><div class="sv" id="score-them">0</div><div class="sk" id="tricks-them">0 tricks</div></div>
       </div>
-      <button id="deal-again-btn">Deal Next Hand</button>
+
+      <div id="trump-display"><div class="pl">Trump</div><div id="trump-suit">&#x2014;</div><div id="trump-hl"></div></div>
+      <div id="bid-display"><div class="pl">Contract</div><div id="bid-info">&#x2014;</div></div>
+
+      <div class="pname" id="name-south">You</div>
+      <div class="pname" id="name-north">North</div>
+      <div class="pname" id="name-west">West</div>
+      <div class="pname" id="name-east">East</div>
+
+      <div class="hand" id="hand-south"></div>
+      <div class="hand" id="hand-north"></div>
+      <div class="hand" id="hand-west"></div>
+      <div class="hand" id="hand-east"></div>
+
+      <div id="trick-area">
+	<div class="tslot" id="ts-south"></div>
+	<div class="tslot" id="ts-north"></div>
+	<div class="tslot" id="ts-west"></div>
+	<div class="tslot" id="ts-east"></div>
+      </div>
+
+      <div class="speech hidden" id="sp-north"></div>
+      <div class="speech hidden" id="sp-west"></div>
+      <div class="speech hidden" id="sp-east"></div>
+
+      <div id="trick-piles">
+	<div class="tpile"><span class="tpc" id="pile-us">0</span>Your Team</div>
+	<div class="tpile"><span class="tpc" id="pile-them">0</span>Opponents</div>
+      </div>
+
+      <div id="message" class="hidden"></div>
+      <button id="play-btn" class="hidden">Play Selected Card</button>
+
+      <!-- Start Screen -->
+      <div id="start-screen">
+	<div class="sbox">
+	  <div class="stitle">♠ Bid Euchre ♥</div>
+	  <div class="ssub">You vs. North vs. East &amp; West</div>
+	  <button id="new-game-btn">New Game</button>
+	</div>
+      </div>
+
+      <!-- Bid Modal -->
+      <div id="bid-modal" class="overlay hidden">
+	<div class="mbox">
+	  <div class="mtitle" id="modal-title">Your Bid</div>
+	  <div class="msub"   id="modal-sub">Choose a bid or pass</div>
+	  <div id="bid-buttons"></div>
+	  <div id="highlow-picker" style="display:none;"></div>
+	  <div id="trump-picker"   style="display:none;"></div>
+	</div>
+      </div>
+
+      <!-- Result -->
+      <div id="result-overlay" class="overlay hidden">
+	<div class="rbox">
+	  <div class="rtitle"  id="result-title">Hand Complete</div>
+	  <div class="rdetail" id="result-detail"></div>
+	  <div class="rscores">
+            <div class="rsi"><div class="rsit">You &amp; North</div><div class="rsin" id="result-us">0</div></div>
+            <div class="rsi"><div class="rsit">East &amp; West</div><div class="rsin" id="result-them">0</div></div>
+	  </div>
+	  <button id="deal-again-btn">Deal Next Hand</button>
+	</div>
+      </div>
+
     </div>
-  </div>
 
-</div>
+    <script src="utils.js"></script>
+    <script src="grinbideuchre.js"></script>
+    <script src="bidding.js"></script>
 
-<script>
-// ═══════════════════════════ BID EUCHRE — Google-Sites-safe ═════════════════════════
 
-const SUITS=['♠','♥','♦','♣'], RANKS=['9','10','J','Q','K','A'];
-const RED=new Set(['♥','♦']);
-
-function sCol(s){return RED.has(s)?'#cc2222':'#111';}
-
-function cardSVG(rank,suit,down){
-  if(down) return `<svg viewBox="0 0 72 108" xmlns="http://www.w3.org/2000/svg">
-    <rect width="72" height="108" rx="7" fill="#1c3e60"/>
-    <rect x="3" y="3" width="66" height="102" rx="6" fill="none" stroke="#2a5e90" stroke-width="1.2"/>
-    <pattern id="bp${Math.random().toString(36).slice(2,6)}" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-      <path d="M5 0L10 5L5 10L0 5Z" fill="none" stroke="#2a5e90" stroke-width="0.7"/>
-    </pattern>
-    <rect x="5" y="5" width="62" height="98" rx="5" fill="#1c3e60" opacity="0.7"/>
-    <path d="M5 5L67 5M5 103L67 103M5 5L5 103M67 5L67 103" stroke="#2a5e90" stroke-width="0.5"/>
-    <line x1="5" y1="5" x2="67" y2="103" stroke="#2a5e90" stroke-width="0.4"/>
-    <line x1="67" y1="5" x2="5" y2="103" stroke="#2a5e90" stroke-width="0.4"/>
-    <rect x="20" y="30" width="32" height="48" rx="3" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.3"/>
-    <text x="36" y="60" text-anchor="middle" font-family="Georgia,serif" font-size="18" fill="#c9a84c" opacity="0.35">&#10022;</text>
-  </svg>`;
-
-  const c=sCol(suit);
-  const cr=`
-    <text x="5" y="14" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="${c}">${rank}</text>
-    <text x="5" y="25" font-family="Georgia,serif" font-size="11" fill="${c}">${suit}</text>
-    <g transform="translate(67,94) rotate(180)">
-      <text x="5" y="14" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="${c}">${rank}</text>
-      <text x="5" y="25" font-family="Georgia,serif" font-size="11" fill="${c}">${suit}</text>
-    </g>`;
-
-  let mid='';
-  if(rank==='A'){
-    mid=`<text x="36" y="65" text-anchor="middle" font-family="Georgia,serif" font-size="38" fill="${c}">${suit}</text>`;
-  } else if(rank==='9'){
-    mid=`<text x="36" y="44" text-anchor="middle" font-family="Georgia,serif" font-size="18" fill="${c}">${suit}</text>
-         <text x="36" y="76" text-anchor="middle" font-family="Georgia,serif" font-size="18" fill="${c}">${suit}</text>`;
-  } else if(rank==='10'){
-    [[22,30],[50,30],[22,47],[50,47],[36,39],[22,65],[50,65],[22,82],[50,82],[36,56]].forEach(([x,y])=>{
-      mid+=`<text x="${x}" y="${y}" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="${c}">${suit}</text>`;
-    });
-  } else {
-    const labels={J:'JACK',Q:'QUEEN',K:'KING'};
-    mid=`<rect x="13" y="22" width="46" height="64" rx="4" fill="none" stroke="${c}" stroke-width="0.7" opacity="0.22"/>
-         <text x="36" y="57" text-anchor="middle" font-family="Georgia,serif" font-size="30" font-weight="bold" fill="${c}">${rank}</text>
-         <text x="36" y="72" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="${c}" opacity="0.6">${suit} ${labels[rank]}</text>`;
-  }
-
-  return `<svg viewBox="0 0 72 108" xmlns="http://www.w3.org/2000/svg">
-    <defs><linearGradient id="wg${rank}${suit.charCodeAt(0)}" x1="0" y1="0" x2=".3" y2="1">
-      <stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f0ece0"/>
-    </linearGradient></defs>
-    <rect width="72" height="108" rx="7" fill="url(#wg${rank}${suit.charCodeAt(0)})" stroke="#bbb" stroke-width=".4"/>
-    ${cr}${mid}
-  </svg>`;
-}
-
-// GAME CORE
-function deck(){const d=[];for(const s of SUITS)for(const r of RANKS)d.push({r,s});return d;}
-function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
-function cid(c){return c.r+c.s;}
-function psuit(t){return{♠:'♣',♣:'♠',♥:'♦',♦:'♥'}[t];}
-function esuit(c,t,hl){if(hl==='low')return c.s;if(c.r==='J'&&c.s===t)return t;if(c.r==='J'&&c.s===psuit(t))return t;return c.s;}
-function crank(c,t,led,hl){
-  if(hl==='low'){const lr={9:6,10:5,J:4,Q:3,K:2,A:1};if(c.s===t)return 10+lr[c.r];if(c.s===led)return lr[c.r];return 0;}
-  if(c.r==='J'&&c.s===t)return 30;if(c.r==='J'&&c.s===psuit(t))return 29;
-  const hr={9:1,10:2,Q:4,K:5,A:6,J:3};
-  if(esuit(c,t,hl)===t)return 20+hr[c.r];if(c.s===led)return hr[c.r];return 0;
-}
-function twinner(trick,t,hl){
-  const led=esuit(trick[0].card,t,hl);let best=trick[0];
-  for(let i=1;i<trick.length;i++)if(crank(trick[i].card,t,led,hl)>crank(best.card,t,led,hl))best=trick[i];
-  return best.player;
-}
-function legal(hand,led,t,hl){if(!led)return hand;const f=hand.filter(c=>esuit(c,t,hl)===led);return f.length?f:hand;}
-
-// STATE
-const PL=['south','west','north','east'];
-const TEAMS={south:'us',north:'us',west:'them',east:'them'};
-const PN={south:'You',north:'North',west:'West',east:'East'};
-
-const G={
-  sc:{us:0,them:0},H:{south:[],west:[],north:[],east:[]},
-  trick:[],done:[],tw:{us:0,them:0},
-  dealer:'south',leader:'west',cur:null,
-  phase:'deal',bids:{},hBid:null,trump:null,hl:'high',sel:null
-};
-
-// UI
-let msgT=null;
-function msg(t,d=2400){const e=$('message');e.textContent=t;e.classList.remove('hidden');clearTimeout(msgT);msgT=setTimeout(()=>e.classList.add('hidden'),d);}
-function speech(who,t,d=2000){const e=$('sp-'+who);if(!e)return;e.textContent=t;e.classList.remove('hidden');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.add('hidden'),d);}
-function setAct(who){PL.forEach(p=>$('name-'+p).classList.toggle('active',p===who));}
-function $(i){return document.getElementById(i);}
-
-function hud(){
-  $('score-us').textContent=G.sc.us; $('score-them').textContent=G.sc.them;
-  $('tricks-us').textContent=G.tw.us+' tricks'; $('tricks-them').textContent=G.tw.them+' tricks';
-  $('pile-us').textContent=G.tw.us; $('pile-them').textContent=G.tw.them;
-  if(G.trump){const ts=$('trump-suit');ts.textContent=G.trump;ts.style.color=RED.has(G.trump)?'#e03030':'#f0ece0';$('trump-hl').textContent=G.hl.toUpperCase();}
-  else{$('trump-suit').textContent='—';$('trump-suit').style.color='';$('trump-hl').textContent='';}
-  $('bid-info').textContent=G.hBid?PN[G.hBid.player]+': '+G.hBid.bid+' tricks':'—';
-}
-
-function renderHands(canPlay){
-  PL.forEach(p=>{
-    const el=$('hand-'+p); el.innerHTML='';
-    const south=p==='south';
-    G.H[p].forEach((card,i)=>{
-      const d=document.createElement('div');
-      d.className='card din'+(south&&canPlay?' playable':'');
-      d.innerHTML=cardSVG(card.r,card.s,!south);
-      d.style.animationDelay=(i*.04)+'s';
-      if(south&&canPlay)d.addEventListener('click',()=>selCard(card,d));
-      el.appendChild(d);
-    });
-  });
-}
-
-function selCard(card,el){
-  if(G.cur!=='south'||G.phase!=='play')return;
-  if(G.trick.length>0){
-    const led=esuit(G.trick[0].card,G.trump,G.hl);
-    if(!legal(G.H.south,led,G.trump,G.hl).find(c=>cid(c)===cid(card))){msg('Must follow suit!',1600);return;}
-  }
-  document.querySelectorAll('#hand-south .card.selected').forEach(e=>e.classList.remove('selected'));
-  G.sel=card; el.classList.add('selected');
-  $('play-btn').classList.remove('hidden');
-}
-
-$('play-btn').addEventListener('click',()=>{if(!G.sel)return;$('play-btn').classList.add('hidden');playCard('south',G.sel);});
-
-function showTC(p,c){const s=$('ts-'+p);s.innerHTML='';const d=document.createElement('div');d.className='card';d.innerHTML=cardSVG(c.r,c.s,false);s.appendChild(d);}
-function clearTC(){['south','north','west','east'].forEach(p=>$('ts-'+p).innerHTML='');}
-
-// DEAL
-function deal(){
-  G.trick=[];G.done=[];G.tw={us:0,them:0};G.bids={};G.hBid=null;G.trump=null;G.hl='high';G.sel=null;G.phase='bid';
-  clearTC(); hud();
-  $('play-btn').classList.add('hidden');
-  $('result-overlay').classList.add('hidden');
-  $('message').classList.add('hidden');
-  $('start-screen').classList.add('hidden');
-  const dk=shuffle(deck());
-  PL.forEach((p,i)=>G.H[p]=dk.slice(i*6,i*6+6));
-  const di=PL.indexOf(G.dealer);
-  G.leader=PL[(di+1)%4];
-  renderHands(false);
-  setTimeout(startBid,500);
-}
-
-// BIDDING
-let bOrder=[],bIdx=0,pAmt=null,pHL=null;
-
-function startBid(){G.phase='bid';const si=PL.indexOf(G.leader);bOrder=PL.map((_,i)=>PL[(si+i)%4]);bIdx=0;nextBid();}
-function nextBid(){
-  if(bIdx>=bOrder.length){if(!G.hBid){msg('All passed — dealer must bid 3!',2200);setTimeout(()=>{placeBid(G.dealer,3,G.H[G.dealer][0].s,'high');finishBid();},2300);return;}finishBid();return;}
-  const p=bOrder[bIdx]; setAct(p);
-  if(p==='south')showBidMod(); else setTimeout(()=>aiBid(p),1000);
-}
-function placeBid(player,amt,trump,hl){G.bids[player]={amt,trump,hl};if(!G.hBid||amt>G.hBid.bid)G.hBid={player,bid:amt,trump,hl};}
-
-function aiBid(player){
-  const hand=G.H[player];let str=0;const sc={};SUITS.forEach(s=>sc[s]=0);
-  hand.forEach(c=>{sc[c.s]++;if(c.r==='A')str+=3;else if(c.r==='K')str+=2;else if(c.r==='J')str+=2.5;else if(c.r==='Q')str+=1;});
-  const bs=Object.entries(sc).sort((a,b)=>b[1]-a[1])[0][0];str+=sc[bs];
-  if(hand.find(c=>c.r==='J'&&c.s===bs))str+=1;
-  const min=G.hBid?G.hBid.bid+1:3;
-  let bid=0;
-  if(str>=11)bid=Math.min(6,0|str/2);else if(str>=8)bid=Math.min(5,0|(str/2.2));else if(str>=6)bid=3;
-  const hl=(hand.filter(c=>c.r==='9'||c.r==='10').length>=3&&Math.random()<.3)?'low':'high';
-  if(bid>=min){placeBid(player,bid,bs,hl);speech(player,bid+' '+hl,1800);hud();bIdx++;setTimeout(nextBid,1500);}
-  else{speech(player,'Pass',1800);bIdx++;setTimeout(nextBid,1300);}
-}
-
-function showBidMod(){
-  const min=G.hBid?G.hBid.bid+1:3;
-  $('modal-title').textContent='Your Bid';
-  $('modal-sub').textContent='Min bid: '+min+(G.hBid?' (beat '+G.hBid.bid+')':'');
-  const bb=$('bid-buttons'); bb.innerHTML=''; bb.style.display='grid';
-  $('trump-picker').style.display='none'; $('highlow-picker').style.display='none';
-  pAmt=null; pHL=null;
-  for(let b=3;b<=6;b++){const btn=document.createElement('button');btn.className='bbtn';btn.textContent=b;if(b<min)btn.disabled=true;else btn.addEventListener('click',()=>pickAmt(b));bb.appendChild(btn);}
-  const pb=document.createElement('button');pb.className='bbtn pbtn';pb.textContent='Pass';
-  pb.addEventListener('click',()=>{$('bid-modal').classList.add('hidden');bIdx++;setTimeout(nextBid,300);});
-  bb.appendChild(pb);
-  $('bid-modal').classList.remove('hidden');
-}
-function pickAmt(amt){
-  pAmt=amt; $('bid-buttons').style.display='none';
-  $('modal-sub').textContent='High or Low?';
-  const hl=$('highlow-picker'); hl.style.display='flex'; hl.innerHTML='';
-  ['high','low'].forEach(v=>{const b=document.createElement('button');b.className='hlbtn';b.textContent=v[0].toUpperCase()+v.slice(1);b.addEventListener('click',()=>{pHL=v;pickTrump();});hl.appendChild(b);});
-}
-function pickTrump(){
-  $('highlow-picker').style.display='none';
-  $('modal-sub').textContent='Choose Trump Suit';
-  const tp=$('trump-picker'); tp.style.display='flex'; tp.innerHTML='';
-  SUITS.forEach(s=>{const b=document.createElement('button');b.className='tbtn '+(RED.has(s)?'red-s':'blk-s');b.textContent=s;
-    b.addEventListener('click',()=>{$('bid-modal').classList.add('hidden');$('bid-buttons').style.display='grid';placeBid('south',pAmt,s,pHL);hud();bIdx++;setTimeout(nextBid,300);});tp.appendChild(b);});
-}
-function finishBid(){
-  if(!G.hBid)return;
-  const h=G.hBid; G.trump=h.trump; G.hl=h.hl; hud();
-  msg(PN[h.player]+' bids '+h.bid+' '+h.hl+' — Trump: '+h.trump,2600);
-  G.leader=h.player; G.cur=h.player; G.phase='play';
-  renderHands(true); setTimeout(startTrick,2700);
-}
-
-// PLAY
-function startTrick(){G.trick=[];G.cur=G.leader;setAct(G.cur);renderHands(true);if(G.cur!=='south')setTimeout(()=>aiPlay(G.cur),900);}
-
-function playCard(player,card){
-  G.H[player]=G.H[player].filter(c=>cid(c)!==cid(card));
-  G.trick.push({player,card}); G.sel=null;
-  showTC(player,card);
-  renderHands(G.phase==='play'&&G.cur==='south');
-  if(G.trick.length<4){const idx=PL.indexOf(player);G.cur=PL[(idx+1)%4];setAct(G.cur);if(G.cur!=='south')setTimeout(()=>aiPlay(G.cur),850);}
-  else setTimeout(resolveT,950);
-}
-
-function aiPlay(player){
-  const hand=G.H[player];let card;
-  if(G.trick.length===0){card=aiLead(hand);}
-  else{const led=esuit(G.trick[0].card,G.trump,G.hl);card=aiFollow(player,legal(hand,led,G.trump,G.hl),led);}
-  playCard(player,card);
-}
-function aiLead(hand){
-  const sc=hand.map(c=>({c,s:crank(c,G.trump,esuit(c,G.trump,G.hl),G.hl)}));
-  if(G.hl==='high'){const tr=sc.filter(x=>esuit(x.c,G.trump,G.hl)===G.trump).sort((a,b)=>b.s-a.s);if(tr.length>0&&Math.random()<.6)return tr[0].c;return sc.sort((a,b)=>b.s-a.s)[0].c;}
-  const tr=sc.filter(x=>esuit(x.c,G.trump,G.hl)===G.trump).sort((a,b)=>a.s-b.s);if(tr.length>0)return tr[0].c;return sc.sort((a,b)=>a.s-b.s)[0].c;
-}
-function aiFollow(player,legs,led){
-  const cur=G.trick.map(x=>crank(x.card,G.trump,led,G.hl)),mc=Math.max(...cur);
-  const pw=G.trick.length>0&&TEAMS[twinner(G.trick,G.trump,G.hl)]===TEAMS[player];
-  if(pw&&G.hl==='high')return legs.sort((a,b)=>crank(a,G.trump,led,G.hl)-crank(b,G.trump,led,G.hl))[0];
-  const win=legs.filter(c=>crank(c,G.trump,led,G.hl)>mc);
-  if(win.length>0)return win.sort((a,b)=>crank(a,G.trump,led,G.hl)-crank(b,G.trump,led,G.hl))[0];
-  return legs.sort((a,b)=>crank(a,G.trump,led,G.hl)-crank(b,G.trump,led,G.hl))[0];
-}
-
-function resolveT(){
-  const winner=twinner(G.trick,G.trump,G.hl);
-  G.tw[TEAMS[winner]]++; G.done.push({trick:G.trick,winner}); G.leader=winner;
-  msg(PN[winner]+' wins the trick!',1500); setAct(winner); hud();
-  const ws=$('ts-'+winner); ws.style.animation='trickWin .4s ease';
-  setTimeout(()=>{ws.style.animation='';},400);
-  setTimeout(()=>{clearTC();G.trick=[];if(G.H.south.length===0)scoreHand();else startTrick();},1700);
-}
-
-// SCORE
-function scoreHand(){
-  G.phase='result'; setAct(null); hud();
-  const h=G.hBid,bt=TEAMS[h.player],ot=bt==='us'?'them':'us';
-  const btw=G.tw[bt],otw=G.tw[ot];let detail='';
-  if(btw>=h.bid){G.sc[bt]+=btw;detail=PN[h.player]+"'s team made it! +"+btw+' pts.';}
-  else{G.sc[bt]-=h.bid;detail=PN[h.player]+"'s team went set! \u2212"+h.bid+' pts.';}
-  G.sc[ot]+=otw;
-  let title='Hand Complete',extra='';
-  if(G.sc.us>=32||G.sc.them>=32){if(G.sc.us>G.sc.them){title='Victory!';extra=' You & North win!';}else if(G.sc.them>G.sc.us){title='Defeated!';extra=' East & West win.';}else{title='Tie Game!';}}
-  $('result-title').textContent=title; $('result-detail').textContent=detail+extra;
-  $('result-us').textContent=G.sc.us; $('result-them').textContent=G.sc.them;
-  $('result-overlay').classList.remove('hidden');
-  const di=PL.indexOf(G.dealer); G.dealer=PL[(di+1)%4];
-  const btn=$('deal-again-btn');
-  if(G.sc.us>=32||G.sc.them>=32){btn.textContent='New Game';btn.onclick=()=>{G.sc={us:0,them:0};deal();};}
-  else{btn.textContent='Deal Next Hand';btn.onclick=deal;}
-}
-
-$('deal-again-btn').addEventListener('click',deal);
-$('new-game-btn').addEventListener('click',deal);
-
-// Scale to fit — key for Google Sites iframe
-function scale(){
-  const w=$('wrap');
-  const sx=window.innerWidth/900, sy=window.innerHeight/620;
-  const s=Math.min(sx,sy,1.2); // allow slight upscale if lots of room
-  w.style.transform='scale('+s+')';
-  w.style.transformOrigin='top center';
-  w.style.width='900px';
-  w.style.height='620px';
-  const ph=Math.max(0,Math.floor((window.innerHeight-620*s)/2));
-  document.body.style.paddingTop=ph+'px';
-}
-window.addEventListener('resize',scale);
-scale();
-
-// Show the start screen on initial load
-$('start-screen').classList.remove('hidden');
-</script>
-</body>
+  </body>
 </html>
