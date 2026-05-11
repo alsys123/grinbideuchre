@@ -510,6 +510,8 @@ function scale(){
   const s=Math.min(sx,sy,1.2); // allow slight upscale if lots of room
   w.style.transform='scale('+s+')';
   w.style.transformOrigin='top center';
+  w.style.width='900px';
+  w.style.height='620px';
   const ph=Math.max(0,Math.floor((window.innerHeight-620*s)/2));
   document.body.style.paddingTop=ph+'px';
 }
