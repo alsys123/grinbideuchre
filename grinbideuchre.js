@@ -310,7 +310,7 @@ function deal(){
     const di=PL.indexOf(G.dealer);
     G.leader=PL[(di+1)%4];
     renderHands(false);
-    setTimeout(startBid,500);
+    setTimeout(startBid(),500);
 }
 
 
