@@ -1,5 +1,6 @@
 # grinbideuchre
 
+vO.0 May 11, 2026 ...  just starting to code.  
 
 public site with latest release:
 
