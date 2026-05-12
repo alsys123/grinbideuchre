@@ -34,8 +34,8 @@ function aiBid(player){
     let bid=0;
     if(str>=12)bid=Math.min(7,0|str/2);else if(str>=11)bid=Math.min(6,0|str/2);else if(str>=8)bid=Math.min(5,0|(str/2.2));else if(str>=6)bid=3;
     const hl=(hand.filter(c=>c.r==='9'||c.r==='10').length>=3&&Math.random()<.3)?'low':'high';
-    const alone=str>=14&&Math.random()<.4;const cardReq=alone?0:(Math.random()<.3?1:0);
-    if(bid>=min){placeBid(player,bid,bs,hl,alone,cardReq);speech(player,bid+' '+hl+(alone?' alone':(cardReq?' ask '+cardReq:'')),1800);hud();bIdx++;setTimeout(nextBid,1500);}
+    const alone=str>=14&&Math.random()<.4;const cardReq=alone?(Math.random()<.5?1:2):0;
+    if(bid>=min){placeBid(player,bid,bs,hl,alone,cardReq);speech(player,bid+' '+hl+(alone?' alone'+(cardReq?' ask '+cardReq:''):'')),1800);hud();bIdx++;setTimeout(nextBid,1500);}
     else{speech(player,'Pass',1800);bIdx++;setTimeout(nextBid,1300);}
 }
 
@@ -71,7 +71,7 @@ function pickAlone(){
     const ap=$('alone-picker'); ap.style.display='flex'; ap.innerHTML='';
     ['Yes','No'].forEach(v=>{const b=document.createElement('button');b.className='abtn';
 							   b.textContent=v;
-							   b.addEventListener('click',()=>{pAlone=(v==='Yes');pAlone?pickTrump():pickCardReq();});ap.appendChild(b);
+							   b.addEventListener('click',()=>{pAlone=(v==='Yes');pAlone?pickCardReq():pickTrump();});ap.appendChild(b);
 							  });
 }
 function pickCardReq(){
@@ -88,14 +88,13 @@ function pickTrump(){
     $('modal-sub').textContent='Choose Trump Suit';
     const tp=$('trump-picker'); tp.style.display='flex'; tp.innerHTML='';
     SUITS.forEach(s=>{const b=document.createElement('button');b.className='tbtn '+(RED.has(s)?'red-s':'blk-s');b.textContent=s;
-		      b.addEventListener('click',()=>{$('bid-modal').classList.add('hidden');$('bid-buttons').style.display='grid';placeBid('south',pAmt,s,pHL,pAlone,pCardReq);hud();bIdx++;setTimeout(nextBid,300);});tp.appendChild(b);});
+		      b.addEventListener('click',()=>{$('bid-modal').classList.add('hidden');$('bid-buttons').style.display='grid';placeBid('south',pAmt,s,pHL,pAlone,pAlone?pCardReq:0);hud();bIdx++;setTimeout(nextBid,300);});tp.appendChild(b);});
 }
 function finishBid(){
     if(!G.hBid)return;
     const h=G.hBid; G.trump=h.trump; G.hl=h.hl; G.alone=h.alone; G.cardReq=h.cardReq;
     let msg_text=PN[h.player]+' bids '+h.bid+' '+h.hl+' — Trump: '+h.trump;
-    if(h.alone)msg_text+=' (ALONE - need 8 tricks)';
-    else if(h.cardReq)msg_text+=' (asking for '+h.cardReq+' card'+(h.cardReq===1?'':'s')+')';
+    if(h.alone)msg_text+=' (ALONE'+(h.cardReq?' - ask '+h.cardReq+' card'+(h.cardReq===1?'':'s'):'')+ ' - need 8 tricks)';
     hud();
     msg(msg_text,2600);
     G.leader=h.player; G.cur=h.player; G.phase='play';
