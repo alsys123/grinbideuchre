@@ -6,7 +6,12 @@ function startBid(){
 }
 
 function nextBid(){
-    if(bIdx>=bOrder.length){if(!G.hBid){msg('All passed — dealer must bid 3!',2200);setTimeout(()=>{placeBid(G.dealer,3,G.H[G.dealer][0].s,'high');finishBid();},2300);return;}finishBid();return;
+    if(bIdx>=bOrder.length){if(!G.hBid){
+		msg('All passed — dealer must bid 3!',2200);
+										setTimeout(()=>{
+											placeBid(G.dealer,3,G.H[G.dealer][0].s,'high');
+														finishBid();
+													   },2300);return;}finishBid();return;
 			   }
     const p=bOrder[bIdx]; setAct(p);
     if(p==='south')showBidMod(); else setTimeout(()=>aiBid(p),1000);
@@ -19,7 +24,10 @@ function placeBid(player,amt,trump,hl){
 
 function aiBid(player){
     const hand=G.H[player];let str=0;const sc={};SUITS.forEach(s=>sc[s]=0);
-    hand.forEach(c=>{sc[c.s]++;if(c.r==='A')str+=3;else if(c.r==='K')str+=2;else if(c.r==='J')str+=2.5;else if(c.r==='Q')str+=1;});
+    hand.forEach(c=>{sc[c.s]++;
+					 if(c.r==='A')str+=3;else if(c.r==='K')str+=2;
+					 else if(c.r==='J')str+=2.5;
+					 else if(c.r==='Q')str+=1;});
     const bs=Object.entries(sc).sort((a,b)=>b[1]-a[1])[0][0];str+=sc[bs];
     if(hand.find(c=>c.r==='J'&&c.s===bs))str+=1;
     const min=G.hBid?G.hBid.bid+1:3;
@@ -37,9 +45,12 @@ function showBidMod(){
     const bb=$('bid-buttons'); bb.innerHTML=''; bb.style.display='grid';
     $('trump-picker').style.display='none'; $('highlow-picker').style.display='none';
     pAmt=null; pHL=null;
-    for(let b=3;b<=6;b++){const btn=document.createElement('button');btn.className='bbtn';btn.textContent=b;if(b<min)btn.disabled=true;else btn.addEventListener('click',()=>pickAmt(b));bb.appendChild(btn);}
+    for(let b=3;b<=6;b++){const btn=document.createElement('button');btn.className='bbtn';
+						  btn.textContent=b;if(b<min)btn.disabled=true;
+						  else btn.addEventListener('click',()=>pickAmt(b));bb.appendChild(btn);}
     const pb=document.createElement('button');pb.className='bbtn pbtn';pb.textContent='Pass';
-    pb.addEventListener('click',()=>{$('bid-modal').classList.add('hidden');bIdx++;setTimeout(nextBid,300);});
+    pb.addEventListener('click',()=>{$('bid-modal').classList.add('hidden');
+									 bIdx++;setTimeout(nextBid,300);});
     bb.appendChild(pb);
     $('bid-modal').classList.remove('hidden');
 }
@@ -47,7 +58,10 @@ function pickAmt(amt){
     pAmt=amt; $('bid-buttons').style.display='none';
     $('modal-sub').textContent='High or Low?';
     const hl=$('highlow-picker'); hl.style.display='flex'; hl.innerHTML='';
-    ['high','low'].forEach(v=>{const b=document.createElement('button');b.className='hlbtn';b.textContent=v[0].toUpperCase()+v.slice(1);b.addEventListener('click',()=>{pHL=v;pickTrump();});hl.appendChild(b);});
+    ['high','low'].forEach(v=>{const b=document.createElement('button');b.className='hlbtn';
+							   b.textContent=v[0].toUpperCase()+v.slice(1);
+							   b.addEventListener('click',()=>{pHL=v;pickTrump();});hl.appendChild(b);
+							  });
 }
 function pickTrump(){
     $('highlow-picker').style.display='none';
