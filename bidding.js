@@ -32,7 +32,7 @@ function aiBid(player){
     if(hand.find(c=>c.r==='J'&&c.s===bs))str+=1;
     const min=G.hBid?G.hBid.bid+1:3;
     let bid=0;
-    if(str>=11)bid=Math.min(6,0|str/2);else if(str>=8)bid=Math.min(5,0|(str/2.2));else if(str>=6)bid=3;
+    if(str>=12)bid=Math.min(7,0|str/2);else if(str>=11)bid=Math.min(6,0|str/2);else if(str>=8)bid=Math.min(5,0|(str/2.2));else if(str>=6)bid=3;
     const hl=(hand.filter(c=>c.r==='9'||c.r==='10').length>=3&&Math.random()<.3)?'low':'high';
     if(bid>=min){placeBid(player,bid,bs,hl);speech(player,bid+' '+hl,1800);hud();bIdx++;setTimeout(nextBid,1500);}
     else{speech(player,'Pass',1800);bIdx++;setTimeout(nextBid,1300);}
@@ -45,7 +45,7 @@ function showBidMod(){
     const bb=$('bid-buttons'); bb.innerHTML=''; bb.style.display='grid';
     $('trump-picker').style.display='none'; $('highlow-picker').style.display='none';
     pAmt=null; pHL=null;
-    for(let b=3;b<=6;b++){const btn=document.createElement('button');btn.className='bbtn';
+    for(let b=3;b<=7;b++){const btn=document.createElement('button');btn.className='bbtn';
 						  btn.textContent=b;if(b<min)btn.disabled=true;
 						  else btn.addEventListener('click',()=>pickAmt(b));bb.appendChild(btn);}
     const pb=document.createElement('button');pb.className='bbtn pbtn';pb.textContent='Pass';
