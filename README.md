@@ -4,7 +4,7 @@ vO.0 May 11, 2026 ...  just starting to code.
 
 public site with latest release:
 
-https://sites.google.com/view/grinbideuchre/
+https://sites.google.com/view/gringalleryreview/bid-euchre
 
 Entry point is:
 
