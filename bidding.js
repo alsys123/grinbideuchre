@@ -20,8 +20,12 @@ function nextBid(){
 
 function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
     G.bids[player]={amt,trump,hl,alone,cardReq};
-    if(!G.hBid||amt>G.hBid.bid)G.hBid={player,bid:amt,trump,hl,alone,cardReq};
+
+    if(!G.hBid||amt>G.hBid.bid)
+	G.hBid={player,bid:amt,trump,hl,alone,cardReq};
+
 }
+
 function aiBid(player){
     const hand = G.H[player];
     let str = 0;
@@ -99,7 +103,6 @@ function aiBid(player){
 }
 
 // show the current bid modal box
-
 function showBidMod(){
     const min = G.hBid?G.hBid.bid+1:3;
     
@@ -121,6 +124,11 @@ function showBidMod(){
             if (G.hBid.cardReq > 0) {
 		desc += " (ask " + G.hBid.cardReq + ")";
             }
+	}
+
+	// show who made the bid
+	if (G.hBid.player) {
+	    desc += " by " + G.hBid.player.toUpperCase();
 	}
 	
 	$('modal-sub').textContent =
@@ -159,7 +167,7 @@ function showBidMod(){
 				     setTimeout(nextBid,300);});
     bb.appendChild(pb);
     $('bid-modal').classList.remove('hidden');
-}
+}//showBidMod
 
 function pickAmt(amt){
     

@@ -30,8 +30,12 @@ function $(i){
     return document.getElementById(i);
 }
 
-
+/*
 function cid(c){
     return c.r + c.s;   // "9♣"
+    }
+    */
+function cid(card) {
+    return card.uid;
 }
 

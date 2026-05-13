@@ -84,7 +84,7 @@ scale();
 // Show the start screen on initial load
 $('start-screen').classList.remove('hidden');
 
-
+/*
 function removeCardFromDOM(player, card) {
     const id = cid(card);
     const cards = document.querySelectorAll(`#hand-${player} .card`);
@@ -94,6 +94,30 @@ function removeCardFromDOM(player, card) {
             el.remove();
         }
     });
+}
+*/
+/*
+function removeCardFromDOM(player, card) {
+    const id = cid(card); // this now returns card.uid
+    const hand = document.querySelector(`#hand-${player}`);
+
+    if (!hand) return;
+
+    // find the FIRST matching card and remove only that one
+    const el = hand.querySelector(`.card[data-cid="${id}"]`);
+    if (el) el.remove();
+}
+*/
+function removeCardFromDOM(player, card) {
+    const id = cid(card);
+    const hand = document.querySelector(`#hand-${player}`);
+    if (!hand) return;
+
+    const el = hand.querySelector(`.card[data-cid="${id}"]`);
+    if (el) {
+        el.classList.add('fade-out');
+        setTimeout(() => el.remove(), 200);
+    }
 }
 
 function hud(){
@@ -109,7 +133,7 @@ function hud(){
     
     $('bid-info').textContent=G.hBid?PN[G.hBid.player]+': '+G.hBid.bid+' tricks':'—';
 }
-
+/*
 function renderHands(canPlay, onlyPlayer = null){
     PL.forEach(p => {
 
@@ -131,6 +155,82 @@ function renderHands(canPlay, onlyPlayer = null){
 
             if (south && canPlay) {
                 d.addEventListener('click', () => selCard(card, d));
+            }
+
+            el.appendChild(d);
+        });
+    });
+}
+*/
+/*
+function renderHands(canPlay, onlyPlayer = null) {
+    PL.forEach(p => {
+
+        if (onlyPlayer && p !== onlyPlayer)
+            return;   // only redraw the requested player
+
+        const el = $('hand-' + p);
+        el.innerHTML = '';
+
+        const south = (p === 'south');
+
+        G.H[p].forEach((card, i) => {
+
+            const d = document.createElement('div');
+            d.className = 'card din' + (south && canPlay ? ' playable' : '');
+
+            // SVG content
+            d.innerHTML = cardSVG(card.r, card.s, !south);
+
+            // *** IMPORTANT: use UID, not rank+suit ***
+            d.dataset.cid = card.uid;
+
+            // click handler for south
+            if (south && canPlay) {
+                d.addEventListener('click', () => selCard(card, d));
+            }
+
+            el.appendChild(d);
+        });
+    });
+} //renderHands
+*/
+function renderHands(canPlay, onlyPlayer = null) {
+
+    PL.forEach(p => {
+
+        if (onlyPlayer && p !== onlyPlayer)
+            return;
+
+        // SORT BEFORE RENDERING
+        if (p === "south") {
+            if (southSortMode === "base") sortBase(G.H[p]);
+            else sortByBid(G.H[p]);
+        } else {
+            sortBase(G.H[p]); // AI hands always base‑sorted
+        }
+
+        const el = $('hand-' + p);
+        el.innerHTML = '';
+
+        const south = (p === 'south');
+
+        G.H[p].forEach(card => {
+
+            const d = document.createElement('div');
+            d.className = 'card din' + (south && canPlay ? ' playable' : '');
+
+            d.innerHTML = cardSVG(card.r, card.s, !south);
+            d.dataset.cid = card.uid;
+
+            if (south && canPlay) {
+                d.addEventListener('click', () => selCard(card, d));
+
+                // DOUBLE‑CLICK / DOUBLE‑TAP TO RESORT
+                d.addEventListener('dblclick', () => {
+                    southSortMode = (southSortMode === "base" ? "bid" : "base");
+                    renderHands(canPlay, "south");
+                });
             }
 
             el.appendChild(d);

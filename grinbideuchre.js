@@ -9,10 +9,11 @@ const RANKS=['J','Q','K','A'];
 
 const RED=new Set(['♥','♦']);
 
+let southSortMode = "base"; // "base" or "bid"
 
 // GAME CORE
 
-function deck(){
+/*function deck(){
     const ranks = ["J","Q","K","A"];
     const suits = ["♠","♥","♦","♣"];
     const d = [];
@@ -26,6 +27,37 @@ function deck(){
             }
         }
     }
+    return d;
+    }
+    */
+function deck() {
+    const ranks = ["J","Q","K","A"];
+    const suits = ["♠","♥","♦","♣"];
+    const d = [];
+
+    // rank values
+    const rv = { J:100, Q:200, K:300, A:400 };
+
+    // suit values
+    const sv = { "♣":10, "♦":20, "♥":30, "♠":40 };
+
+    // track how many times we've seen each rank+suit
+    const count = {};
+
+    for (let i = 0; i < 2; i++) {           // double deck
+        for (let r of ranks) {
+            for (let s of suits) {
+
+                const key = r + s;
+                count[key] = (count[key] || 0) + 1;   // 1 or 2
+
+                const uid = rv[r] + sv[s] + count[key];
+
+                d.push({ r, s, uid });
+            }
+        }
+    }
+
     return d;
 }
 
@@ -134,9 +166,55 @@ function deal(){
     renderHands(false);
     // setTimeout(startBid(),500);
     startBid();
+
+    setTimeout(() => {
+	speech("south",
+	       "Double‑click to re‑sort your hand, anytime",
+	       3500);
+}, 800);
+
 }
 
+// after bidding complete -- double-click re-sorts hand
+function sortByBid(hand) {
+    if (!G.hBid) return sortBase(hand);
 
+    const trump = G.hBid.trump;
+    const suitOrder = { "♣":1, "♦":2, "♥":3, "♠":4 };
+    const rankOrder = { "J":1, "Q":2, "K":3, "A":4 };
+
+    hand.sort((a, b) => {
+
+        // trump suit always last
+        const aTrump = (a.s === trump);
+        const bTrump = (b.s === trump);
+        if (aTrump !== bTrump) return aTrump ? 1 : -1;
+
+        // normal suit order
+        if (suitOrder[a.s] !== suitOrder[b.s])
+            return suitOrder[a.s] - suitOrder[b.s];
+
+        // rank order
+        if (rankOrder[a.r] !== rankOrder[b.r])
+            return rankOrder[a.r] - rankOrder[b.r];
+
+        return a.uid - b.uid;
+    });
+}
+
+// basic sort at start of game
+function sortBase(hand) {
+    const suitOrder = { "♣":1, "♦":2, "♥":3, "♠":4 };
+    const rankOrder = { "J":1, "Q":2, "K":3, "A":4 };
+
+    hand.sort((a, b) => {
+        if (suitOrder[a.s] !== suitOrder[b.s])
+            return suitOrder[a.s] - suitOrder[b.s];
+        if (rankOrder[a.r] !== rankOrder[b.r])
+            return rankOrder[a.r] - rankOrder[b.r];
+        return a.uid - b.uid; // stable for duplicates
+    });
+}
 
 // SCORE
 function scoreHand(){
