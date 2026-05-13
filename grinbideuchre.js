@@ -13,23 +13,6 @@ let southSortMode = "base"; // "base" or "bid"
 
 // GAME CORE
 
-/*function deck(){
-    const ranks = ["J","Q","K","A"];
-    const suits = ["♠","♥","♦","♣"];
-    const d = [];
-    let i, r, s;
-
-    // double deck
-    for(i=0;i<2;i++){
-        for(r of ranks){
-            for(s of suits){
-                d.push({ r, s });
-            }
-        }
-    }
-    return d;
-    }
-    */
 function deck() {
     const ranks = ["J","Q","K","A"];
     const suits = ["♠","♥","♦","♣"];
@@ -131,14 +114,20 @@ const TEAMS={south:'us',north:'us',west:'them',east:'them'};
 const PN={south:'You',north:'North',west:'West',east:'East'};
 
 const G={
-    sc:{us:0,them:0},H:{south:[],west:[],north:[],east:[]},
-    trick:[],done:[],tw:{us:0,them:0},
+    sc:{us:0,them:0},
+    H:{south:[],west:[],north:[],east:[]},
+    trick:[],
+    done:[],
+    tw:{us:0, them:0 },
     
     dealer:'south',leader:'west',cur:null,
 
-    phase:'deal',bids:{},hBid:null,trump:null,hl:'high',sel:null
-
+    phase:'deal',bids:{},hBid:null,trump:null,hl:'high',sel:null,
+    firstHand: true
+    
 };
+
+G.starts = { north:0, east:0, south:0, west:0 };
 
 
 // DEAL
@@ -271,7 +260,8 @@ function scoreHand(){
 
     }
     else{
-	btn.textContent='Deal Next Hand';btn.onclick=deal;
+	btn.textContent='Deal Next Hand';
+	btn.onclick=nextHand;
     }
 }
 
@@ -280,10 +270,25 @@ $('deal-again-btn').addEventListener('click',deal);
 //$('new-game-btn').addEventListener('click',deal);
 $('new-game-btn').addEventListener('click', startNewGame);
 
+function nextHand() {
+    if (allPlayersHaveTwoStarts()) {
+        endGame();
+    } else {
+        deal();
+        startNewGame();
+    }
+}
 
 function randomLeader() {
     const i = Math.floor(Math.random() * 4);
     return PL[i]; // PL = ["north","east","south","west"]
+}
+
+function endGame() {
+
+    speech("south", "Game over — all players have started twice!",2000);
+
+    // or show a proper overlay if you want
 }
 
 //showStarterGraphic("south", ()=>{});
@@ -306,47 +311,49 @@ function showStarterGraphic(player, cb) {
         }, 600);
     }, 1800);
 }
-/*
-function startNewGame() {
-    deal(); // deal resets hands, HUD, etc.
-
-    // override leader with random choice
-    G.leader = randomLeader();
-
-    // show graphic, then begin bidding
-    showStarterGraphic(G.leader, () => {
-        startBid();
-    });
-    }
-*/
 
 function startNewGame() {
     deal(); // deal resets hands
 
-    // Pick winner BEFORE spinning
-    const winner = randomLeader();
-    G.leader = winner;
-
-    let winnerLabel = "";
-    if (winner === "north") winnerLabel = "➡️ N";
-    if (winner === "south") winnerLabel = "➡️ S";
-    if (winner === "east" ) winnerLabel = "➡️ E";
-    if (winner === "west" ) winnerLabel = "➡️️ W";
- 
+    let leader;
+    
+    if (G.firstHand) {
+	// Pick winner BEFORE spinning
+	leader = randomLeader();
+	G.leader = leader;
+	G.firstHand = false;
+	
+	
+	let leaderLabel = "";
+	if (leader === "north") leaderLabel = "➡️ N";
+	if (leader === "south") leaderLabel = "➡️ S";
+	if (leader === "east" ) leaderLabel = "➡️ E";
+	if (leader === "west" ) leaderLabel = "➡️️ W";
+	
 	setTimeout(() => {
-    document.querySelector('.spinner-label.' + winner).textContent = winnerLabel;
-    }, 1200);
-
-    // Step 1: show spinner
-    showStarterSpinner(winner, () => {
-	// Step 3: show reveal graphic
-        showStarterGraphic(winner, () => {
-	    // Step 4: start bidding
-            startBid();
-        });
-    });
+	    document.querySelector('.spinner-label.' + leader).textContent = leaderLabel;
+	}, 1200);
+	
+	// Step 1: show spinner
+	showStarterSpinner(leader, () => {
+	    // Step 3: show reveal graphic
+            showStarterGraphic(leader, () => {
+		// Step 4: start bidding
+		startBid();
+            });
+	});
+	
+    } else {
+	// All later hands: leader is left of dealer
+        const di = PL.indexOf(G.dealer);
+        leader = PL[(di + 1) % 4];
+	
+        showStarterGraphic(leader, () => startBid());
     }
-
+    
+    G.starts[leader]++;
+    G.leader = leader;
+}
 
 function showStarterSpinner(winner,cb) {
     const el = $('starter-spinner');
@@ -380,3 +387,11 @@ function showStarterSpinner(winner,cb) {
 }
 
 
+function allPlayersHaveTwoStarts() {
+    return (
+        G.starts.north >= 2 &&
+        G.starts.east  >= 2 &&
+        G.starts.south >= 2 &&
+        G.starts.west  >= 2
+    );
+}

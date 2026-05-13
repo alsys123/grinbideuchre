@@ -257,32 +257,6 @@ function pickAlone() {
         ap.appendChild(b);
     });
 } //pickAlone
-/*
-function pickAlone(){
-    $('highlow-picker').style.display='none';
-    $('modal-sub').textContent='Go alone?';
-    const ap=$('alone-picker');
-    ap.style.display='flex';
-    ap.innerHTML='';
-
-    
-// Only allow "Yes" if pAmt === 8
-const options = (pAmt === 8) ? ['Yes','No'] : ['No'];
-
-options.forEach(v => {
-    const b = document.createElement('button');
-    b.className = 'abtn';
-    b.textContent = v;
-    b.addEventListener('click', () => {
-        pAlone = (v === 'Yes');
-        pAlone ? pickCardReq() : pickTrump();
-    });
-    ap.appendChild(b);
-});
-
-
-} //pickAlone
-*/
 
 function pickCardReq(){
     $('alone-picker').style.display='none';
@@ -366,46 +340,6 @@ function finishBid() {
 
     setTimeout(startTrick, 2700);
 }
-/*
-function finishBid(){
-    if(!G.hBid)return;
-    const h=G.hBid;
-
-    // are we asking for 1 or 2 cards when going alone
-    if (h.bid === 8 && h.player === 'south' && h.cardReq > 0) {
-    setTimeout(() => startExchange(h.cardReq), 300);
-    return; // stop normal flow until exchange is done
-    }
-
-    // Enforce rule: bid 8 = alone
-    if (h.bid === 8) {
-        h.alone = true;
-        h.cardReq = 0;
-        h.hl = 'high';   // optional: 8 is always high
-    } else {
-	h.alone = false;
-	h.cardReq = 0;
-    }
-    
-    G.trump=h.trump;
-    G.hl=h.hl;
-    G.alone=h.alone;
-    G.cardReq=h.cardReq;
-    
-    let msg_text=PN[h.player]+' bids '+h.bid+' '+h.hl+' — Trump: '+h.trump;
-    
-    if(h.alone)msg_text+=' (ALONE'+(h.cardReq?' - ask '+h.cardReq+' card'+(h.cardReq===1?'':'s'):'')+ ' - need 8 tricks)';
-    hud();
-    msg(msg_text,2600);
-    G.leader=h.player;
-    G.cur=h.player;
-    G.phase='play';
-
-    renderHands(true,'south');
-
-    setTimeout(startTrick,2700);
-}
-*/
 
 
 // *** Going alone - asking for 1 or 2 cards ***
@@ -505,46 +439,6 @@ function finalizeExchange() {
 
     speech('south', 'Exchange complete.', 2000);
 }
-/*
-function finalizeExchange() {
-    const partner = partnerOf('south');
-    const n = G.exchangeCount;
-
-    // partner gives best cards
-    const best = partnerBestCards(partner, n);
-    G.exchangeGet = best;
-
-    // remove given cards from South
-    G.exchangeGive.forEach(c => {
-        const idx = G.H.south.findIndex(x => x.uid === c.uid);
-        if (idx >= 0) G.H.south.splice(idx, 1);
-    });
-
-    // remove best cards from partner
-    best.forEach(c => {
-        const idx = G.H[partner].findIndex(x => x.uid === c.uid);
-        if (idx >= 0) G.H[partner].splice(idx, 1);
-    });
-
-    // add exchanged cards
-    G.H.south.push(...best);
-    G.H[partner].push(...G.exchangeGive);
-
-    // sort both hands
-    sortBase(G.H.south);
-    sortBase(G.H[partner]);
-
-    // return to play phase
-    G.phase = 'play';
-
-    speech('south', 'Exchange complete.', 2000);
-
-    renderHands(true, 'south');
-    renderHands(false, partner);
-
-    setTimeout(startTrick, 800);
-}
-*/
 
 function partnerOf(p) {
     const idx = PL.indexOf(p);
