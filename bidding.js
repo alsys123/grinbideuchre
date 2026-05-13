@@ -7,15 +7,25 @@ function startBid(){
 }
 
 function nextBid(){
-    if(bIdx>=bOrder.length){if(!G.hBid){
-	msg('All passed — dealer must bid 3!',2200);
-	setTimeout(()=>{
-	    placeBid(G.dealer,3,G.H[G.dealer][0].s,'high',false,0);
-	    finishBid();
-	},2300);return;}finishBid();return;
-			   }
+    if(bIdx>=bOrder.length){
+	if(!G.hBid){
+	    msg('All passed — dealer must bid 3!',2200);
+	    
+	    setTimeout(()=>{
+		placeBid(G.dealer,3,G.H[G.dealer][0].s,'high',false,0);
+		finishBid();
+	    }, 2300);
+
+	    return;
+	} finishBid();
+	return;
+    }
+    
     const p=bOrder[bIdx]; setAct(p);
-    if(p==='south')showBidMod(); else setTimeout(()=>aiBid(p),1000);
+    if(p==='south')
+	showBidMod();
+    else setTimeout(()=>aiBid(p),1000);
+
 }
 
 function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
@@ -69,13 +79,19 @@ function aiBid(player){
     if (bid === 8) {
         alone = true;
         cardReq = 0;
+    } else {
+	alone = false;
+	cardReq = 0;
     }
 
-    // High/Low
-    const hl = (hand.filter(c => c.r === '9' || c.r === '10').length >= 3 && Math.random() < .3)
-        ? 'low'
-        : 'high';
 
+    // High/Low
+//    const hl = (hand.filter(c => c.r === '9' || c.r === '10').length >= 3 && Math.random() < .3)
+//        ? 'low'
+//        : 'high';
+
+    const hl = 'high';
+    
     // --- PLACE BID ---
     if (bid >= min) {
 
@@ -172,6 +188,7 @@ function showBidMod(){
 function pickAmt(amt){
     
     pAmt=amt;
+    /*
     if (amt === 8) {
         // auto alone, auto high, auto no card request
         pHL = 'high';
@@ -179,8 +196,15 @@ function pickAmt(amt){
         pCardReq = 0;
         pickTrump();
         return;
-    }
+	}
+    */
     
+    if (amt === 8) {
+    pHL = 'high';   // always high for 8‑bid
+    pickAlone();    // now choose 1‑card, 2‑card, or MoonShot
+    return;
+    }
+
     $('bid-buttons').style.display='none';
 
     $('modal-sub').textContent='High or Low?';
@@ -193,26 +217,72 @@ function pickAmt(amt){
 	const b=document.createElement('button');
 	b.className='hlbtn';
 	b.textContent=v[0].toUpperCase()+v.slice(1);
+
 	b.addEventListener('click',()=>{pHL=v;pickAlone();
 				       });
-	hl.appendChild(b);
-    });
-}
 
+	hl.appendChild(b);
+
+    });
+} //pickAmt
+
+function pickAlone() {
+    $('highlow-picker').style.display = 'none';
+
+    // This text is now specific to the 8‑bid scenario
+    $('modal-sub').textContent = 'Choose your 8‑bid option';
+
+    const ap = $('alone-picker');
+    ap.style.display = 'flex';
+    ap.innerHTML = '';
+
+    // Three options:
+    const options = [
+        { label: 'Ask 1 Card',  alone: true,  cardReq: 1 },
+        { label: 'Ask 2 Cards', alone: true,  cardReq: 2 },
+        { label: 'MoonShot!',   alone: true,  cardReq: 0 }
+    ];
+
+    options.forEach(opt => {
+        const b = document.createElement('button');
+        b.className = 'abtn';
+        b.textContent = opt.label;
+
+        b.addEventListener('click', () => {
+            pAlone   = opt.alone;      // always true for 8‑bid
+            pCardReq = opt.cardReq;    // 0, 1, or 2
+            pickTrump();
+        });
+
+        ap.appendChild(b);
+    });
+} //pickAlone
+/*
 function pickAlone(){
     $('highlow-picker').style.display='none';
     $('modal-sub').textContent='Go alone?';
     const ap=$('alone-picker');
     ap.style.display='flex';
     ap.innerHTML='';
-    ['Yes','No'].forEach(v=>{const b=document.createElement('button');
-			     b.className='abtn';
-			     b.textContent=v;
-			     b.addEventListener('click',()=>{pAlone=(v==='Yes');
-							     pAlone?pickCardReq():pickTrump();});
-			     ap.appendChild(b);
-			    });
-}
+
+    
+// Only allow "Yes" if pAmt === 8
+const options = (pAmt === 8) ? ['Yes','No'] : ['No'];
+
+options.forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'abtn';
+    b.textContent = v;
+    b.addEventListener('click', () => {
+        pAlone = (v === 'Yes');
+        pAlone ? pickCardReq() : pickTrump();
+    });
+    ap.appendChild(b);
+});
+
+
+} //pickAlone
+*/
 
 function pickCardReq(){
     $('alone-picker').style.display='none';
@@ -241,16 +311,80 @@ function pickTrump(){
 		      tp.appendChild(b);
 		     });
 }
+function finishBid() {
+    if (!G.hBid) return;
+    const h = G.hBid;
 
+        // Always set trump + HL immediately
+    G.trump = h.trump;
+    G.hl = h.hl;
+    
+    // If South bid 8 and requested 1 or 2 cards → do exchange FIRST
+    if (h.bid === 8 && h.player === 'south' && h.cardReq > 0) {
+        // Do NOT overwrite cardReq here
+        setTimeout(() => startExchange(h.cardReq), 300);
+        return; // stop normal flow until exchange is done
+    }
+
+    // Enforce rule: bid 8 = alone (MoonShot or no request)
+    if (h.bid === 8) {
+        h.alone = true;
+
+        // If MoonShot (cardReq = 0), keep it
+        // If exchange already happened, cardReq was consumed
+        // If no exchange, cardReq should be 0
+        if (!h.cardReq) h.cardReq = 0;
+
+        h.hl = 'high'; // 8 is always high
+    } else {
+        // All other bids cannot go alone
+        h.alone = false;
+        h.cardReq = 0;
+    }
+
+    // Apply final bid settings
+    G.trump = h.trump;
+    G.hl = h.hl;
+    G.alone = h.alone;
+    G.cardReq = h.cardReq;
+
+    let msg_text = PN[h.player] + ' bids ' + h.bid + ' ' + h.hl + ' — Trump: ' + h.trump;
+
+    if (h.alone)
+        msg_text += ' (ALONE' +
+            (h.cardReq ? ' - ask ' + h.cardReq + ' card' + (h.cardReq === 1 ? '' : 's') : '') +
+            ' - need 8 tricks)';
+
+    hud();
+    msg(msg_text, 2600);
+
+    G.leader = h.player;
+    G.cur = h.player;
+    G.phase = 'play';
+
+    renderHands(true, 'south');
+
+    setTimeout(startTrick, 2700);
+}
+/*
 function finishBid(){
     if(!G.hBid)return;
     const h=G.hBid;
+
+    // are we asking for 1 or 2 cards when going alone
+    if (h.bid === 8 && h.player === 'south' && h.cardReq > 0) {
+    setTimeout(() => startExchange(h.cardReq), 300);
+    return; // stop normal flow until exchange is done
+    }
 
     // Enforce rule: bid 8 = alone
     if (h.bid === 8) {
         h.alone = true;
         h.cardReq = 0;
         h.hl = 'high';   // optional: 8 is always high
+    } else {
+	h.alone = false;
+	h.cardReq = 0;
     }
     
     G.trump=h.trump;
@@ -270,4 +404,149 @@ function finishBid(){
     renderHands(true,'south');
 
     setTimeout(startTrick,2700);
+}
+*/
+
+
+// *** Going alone - asking for 1 or 2 cards ***
+
+function startExchange(n) {
+    G.phase = 'exchange';
+    G.exchangeCount = n;
+    G.exchangeGive = []; // cards South gives
+    G.exchangeGet = [];  // cards partner gives
+
+    speech('south', 'Select ' + n + ' card' + (n===1?'':'s') +
+	   ' to give your partner.', 3000);
+
+    // highlight playable cards
+    const hand = $('hand-south').children;
+    for (let el of hand) {
+        el.classList.add('exchange-select');
+        el.addEventListener('click', () => pickExchangeCard(el));
+    }
+}
+
+function pickExchangeCard(el) {
+    if (G.exchangeGive.length >= G.exchangeCount) return;
+
+    const uid = parseInt(el.dataset.cid);
+    const card = G.H.south.find(c => c.uid === uid);
+
+    if (!card) return;
+
+    el.classList.add('selected');
+    G.exchangeGive.push(card);
+
+    if (G.exchangeGive.length === G.exchangeCount) {
+        finalizeExchange();
+    }
+}
+
+function partnerBestCards(partner, n) {
+    const hand = [...G.H[partner]];
+
+    const rankVal = { 'J':1, 'Q':2, 'K':3, 'A':4 };
+
+    hand.sort((a,b) => {
+        const aTrump = (a.s === G.trump);
+        const bTrump = (b.s === G.trump);
+
+        if (aTrump !== bTrump) return bTrump - aTrump;
+        return rankVal[b.r] - rankVal[a.r];
+    });
+
+    return hand.slice(0, n);
+}
+
+function finalizeExchange() {
+    const partner = partnerOf('south');
+    const n = G.exchangeCount;
+
+    // Partner gives best N cards
+    const best = partnerBestCards(partner, n);
+    G.exchangeGet = best;
+
+    // --- REMOVE CARDS SOUTH IS GIVING ---
+    G.exchangeGive.forEach(c => {
+        const idx = G.H.south.findIndex(x => x.uid === c.uid);
+        if (idx >= 0) G.H.south.splice(idx, 1);
+    });
+
+    // --- REMOVE CARDS PARTNER IS GIVING ---
+    best.forEach(c => {
+        const idx = G.H[partner].findIndex(x => x.uid === c.uid);
+        if (idx >= 0) G.H[partner].splice(idx, 1);
+    });
+
+    // --- ADD EXCHANGED CARDS ---
+    G.H.south.push(...best);
+    G.H[partner].push(...G.exchangeGive);
+
+    // --- SORT BOTH HANDS ---
+    sortBase(G.H.south);
+    sortBase(G.H[partner]);
+
+    // --- CLEAR EXCHANGE STATE ---
+    G.exchangeGive = [];
+    G.exchangeGet = [];
+    G.exchangeCount = 0;
+
+    // --- IMPORTANT: exchange is done, so cardReq must be 0 ---
+    G.hBid.cardReq = 0;
+
+    // --- Return to normal bidding flow ---
+    // This will show the final bid message, set leader, and start the trick
+    setTimeout(() => finishBid(), 300);
+
+    // --- Update visuals ---
+    renderHands(true, 'south');
+    renderHands(false, partner);
+
+    speech('south', 'Exchange complete.', 2000);
+}
+/*
+function finalizeExchange() {
+    const partner = partnerOf('south');
+    const n = G.exchangeCount;
+
+    // partner gives best cards
+    const best = partnerBestCards(partner, n);
+    G.exchangeGet = best;
+
+    // remove given cards from South
+    G.exchangeGive.forEach(c => {
+        const idx = G.H.south.findIndex(x => x.uid === c.uid);
+        if (idx >= 0) G.H.south.splice(idx, 1);
+    });
+
+    // remove best cards from partner
+    best.forEach(c => {
+        const idx = G.H[partner].findIndex(x => x.uid === c.uid);
+        if (idx >= 0) G.H[partner].splice(idx, 1);
+    });
+
+    // add exchanged cards
+    G.H.south.push(...best);
+    G.H[partner].push(...G.exchangeGive);
+
+    // sort both hands
+    sortBase(G.H.south);
+    sortBase(G.H[partner]);
+
+    // return to play phase
+    G.phase = 'play';
+
+    speech('south', 'Exchange complete.', 2000);
+
+    renderHands(true, 'south');
+    renderHands(false, partner);
+
+    setTimeout(startTrick, 800);
+}
+*/
+
+function partnerOf(p) {
+    const idx = PL.indexOf(p);
+    return PL[(idx + 2) % 4];
 }

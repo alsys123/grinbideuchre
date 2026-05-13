@@ -260,3 +260,81 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 .din { animation:dealIn .3s cubic-bezier(.34,1.4,.64,1) both;
      }
 
+
+#starter-graphic {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 30px;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 28px;
+    border-radius: 12px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+    z-index: 9999; /* IMPORTANT */
+}
+
+#starter-graphic.show {
+    opacity: 1;
+}
+
+.hidden {
+    display: none;
+}
+
+#starter-spinner {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 999999 !important;
+    display: none;
+}
+
+/* Multi-colour ring */
+.spinner-ring {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: relative;
+    margin: 0 auto 15px auto;
+/*    animation: spin 1.2s linear infinite; */
+    border: 12px solid transparent;
+    border-top-color: #ff3b3b;   /* North - red */
+    border-right-color: #ffd93b; /* East - yellow */
+    border-bottom-color: #3bff6b;/* South - green */
+    border-left-color: #3bb3ff;  /* West - blue */
+}
+
+/* Direction labels */
+.spinner-label {
+    position: absolute;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 0 0 5px black;
+}
+
+.spinner-label.north { top: -5px; left: 50%; transform: translateX(-50%); }
+.spinner-label.east  { right: -5px; top: 50%; transform: translateY(-50%); }
+.spinner-label.south { bottom: -5px; left: 50%; transform: translateX(-50%); }
+.spinner-label.west  { left: -5px; top: 50%; transform: translateY(-50%); }
+
+.spinner-text {
+    color: white;
+    font-size: 24px;
+    background: rgba(0,0,0,0.75);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+

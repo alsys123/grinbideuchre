@@ -133,8 +133,11 @@ const PN={south:'You',north:'North',west:'West',east:'East'};
 const G={
     sc:{us:0,them:0},H:{south:[],west:[],north:[],east:[]},
     trick:[],done:[],tw:{us:0,them:0},
+    
     dealer:'south',leader:'west',cur:null,
+
     phase:'deal',bids:{},hBid:null,trump:null,hl:'high',sel:null
+
 };
 
 
@@ -165,7 +168,7 @@ function deal(){
     G.leader=PL[(di+1)%4];
     renderHands(false);
     // setTimeout(startBid(),500);
-    startBid();
+//    startBid();
 
     setTimeout(() => {
 	speech("south",
@@ -256,12 +259,16 @@ function scoreHand(){
     const di=PL.indexOf(G.dealer);
     G.dealer=PL[(di+1)%4];
     const btn=$('deal-again-btn');
+
     if(G.sc.us>=32||G.sc.them>=32){
 	btn.textContent='New Game';
 	
 	btn.onclick=()=>{
-	    G.sc={us:0,them:0};deal();
+	    G.sc={us:0,them:0};
+//	    deal();
+	    startNewGame();
 	};
+
     }
     else{
 	btn.textContent='Deal Next Hand';btn.onclick=deal;
@@ -270,6 +277,106 @@ function scoreHand(){
 
 $('deal-again-btn').addEventListener('click',deal);
 
-$('new-game-btn').addEventListener('click',deal);
+//$('new-game-btn').addEventListener('click',deal);
+$('new-game-btn').addEventListener('click', startNewGame);
+
+
+function randomLeader() {
+    const i = Math.floor(Math.random() * 4);
+    return PL[i]; // PL = ["north","east","south","west"]
+}
+
+//showStarterGraphic("south", ()=>{});
+
+function showStarterGraphic(player, cb) {
+    
+    const el = $('starter-graphic');
+    el.textContent = PN[player] + " starts!";
+    el.classList.remove('hidden');
+
+    // fade in
+    setTimeout(() => el.classList.add('show'), 20);
+
+    // fade out after 1.8s
+    setTimeout(() => {
+        el.classList.remove('show');
+        setTimeout(() => {
+            el.classList.add('hidden');
+            cb(); // continue game
+        }, 600);
+    }, 1800);
+}
+/*
+function startNewGame() {
+    deal(); // deal resets hands, HUD, etc.
+
+    // override leader with random choice
+    G.leader = randomLeader();
+
+    // show graphic, then begin bidding
+    showStarterGraphic(G.leader, () => {
+        startBid();
+    });
+    }
+*/
+
+function startNewGame() {
+    deal(); // deal resets hands
+
+    // Pick winner BEFORE spinning
+    const winner = randomLeader();
+    G.leader = winner;
+
+    let winnerLabel = "";
+    if (winner === "north") winnerLabel = "➡️ N";
+    if (winner === "south") winnerLabel = "➡️ S";
+    if (winner === "east" ) winnerLabel = "➡️ E";
+    if (winner === "west" ) winnerLabel = "➡️️ W";
+ 
+	setTimeout(() => {
+    document.querySelector('.spinner-label.' + winner).textContent = winnerLabel;
+    }, 1200);
+
+    // Step 1: show spinner
+    showStarterSpinner(winner, () => {
+	// Step 3: show reveal graphic
+        showStarterGraphic(winner, () => {
+	    // Step 4: start bidding
+            startBid();
+        });
+    });
+    }
+
+
+function showStarterSpinner(winner,cb) {
+    const el = $('starter-spinner');
+    const ring = el.querySelector('.spinner-ring');
+
+    el.classList.remove('hidden');
+    el.style.display = "block";
+
+    let angle = 0;
+    let speed = 25; // degrees per frame (fast start) was 25
+
+    function spin() {
+        angle += speed;
+        ring.style.transform = `rotate(${angle}deg)`;
+
+        // Slow down gradually
+        if (speed > 0.3) {  //was 0.5
+            speed *= 0.995; // decay factor was 0.97
+            requestAnimationFrame(spin);
+        } else {
+            // Final stop
+            setTimeout(() => {
+                el.style.display = "none";
+                el.classList.add('hidden');
+                cb();
+            }, 300);
+        }
+    }
+
+    requestAnimationFrame(spin);
+}
 
 
