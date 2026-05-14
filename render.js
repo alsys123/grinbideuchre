@@ -84,30 +84,6 @@ scale();
 // Show the start screen on initial load
 $('start-screen').classList.remove('hidden');
 
-/*
-function removeCardFromDOM(player, card) {
-    const id = cid(card);
-    const cards = document.querySelectorAll(`#hand-${player} .card`);
-
-    cards.forEach(el => {
-        if (el.dataset.cid === id) {
-            el.remove();
-        }
-    });
-}
-*/
-/*
-function removeCardFromDOM(player, card) {
-    const id = cid(card); // this now returns card.uid
-    const hand = document.querySelector(`#hand-${player}`);
-
-    if (!hand) return;
-
-    // find the FIRST matching card and remove only that one
-    const el = hand.querySelector(`.card[data-cid="${id}"]`);
-    if (el) el.remove();
-}
-*/
 function removeCardFromDOM(player, card) {
     const id = cid(card);
     const hand = document.querySelector(`#hand-${player}`);
@@ -121,80 +97,48 @@ function removeCardFromDOM(player, card) {
 }
 
 function hud(){
-    $('score-us').textContent=G.sc.us; $('score-them').textContent=G.sc.them;
-    $('tricks-us').textContent=G.tw.us+' tricks';
+    $('score-us').textContent=G.sc.us;
+    $('score-them').textContent=G.sc.them;
+    $('tricks-us').textContent=G.tw.us+
+	' tricks';
     $('tricks-them').textContent=G.tw.them+' tricks';
-    $('pile-us').textContent=G.tw.us; $('pile-them').textContent=G.tw.them;
-    if(G.trump){
-	const ts=$('trump-suit');ts.textContent=G.trump;ts.style.color=RED.has(G.trump)?'#e03030':'#f0ece0';$('trump-hl').textContent=G.hl.toUpperCase();
-    }
-    else{$('trump-suit').textContent='—';$('trump-suit').style.color='';$('trump-hl').textContent='';
-	}
+    $('pile-us').textContent=G.tw.us;
+    $('pile-them').textContent=G.tw.them;
     
-    $('bid-info').textContent=G.hBid?PN[G.hBid.player]+': '+G.hBid.bid+' tricks':'—';
+    if(G.trump){
+	const ts=$('trump-suit');
+	ts.textContent=G.trump;
+	ts.style.color=RED.has(G.trump)?'#e03030':'#f0ece0';
+	$('trump-hl').textContent=G.hl.toUpperCase();
+    }
+    else{
+	$('trump-suit').textContent='—';
+	$('trump-suit').style.color='';
+	 $('trump-hl').textContent='';
+    }
+    
+//    $('bid-info').textContent=G.hBid?PN[G.hBid.player]+
+//	': '+
+//	G.hBid.bid+' tricks':'—';
+
+    if (G.hBid) {
+    const b = G.hBid;
+    const suit = b.trump === "NT" ? "NT" : b.trump;
+    const hl = b.hl.toUpperCase();
+    const alone = b.alone ? " alone" : "";
+	const suitSpan =
+	      `<span style="color:${RED.has(b.trump)?'#e03030':'#f0ece0'}">${suit}</span>`;
+	$('bid-info').innerHTML =
+	    `${PN[b.player]}: ${b.bid} in ${suitSpan} (${hl})${alone}`;
+
+//	$('bid-info').textContent =
+//            `${PN[b.player]}: ${b.bid} in ${suit} (${hl})${alone}`;
+    } else {
+	$('bid-info').textContent = '—';
+    }
+    
 }
-/*
-function renderHands(canPlay, onlyPlayer = null){
-    PL.forEach(p => {
 
-        if (onlyPlayer && p !== onlyPlayer)
-            return;   // ← only redraw the requested player
-
-        const el = $('hand-' + p);
-        el.innerHTML = '';
-
-        const south = (p === 'south');
-
-        G.H[p].forEach((card, i) => {
-            const d = document.createElement('div');
-            d.className = 'card din' + (south && canPlay ? ' playable' : '');
-            d.innerHTML = cardSVG(card.r, card.s, !south);
-            d.dataset.cid = cid(card);
-	    
-	    //            d.style.animationDelay = (i * .04) + 's';
-
-            if (south && canPlay) {
-                d.addEventListener('click', () => selCard(card, d));
-            }
-
-            el.appendChild(d);
-        });
-    });
-}
-*/
-/*
-function renderHands(canPlay, onlyPlayer = null) {
-    PL.forEach(p => {
-
-        if (onlyPlayer && p !== onlyPlayer)
-            return;   // only redraw the requested player
-
-        const el = $('hand-' + p);
-        el.innerHTML = '';
-
-        const south = (p === 'south');
-
-        G.H[p].forEach((card, i) => {
-
-            const d = document.createElement('div');
-            d.className = 'card din' + (south && canPlay ? ' playable' : '');
-
-            // SVG content
-            d.innerHTML = cardSVG(card.r, card.s, !south);
-
-            // *** IMPORTANT: use UID, not rank+suit ***
-            d.dataset.cid = card.uid;
-
-            // click handler for south
-            if (south && canPlay) {
-                d.addEventListener('click', () => selCard(card, d));
-            }
-
-            el.appendChild(d);
-        });
-    });
-} //renderHands
-*/
 function renderHands(canPlay, onlyPlayer = null) {
 
     PL.forEach(p => {

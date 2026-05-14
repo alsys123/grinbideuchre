@@ -101,12 +101,6 @@ function aiBid(player){
 	cardReq = 0;
     }
 
-
-    // High/Low
-//    const hl = (hand.filter(c => c.r === '9' || c.r === '10').length >= 3 && Math.random() < .3)
-//        ? 'low'
-//        : 'high';
-
     const hl = 'high';
     
     // --- PLACE BID ---
