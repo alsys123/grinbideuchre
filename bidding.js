@@ -199,23 +199,15 @@ function showBidMod(){
 function pickAmt(amt){
     
     pAmt=amt;
-    /*
-    if (amt === 8) {
-        // auto alone, auto high, auto no card request
-        pHL = 'high';
-        pAlone = true;
-        pCardReq = 0;
-        pickTrump();
-        return;
-	}
-    */
     
     if (amt === 8) {
-    pHL = 'high';   // always high for 8‑bid
-    pickAlone();    // now choose 1‑card, 2‑card, or MoonShot
-    return;
+	pHL = 'high';   // always high for 8‑bid
+	pickAlone();    // now choose 1‑card, 2‑card, or MoonShot
+	return;
     }
 
+//    cLog("pickAmt",amt);
+    
     $('bid-buttons').style.display='none';
 
     $('modal-sub').textContent='High or Low?';
@@ -226,15 +218,18 @@ function pickAmt(amt){
 
     ['high','low'].forEach(v=>{
 	const b=document.createElement('button');
+
 	b.className='hlbtn';
+	
 	b.textContent=v[0].toUpperCase()+v.slice(1);
 
-	b.addEventListener('click',()=>{pHL=v;pickAlone();
-				       });
-
+	b.addEventListener('click',()=>
+	    {pHL=v;
+	     pickAlone();
+	    });
 	hl.appendChild(b);
-
     });
+    
 } //pickAmt
 
 function pickAlone() {
