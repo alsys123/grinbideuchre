@@ -140,6 +140,7 @@ const G={
 };
 
 G.starts = { north:0, east:0, south:0, west:0 };
+G.history = [];
 
 
 // DEAL
@@ -185,16 +186,16 @@ function deal(){
 // after bidding complete -- double-click re-sorts hand
 function sortByBid(hand) {
 
-    if (trump === "NT") {
-	// Sort by suit, then rank
-	return sortBase(hand);
-    }
-
     if (!G.hBid) return sortBase(hand);
 
     const trump = G.hBid.trump;
     const suitOrder = { "♣":1, "♦":2, "♥":3, "♠":4 };
     const rankOrder = { "J":1, "Q":2, "K":3, "A":4 };
+
+    if (trump === "NT") {
+	// Sort by suit, then rank
+	return sortBase(hand);
+    }
 
     hand.sort((a, b) => {
 
@@ -260,6 +261,22 @@ function scoreHand(){
 		title='Tie Game!';
 	    }
     }
+
+    
+    G.history.push({
+	dealer: G.dealer,
+	leader: G.leader,
+	bid: G.hBid ? {
+            player: G.hBid.player,
+            bid: G.hBid.bid,
+            trump: G.hBid.trump,
+            hl: G.hBid.hl,
+            alone: G.hBid.alone
+	} : null,
+	tricks: { us: G.tw.us, them: G.tw.them },
+	score: { us: G.sc.us, them: G.sc.them }
+    });
+    
     $('result-title').textContent=title;
     $('result-detail').textContent=detail+extra;
     $('result-us').textContent=G.sc.us;
@@ -314,10 +331,22 @@ function endGame() {
 
 //showStarterGraphic("south", ()=>{});
 
+// player is next to bid -- dealer is to the right
 function showStarterGraphic(player, cb) {
-    
+
+    // compute dealer = player to the right
+    const i = PL.indexOf(player);
+    const dealer = PL[(i + 3) % 4];   // right-hand player
+
     const el = $('starter-graphic');
-    el.textContent = PN[player] + " starts!";
+
+    //    el.textContent = PN[player] + " starts!";
+
+    el.textContent = PN[dealer] + " is the dealer.";
+//    PN[player] + " bids first — "
+
+
+
     el.classList.remove('hidden');
 
     // fade in
@@ -333,6 +362,7 @@ function showStarterGraphic(player, cb) {
     }, 1800);
 }
 
+// this is actually starting a new deal
 function startNewGame() {
     deal(); // deal resets hands
 
@@ -344,8 +374,23 @@ function startNewGame() {
 	G.leader = leader;
 	G.firstHand = false;
 	
+
 	
+	const i = PL.indexOf(leader); // first to play
+	const dealer = PL[(i + 3) % 4];   // right-hand player
+
 	let leaderLabel = "";
+	if (dealer === "north") dealerLabel = "➡️ N";
+	if (dealer === "south") dealerLabel = "➡️ S";
+	if (dealer === "east" ) dealerLabel = "➡️ E";
+	if (dealer === "west" ) dealerLabel = "➡️️ W";
+	
+	setTimeout(() => {
+	    document.querySelector('.spinner-label.' +
+				   dealer).textContent = dealerLabel;
+	}, 1200);
+
+	/*
 	if (leader === "north") leaderLabel = "➡️ N";
 	if (leader === "south") leaderLabel = "➡️ S";
 	if (leader === "east" ) leaderLabel = "➡️ E";
@@ -355,6 +400,8 @@ function startNewGame() {
 	    document.querySelector('.spinner-label.' +
 				   leader).textContent = leaderLabel;
 	}, 1200);
+
+	 */
 	
 	// Step 1: show spinner
 	showStarterSpinner(leader, () => {
@@ -371,6 +418,9 @@ function startNewGame() {
         leader = PL[(di + 1) % 4];
 	
         showStarterGraphic(leader, () => startBid());
+
+	cLog("previous dealer: ", G.dealer);
+	cLog("next dealer:", leader);
     }
     
     G.starts[leader]++;
@@ -425,3 +475,83 @@ $('rules-btn').addEventListener('click', () => {
 $('rules-close').addEventListener('click', () => {
     $('rules-modal').classList.add('hidden');
 });
+
+
+$('scoreboard').addEventListener('click', () => {
+    showGameDetails();
+});
+
+$('details-close').addEventListener('click', () => {
+    $('details-modal').classList.add('hidden');
+});
+
+
+function showGameDetails() {
+
+    const body = $('details-body');
+
+    const dealer = G.dealer;
+    const leader = G.leader;
+
+    const usScore = G.sc.us;
+    const themScore = G.sc.them;
+
+    const usTricks = G.tw.us;
+    const themTricks = G.tw.them;
+
+    const trump = G.trump ? G.trump : "—";
+    const hl = G.hl ? G.hl.toUpperCase() : "";
+
+    const bid = G.hBid
+        ? `${PN[G.hBid.player]} bid ${G.hBid.bid} in ${G.hBid.trump} (${G.hBid.hl})`
+        : "No bids yet";
+
+    body.innerHTML = `
+        <div><b>Dealer:</b> ${PN[dealer]}</div>
+        <div><b>Leader:</b> ${PN[leader]}</div>
+        <hr>
+        <div><b>Score:</b> You & North ${usScore} — ${themScore} East & West</div>
+        <div><b>Tricks:</b> ${usTricks} — ${themTricks}</div>
+        <hr>
+        <div><b>Trump:</b> ${trump} ${hl}</div>
+        <div><b>Bid:</b> ${bid}</div>
+    `;
+
+    $('details-modal').classList.remove('hidden');
+}
+
+// RUNNING History
+
+function showHistory() {
+    const body = $('history-body');
+    body.innerHTML = "";
+
+    if (G.history.length === 0) {
+        body.innerHTML = "<div>No hands played yet.</div>";
+    } else {
+        G.history.forEach((h, i) => {
+            const bidText = h.bid
+                ? `${PN[h.bid.player]} bid ${h.bid.bid} in ${h.bid.trump} (${h.bid.hl})${h.bid.alone ? " alone" : ""}`
+                : "No bid";
+
+            body.innerHTML += `
+                <div style="margin-bottom:12px;">
+                    <b>Hand ${i+1}</b><br>
+                    Dealer: ${PN[h.dealer]}<br>
+                    Leader: ${PN[h.leader]}<br>
+                    Bid: ${bidText}<br>
+                    Tricks: Us ${h.tricks.us} — ${h.tricks.them}<br>
+                    Score: Us ${h.score.us} — ${h.score.them}
+                </div>
+            `;
+        });
+    }
+
+    $('history-modal').classList.remove('hidden');
+}
+
+$('history-close').addEventListener('click', () => {
+    $('history-modal').classList.add('hidden');
+});
+
+$('scoreboard').addEventListener('click', showHistory);
