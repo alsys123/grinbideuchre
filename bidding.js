@@ -52,7 +52,7 @@ function aiBid(player){
     });
 
     // Best suit
-    const bs = Object.entries(sc).sort((a,b)=>b[1]-a[1])[0][0];
+    let bs = Object.entries(sc).sort((a,b)=>b[1]-a[1])[0][0];
     str += sc[bs] * 0.5; // best suit bonus
 
     // Right bower bonus
@@ -61,6 +61,23 @@ function aiBid(player){
     const min = G.hBid ? G.hBid.bid + 1 : 3;
     let bid = 0;
 
+    // For No Trump
+    let ntStrength = 0;
+    hand.forEach(c => {
+	if (c.r === 'A') ntStrength += 2;
+	else if (c.r === 'K') ntStrength += 1.5;
+	else if (c.r === 'Q') ntStrength += 1;
+	else if (c.r === 'J') ntStrength += 0.5;
+    });
+    
+    // If balanced hand, consider NT
+    const isBalanced = Math.max(...Object.values(sc)) <= 3;
+    
+    if (isBalanced && ntStrength >= 8) {
+	bs = "NT";
+	    str = ntStrength;   // ⭐ important
+    }
+    
     // --- FIXED BID LOGIC ---
 
     // *** raising 16 to 20 or 22 lowers the possibility of AI going alone ***
@@ -271,20 +288,43 @@ function pickCardReq(){
 }
 
 function pickTrump(){
-    $('card-req-picker').style.display='none'; $('alone-picker').style.display='none';
+    $('card-req-picker').style.display='none';
+    $('alone-picker').style.display='none';
     $('modal-sub').textContent='Choose Trump Suit';
-    const tp=$('trump-picker'); tp.style.display='flex'; tp.innerHTML='';
-    SUITS.forEach(s=>{const b=document.createElement('button');
-		      b.className='tbtn '+(RED.has(s)?'red-s':'blk-s');
-		      b.textContent=s;
-		      b.addEventListener('click',()=>{$('bid-modal').classList.add('hidden');
-					    $('bid-buttons').style.display='grid';
-					    placeBid('south',pAmt,s,pHL,pAlone,pAlone?pCardReq:0);
-					    hud();
-					    bIdx++;setTimeout(nextBid,300);});
-		      tp.appendChild(b);
-		     });
+    const tp=$('trump-picker');
+    tp.style.display='flex'; tp.innerHTML='';
+    
+    SUITS.forEach(s=>{
+	const b=document.createElement('button');
+	b.className='tbtn '+(RED.has(s)?'red-s':'blk-s');
+	b.textContent=s;
+	b.addEventListener('click',()=>{
+	    $('bid-modal').classList.add('hidden');
+	    $('bid-buttons').style.display='grid';
+	    placeBid('south',pAmt,s,pHL,pAlone,pAlone?pCardReq:0);
+	    hud();
+	    bIdx++;setTimeout(nextBid,300);
+	});
+	tp.appendChild(b);
+
+    });
+    // no trump button option
+    // Add NT button
+const nt = document.createElement('button');
+nt.className = 'tbtn ntbtn';
+nt.textContent = 'NT';
+nt.addEventListener('click', () => {
+    $('bid-modal').classList.add('hidden');
+    $('bid-buttons').style.display='grid';
+    placeBid('south', pAmt, 'NT', pHL, pAlone, pAlone ? pCardReq : 0);
+    hud();
+    bIdx++;
+    setTimeout(nextBid, 300);
+});
+tp.appendChild(nt);
+
 }
+
 function finishBid() {
     if (!G.hBid) return;
     const h = G.hBid;
@@ -322,8 +362,14 @@ function finishBid() {
     G.alone = h.alone;
     G.cardReq = h.cardReq;
 
-    let msg_text = PN[h.player] + ' bids ' + h.bid + ' ' + h.hl + ' — Trump: ' + h.trump;
-
+    //    let msg_text = PN[h.player] + ' bids ' + h.bid + ' ' + h.hl + ' — Trump: ' + h.trump;
+    let msg_text = PN[h.player] +
+	' bids ' +
+	h.bid + ' ' +
+	h.hl +
+	(h.trump === "NT" ? " — No Trump" : " — Trump: " +
+	 h.trump);
+    
     if (h.alone)
         msg_text += ' (ALONE' +
             (h.cardReq ? ' - ask ' + h.cardReq + ' card' + (h.cardReq === 1 ? '' : 's') : '') +

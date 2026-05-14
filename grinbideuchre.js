@@ -63,16 +63,26 @@ function psuit(t){
 }
 
 function esuit(c,t,hl){
-    if(hl==='low')
-	return c.s;
-    if(c.r==='J'&&c.s===t)
-	return t;
-    if(c.r==='J'&&c.s===psuit(t))
-	return t;
+    if (t === "NT") return c.s;   // ⭐ No trump suit
+
+    if (hl==='low') return c.s;
+    if (c.r==='J'&&c.s===t) return t;
+    if (c.r==='J'&&c.s===psuit(t)) return t;
     return c.s;
 }
 
+// Card Rank
 function crank(c,t,led,hl){
+
+    if (t === "NT") {
+    const orderHigh = { J:1, Q:2, K:3, A:4 };
+    const orderLow  = { A:1, K:2, Q:3, J:4 };
+    const order = (hl === "low") ? orderLow : orderHigh;
+
+    if (c.s === led) return order[c.r];
+    return 0;
+}
+
     if(hl==='low'){
 	const lr={J:4,Q:3,K:2,A:1};
 	if(c.s===t)return 10+lr[c.r];
@@ -109,7 +119,9 @@ function legal(hand,led,t,hl){
 }
 
 // STATE
+
 const PL=['south','west','north','east'];
+
 const TEAMS={south:'us',north:'us',west:'them',east:'them'};
 const PN={south:'You',north:'North',west:'West',east:'East'};
 
@@ -153,8 +165,11 @@ function deal(){
     //    PL.forEach((p,i)=>G.H[p]=dk.slice(i*6,i*6+6));
     PL.forEach((p,i)=>G.H[p]=dk.slice(i*8,i*8+8));
     
-    const di=PL.indexOf(G.dealer);
-    G.leader=PL[(di+1)%4];
+
+    // this is done in StartNewGame instead
+    //    const di=PL.indexOf(G.dealer);
+    //    G.leader=PL[(di+1)%4];
+    
     renderHands(false);
     // setTimeout(startBid(),500);
 //    startBid();
@@ -163,12 +178,18 @@ function deal(){
 	speech("south",
 	       "Double‑click to re‑sort your hand, anytime",
 	       3500);
-}, 800);
-
+    }, 800);
+    
 }
 
 // after bidding complete -- double-click re-sorts hand
 function sortByBid(hand) {
+
+    if (trump === "NT") {
+	// Sort by suit, then rank
+	return sortBase(hand);
+    }
+
     if (!G.hBid) return sortBase(hand);
 
     const trump = G.hBid.trump;
@@ -331,7 +352,8 @@ function startNewGame() {
 	if (leader === "west" ) leaderLabel = "➡️️ W";
 	
 	setTimeout(() => {
-	    document.querySelector('.spinner-label.' + leader).textContent = leaderLabel;
+	    document.querySelector('.spinner-label.' +
+				   leader).textContent = leaderLabel;
 	}, 1200);
 	
 	// Step 1: show spinner
@@ -371,7 +393,7 @@ function showStarterSpinner(winner,cb) {
 
         // Slow down gradually
         if (speed > 0.3) {  //was 0.5
-            speed *= 0.995; // decay factor was 0.97
+            speed *= 0.98; // decay factor was 0.97
             requestAnimationFrame(spin);
         } else {
             // Final stop
@@ -395,3 +417,11 @@ function allPlayersHaveTwoStarts() {
         G.starts.west  >= 2
     );
 }
+
+$('rules-btn').addEventListener('click', () => {
+    $('rules-modal').classList.remove('hidden');
+});
+
+$('rules-close').addEventListener('click', () => {
+    $('rules-modal').classList.add('hidden');
+});

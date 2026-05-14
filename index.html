@@ -10,12 +10,37 @@
     <div id="wrap">
 
       <div id="scoreboard">
-	<div class="st"><div class="sl">You &amp; North</div><div class="sv" id="score-us">0</div><div class="sk" id="tricks-us">0 tricks</div></div>
-	<div class="st"><div class="sl">East &amp; West</div><div class="sv" id="score-them">0</div><div class="sk" id="tricks-them">0 tricks</div></div>
+	<div class="st"><div class="sl">You &amp; North</div>
+	  <div class="sv" id="score-us">0</div>
+	  <div class="sk" id="tricks-us">0 tricks</div>
+	</div>
+	<div class="st"><div class="sl">East &amp; West</div>
+	  <div class="sv" id="score-them">0</div>
+	  <div class="sk" id="tricks-them">0 tricks</div>
+	</div>
       </div>
 
-      <div id="trump-display"><div class="pl">Trump</div><div id="trump-suit">&#x2014;</div><div id="trump-hl"></div></div>
-      <div id="bid-display"><div class="pl">Contract</div><div id="bid-info">&#x2014;</div></div>
+      <div id="trump-display">
+	<div class="pl">Trump</div>
+	<div id="trump-suit">&#x2014;</div><div id="trump-hl"></div>
+      </div>
+      
+      <div id="bid-display">
+	<div class="pl">Contract</div>
+	<div id="bid-info">&#x2014;</div>
+      </div>
+
+      <div id="top-bar">
+	<button id="rules-btn" class="top-btn">Rules</button>
+      </div>
+      <div id="rules-modal" class="hidden rules-modal">
+	<div class="rules-box">
+          <button id="rules-close" class="close-btn">✖</button>
+          <iframe id="rules-frame" src="rules.html"></iframe>
+	</div>
+      </div>
+      
+
 
       <div class="pname" id="name-south">You</div>
       <div class="pname" id="name-north">North</div>
