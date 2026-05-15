@@ -182,11 +182,12 @@ function deal(){
     // setTimeout(startBid(),500);
 //    startBid();
 
-    setTimeout(() => {
-	speech("south",
-	       "Double‑click to re‑sort your hand, anytime",
-	       3500);
-    }, 800);
+    //!!! put this in later --- MAYBE!!!
+////    setTimeout(() => {
+////	speech("south",
+////	       "Double‑click to re‑sort your hand, anytime",
+////	       3500);
+////    }, 800);
     
 }
 
@@ -636,11 +637,9 @@ function showHistory() {
 
             body.innerHTML += `
                 <div style="margin-bottom:12px;">
-                    <b>Hand ${i+1}</b><br>
-                    Dealer: ${PN[h.dealer]}<br>
-                    Leader: ${PN[h.leader]}<br>
+                    <b>Hand ${i+1}</b>, Dealer: ${PN[h.dealer]}, Leader: ${PN[h.leader]}<br>
                     Bid: ${bidText}<br>
-                    Tricks: Us ${h.tricks.us} — ${h.tricks.them}<br>
+                    Tricks: Us ${h.tricks.us} — ${h.tricks.them}, 
                     Score: Us ${h.score.us} — ${h.score.them}
                 </div>
             `;

@@ -240,7 +240,47 @@ function pickAmt(amt){
     });
     
 } //pickAmt
+function pickAlone(amt) {
 
+    hideAllPickers();   // always reset
+
+    const ap = $('alone-picker');
+    ap.innerHTML = '';
+
+    // ⭐ If NOT 8 → no alone options, skip picker entirely
+    if (amt !== 8) {
+        pAlone   = false;  // not going alone
+        pCardReq = 0;      // no cards requested
+        pickTrump();       // go straight to trump picker
+        return;
+    }
+
+    // ⭐ If 8 → show the 3 alone options
+    $('modal-sub').textContent = 'Choose your bid option';
+    ap.style.display = 'flex';
+
+    const options = [
+        { label: 'Ask 1 Card',  alone: true, cardReq: 1 },
+        { label: 'Ask 2 Cards', alone: true, cardReq: 2 },
+        { label: 'MoonShot!',   alone: true, cardReq: 0 }
+    ];
+
+    options.forEach(opt => {
+        const b = document.createElement('button');
+        b.className = 'abtn';
+        b.textContent = opt.label;
+
+        b.addEventListener('click', () => {
+            pAlone   = opt.alone;
+            pCardReq = opt.cardReq;
+            pickTrump();
+        });
+
+        ap.appendChild(b);
+    });
+}
+
+/*
 function pickAlone(amt) {
 
 //    $('highlow-picker').style.display = 'none';
@@ -259,7 +299,6 @@ function pickAlone(amt) {
     
     if (amt === 8) {
 	options = [
-            { label: 'Not Alone',   alone: false,  cardReq: 0 },
             { label: 'Ask 1 Card',  alone: true,   cardReq: 1 },
             { label: 'Ask 2 Cards', alone: true,   cardReq: 2 },
             { label: 'MoonShot!',   alone: true,   cardReq: 0 }
@@ -272,15 +311,7 @@ function pickAlone(amt) {
 	]
     }
     
-/*    
-    options = [
-            { label: 'Not Alone',   alone: false,  cardReq: 0 },
-            { label: 'Ask 1 Card',  alone: true,   cardReq: 1 },
-            { label: 'Ask 2 Cards', alone: true,   cardReq: 2 },
-            { label: 'MoonShot!',   alone: true,   cardReq: 0 }
-	];
-*/
-    
+   
     options.forEach(opt => {
         const b = document.createElement('button');
         b.className = 'abtn';
@@ -295,7 +326,7 @@ function pickAlone(amt) {
         ap.appendChild(b);
     });
 } //pickAlone
-
+*/
 function hideAllPickers() {
     $('bid-buttons').style.display = 'none';
     $('highlow-picker').style.display = 'none';

@@ -1,0 +1,293 @@
+
+:root {
+    --ink: #1a1208;
+    --ink-light: #3d2e18;
+    --cream: #f7f2e8;
+    --parchment: #efe8d6;
+    --rule-gold: #9a7b3a;
+    --rule-gold-light: #c9a84c;
+    --red: #8b1a1a;
+    --black-suit: #1a1208;
+    --accent: #5c3d1a;
+    --table-stripe: #ece5d3;
+}
+
+- { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: #d6cdb8;
+    font-family: ‘Crimson Pro’, Georgia, serif;
+    color: var(–ink);
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.page {
+    max-width: 780px;
+    margin: 40px auto;
+    background: var(–cream);
+    padding: 60px 72px;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.28), inset 0 0 80px rgba(180,160,110,0.12);
+    position: relative;
+    border: 1px solid #c4b488;
+}
+
+/* Corner ornaments */
+.page::before, .page::after {
+    content: ‘✦’;
+    position: absolute;
+    font-size: 22px;
+    color: var(–rule-gold);
+    opacity: 0.6;
+}
+.page::before { top: 18px; left: 24px; }
+.page::after  { bottom: 18px; right: 24px; }
+
+/* Decorative border inset */
+.border-frame {
+    position: absolute;
+    inset: 14px;
+    border: 1px solid var(–rule-gold);
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+/* ── Header ── */
+.header {
+    text-align: center;
+    padding-bottom: 32px;
+    margin-bottom: 36px;
+    border-bottom: 2px solid var(–rule-gold);
+    position: relative;
+}
+.header::after {
+    content: ‘’;
+    display: block;
+    width: 60%;
+    margin: 8px auto 0;
+    border-bottom: 1px solid var(–rule-gold);
+    opacity: 0.5;
+}
+
+.suit-row {
+    font-size: 28px;
+    letter-spacing: 16px;
+    margin-bottom: 12px;
+}
+.suit-row .red { color: var(–red); }
+
+h1 {
+    font-family: ‘Playfair Display’, Georgia, serif;
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    color: var(–ink);
+}
+h1 em {
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.5rem;
+    display: block;
+    color: var(–ink-light);
+    letter-spacing: 0.2em;
+    margin-top: 6px;
+    text-transform: uppercase;
+}
+
+.subtitle {
+    margin-top: 14px;
+    font-size: 0.95rem;
+    color: var(–accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 300;
+}
+
+/* ── Sections ── */
+section {
+    margin-bottom: 36px;
+}
+
+h2 {
+    font-family: ‘Playfair Display’, Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(–ink);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border-bottom: 1px solid var(–rule-gold);
+    padding-bottom: 5px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+h2 .section-num {
+    font-family: ‘Crimson Pro’, Georgia, serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(–rule-gold);
+    letter-spacing: 0.05em;
+}
+
+h3 {
+    font-family: ‘Playfair Display’, Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(–accent);
+    margin: 18px 0 8px;
+}
+
+p {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: var(–ink-light);
+}
+
+/* ── Two-column overview ── */
+.overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 32px;
+    background: var(–parchment);
+    border: 1px solid #c8b77a;
+    border-radius: 2px;
+    padding: 20px 24px;
+}
+.overview-item strong {
+    display: block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(–rule-gold);
+    margin-bottom: 2px;
+}
+.overview-item span {
+    font-size: 1rem;
+    color: var(–ink);
+}
+
+/* ── Tables ── */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.96rem;
+    margin: 12px 0;
+}
+th {
+    background: var(–ink);
+    color: var(–cream);
+    font-family: ‘Playfair Display’, serif;
+    font-weight: 400;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    text-align: left;
+}
+td {
+    padding: 7px 12px;
+    border-bottom: 1px solid #ddd4be;
+    color: var(–ink-light);
+    vertical-align: top;
+}
+tr:nth-child(even) td { background: var(–table-stripe); }
+tr:last-child td { border-bottom: none; }
+
+.rank-num {
+    font-weight: 600;
+    color: var(–rule-gold);
+    width: 30px;
+}
+
+/* ── Callout boxes ── */
+.callout {
+    background: var(–parchment);
+    border-left: 3px solid var(–rule-gold);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 0.97rem;
+    color: var(–ink-light);
+}
+.callout strong {
+    color: var(–ink);
+    font-weight: 600;
+}
+
+.callout.warning {
+    border-left-color: var(–red);
+    background: #fdf4f4;
+}
+.callout.warning strong { color: var(–red); }
+
+/* ── Bid examples ── */
+.bid-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+}
+.bid-tag {
+    display: inline-block;
+    background: var(–ink);
+    color: var(–cream);
+    font-family: ‘Playfair Display’, serif;
+    font-size: 0.85rem;
+    padding: 4px 12px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+}
+.bid-tag.invalid {
+    background: transparent;
+    color: var(–red);
+    border: 1px solid var(–red);
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* ── Suit symbols ── */
+.s { color: var(–black-suit); }
+.h { color: var(–red); }
+.d { color: var(–red); }
+.c { color: var(–black-suit); }
+
+/* ── Score table highlight ── */
+.score-positive { color: #2a6b2a; font-weight: 600; }
+.score-negative { color: var(–red); font-weight: 600; }
+
+/* ── Divider ornament ── */
+.ornament {
+    text-align: center;
+    color: var(–rule-gold);
+    font-size: 1.1rem;
+    letter-spacing: 12px;
+    margin: 28px 0;
+    opacity: 0.7;
+}
+
+/* ── Footer ── */
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 18px;
+    border-top: 1px solid var(–rule-gold);
+    font-size: 0.82rem;
+    color: var(–rule-gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* ── Print ── */
+@media print {
+    body { background: white; }
+    .page {
+	margin: 0;
+	box-shadow: none;
+	padding: 40px 56px;
+	max-width: 100%;
+    }
+    h2 { page-break-after: avoid; }
+    section { page-break-inside: avoid; }
+}

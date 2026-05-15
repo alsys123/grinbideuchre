@@ -1,559 +1,315 @@
 <!DOCTYPE html>
 
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bid Euchre — Official Rules</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --ink: #1a1208;
-    --ink-light: #3d2e18;
-    --cream: #f7f2e8;
-    --parchment: #efe8d6;
-    --rule-gold: #9a7b3a;
-    --rule-gold-light: #c9a84c;
-    --red: #8b1a1a;
-    --black-suit: #1a1208;
-    --accent: #5c3d1a;
-    --table-stripe: #ece5d3;
-  }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bid Euchre — Official Rules</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 
-- { box-sizing: border-box; margin: 0; padding: 0; }
+    <link rel="stylesheet" href="rules.css">
 
-body {
-background: #d6cdb8;
-font-family: ‘Crimson Pro’, Georgia, serif;
-color: var(–ink);
-font-size: 16px;
-line-height: 1.7;
-}
+  </head>
+  <body>
+    <div class="page">
+      <div class="border-frame"></div>
 
-.page {
-max-width: 780px;
-margin: 40px auto;
-background: var(–cream);
-padding: 60px 72px;
-box-shadow: 0 4px 40px rgba(0,0,0,0.28), inset 0 0 80px rgba(180,160,110,0.12);
-position: relative;
-border: 1px solid #c4b488;
-}
+      <!-- Header -->
 
-/* Corner ornaments */
-.page::before, .page::after {
-content: ‘✦’;
-position: absolute;
-font-size: 22px;
-color: var(–rule-gold);
-opacity: 0.6;
-}
-.page::before { top: 18px; left: 24px; }
-.page::after  { bottom: 18px; right: 24px; }
+      <div class="header">
+	<div class="suit-row">
+	  <span class="s">♠</span>
+	  <span class="h red">♥</span>
+	  <span class="d red">♦</span>
+	  <span class="c">♣</span>
+	</div>
+	<h1>Bid Euchre<em>Official Rules</em></h1>
+	<p class="subtitle">4 Players · Partnership · High &amp; Low · Trick-Taking</p>
+      </div>
 
-/* Decorative border inset */
-.border-frame {
-position: absolute;
-inset: 14px;
-border: 1px solid var(–rule-gold);
-opacity: 0.35;
-pointer-events: none;
-}
+      <!-- 1. Overview -->
 
-/* ── Header ── */
-.header {
-text-align: center;
-padding-bottom: 32px;
-margin-bottom: 36px;
-border-bottom: 2px solid var(–rule-gold);
-position: relative;
-}
-.header::after {
-content: ‘’;
-display: block;
-width: 60%;
-margin: 8px auto 0;
-border-bottom: 1px solid var(–rule-gold);
-opacity: 0.5;
-}
+      <section>
+	<h2><span class="section-num">I</span> Overview</h2>
+	<p>Bid Euchre is a partnership trick-taking game blending Euchre-style
+	  trump rules with competitive auction bidding. Players bid contracts
+	  specifying the number of tricks they'll win, a trump suit (or No Trump),
+	  and whether they're playing High or Low. The team that wins the bid then
+	  tries to fulfill — or exceed — their contract, while the defenders try to stop them.</p>
+	<div class="overview-grid">
+	  <div class="overview-item"><strong>Players</strong><span>4 (2 teams of 2;
+	      partners sit opposite)</span></div>
+	  <div class="overview-item"><strong>Deck</strong><span>2 standard Euchre decks,
+	      J–A only (32 cards)</span></div>
+	  <div class="overview-item"><strong>Cards per Player</strong>
+	    <span>8 (all cards are dealt)</span></div>
+	  <div class="overview-item"><strong>Game Length</strong>
+	    <span>Each player deals twice, or first to 42 points</span></div>
+	</div>
+      </section>
 
-.suit-row {
-font-size: 28px;
-letter-spacing: 16px;
-margin-bottom: 12px;
-}
-.suit-row .red { color: var(–red); }
+      <div class="ornament">✦ ✦ ✦</div>
 
-h1 {
-font-family: ‘Playfair Display’, Georgia, serif;
-font-size: 3rem;
-font-weight: 900;
-letter-spacing: 0.04em;
-line-height: 1.1;
-color: var(–ink);
-}
-h1 em {
-font-style: italic;
-font-weight: 400;
-font-size: 1.5rem;
-display: block;
-color: var(–ink-light);
-letter-spacing: 0.2em;
-margin-top: 6px;
-text-transform: uppercase;
-}
+      <!-- 2. The Deck -->
 
-.subtitle {
-margin-top: 14px;
-font-size: 0.95rem;
-color: var(–accent);
-letter-spacing: 0.15em;
-text-transform: uppercase;
-font-weight: 300;
-}
+      <section>
+	<h2><span class="section-num">II</span> The Deck</h2>
+	<p>Combine two standard Euchre decks and remove all cards except
+	  Jacks, Queens, Kings, and Aces. This yields <strong>32 cards</strong> —
+	  8 per suit, with two identical copies of every card. This duplication
+	  creates a special
+	  rule throughout the game: <strong>when two identical cards are played
+	    in the same trick, the one played first outranks the second.</strong></p>
+      </section>
 
-/* ── Sections ── */
-section {
-margin-bottom: 36px;
-}
+      <!-- 3. Card Ranking -->
 
-h2 {
-font-family: ‘Playfair Display’, Georgia, serif;
-font-size: 1.35rem;
-font-weight: 700;
-color: var(–ink);
-text-transform: uppercase;
-letter-spacing: 0.12em;
-border-bottom: 1px solid var(–rule-gold);
-padding-bottom: 5px;
-margin-bottom: 14px;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-h2 .section-num {
-font-family: ‘Crimson Pro’, Georgia, serif;
-font-size: 0.85rem;
-font-weight: 300;
-color: var(–rule-gold);
-letter-spacing: 0.05em;
-}
+      <section>
+	<h2><span class="section-num">III</span> Card Ranking</h2>
 
-h3 {
-font-family: ‘Playfair Display’, Georgia, serif;
-font-size: 1.05rem;
-font-weight: 700;
-font-style: italic;
-color: var(–accent);
-margin: 18px 0 8px;
-}
+	<h3>High Trump (standard play)</h3>
+	<p>When a trump suit is named and High is called, cards rank from highest to lowest:</p>
+	<table>
+	  <thead><tr><th>#</th><th>Card</th><th>Notes</th></tr></thead>
+	  <tbody>
+	    <tr><td class="rank-num">1</td><td><strong>Right Bower</strong></td>
+	      <td>Jack of the trump suit</td></tr>
+	    <tr>
+	      <td class="rank-num">2</td><td><strong>Left Bower</strong></td>
+	      <td>Jack of the other suit of the same color as trump</td>
+	    </tr>
+	    <tr><td class="rank-num">3</td><td>Ace of trump</td><td></td></tr>
+	    <tr><td class="rank-num">4</td><td>King of trump</td><td></td></tr>
+	    <tr><td class="rank-num">5</td><td>Queen of trump</td><td></td></tr>
+	    <tr><td class="rank-num">6</td><td>Second Ace of trump</td>
+	      <td>Duplicate; loses to the first Ace played</td></tr>
+	    <tr><td class="rank-num">7–8</td><td>Second King, Second Queen</td>
+	      <td>Similarly outranked by their earlier duplicates</td></tr>
+	  </tbody>
+	</table>
+	<div class="callout">
+	  <strong>Example — Hearts are trump:</strong> J♥ (Right) &gt; J♦
+	  (Left) &gt; A♥ &gt; K♥ &gt; Q♥ &gt; remaining Hearts in order, first
+	  played beats second.
+	</div>
 
-p {
-margin-bottom: 10px;
-font-size: 1rem;
-color: var(–ink-light);
-}
+	<h3>Low Trump (reversed)</h3>
+	<p>When Low is called with a trump suit, the ranking completely reverses —
+	  the <em>lowest</em> trump wins tricks, not the highest:</p>
+	<table>
+	  <thead><tr><th>#</th><th>Card</th><th>Notes</th></tr></thead>
+	  <tbody>
+	    <tr><td class="rank-num">1</td><td>Queen of trump</td>
+	      <td>Lowest — wins in Low</td></tr>
+	    <tr><td class="rank-num">2</td><td>King of trump</td>
+	      <td></td></tr>
+	    <tr><td class="rank-num">3</td><td>Ace of trump</td>
+	      <td></td></tr>
+	    <tr><td class="rank-num">4</td><td>Left Bower</td>
+	      <td>Jack of same-color suit</td></tr>
+	    <tr><td class="rank-num">5</td><td>Right Bower</td>
+	      <td>Jack of trump suit — highest, weakest in Low</td></tr>
+	  </tbody>
+	</table>
+	<p>Duplicates still follow the first-played rule: the first Queen of trump
+	  beats the second.</p>
 
-/* ── Two-column overview ── */
-.overview-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 16px 32px;
-background: var(–parchment);
-border: 1px solid #c8b77a;
-border-radius: 2px;
-padding: 20px 24px;
-}
-.overview-item strong {
-display: block;
-font-size: 0.78rem;
-text-transform: uppercase;
-letter-spacing: 0.12em;
-color: var(–rule-gold);
-margin-bottom: 2px;
-}
-.overview-item span {
-font-size: 1rem;
-color: var(–ink);
-}
+	<h3>No Trump High</h3>
+	<p>No trump suit exists. Within each suit, Aces rank
+	  highest: <strong>A &gt; K &gt; Q &gt; J</strong>. Highest card
+	  of the led suit wins. First-played wins duplicates.</p>
 
-/* ── Tables ── */
-table {
-width: 100%;
-border-collapse: collapse;
-font-size: 0.96rem;
-margin: 12px 0;
-}
-th {
-background: var(–ink);
-color: var(–cream);
-font-family: ‘Playfair Display’, serif;
-font-weight: 400;
-font-size: 0.82rem;
-letter-spacing: 0.12em;
-text-transform: uppercase;
-padding: 8px 12px;
-text-align: left;
-}
-td {
-padding: 7px 12px;
-border-bottom: 1px solid #ddd4be;
-color: var(–ink-light);
-vertical-align: top;
-}
-tr:nth-child(even) td { background: var(–table-stripe); }
-tr:last-child td { border-bottom: none; }
+	<h3>No Trump Low</h3>
+	<p>No trump suit exists. Within each suit, Jacks rank
+	  lowest: <strong>J &gt; Q &gt; K &gt; A</strong> (reading lowest to highest).
+	  The <em>lowest</em> card of the led suit wins the trick.
+	  First-played wins duplicates.</p>
 
-.rank-num {
-font-weight: 600;
-color: var(–rule-gold);
-width: 30px;
-}
+      </section>
 
-/* ── Callout boxes ── */
-.callout {
-background: var(–parchment);
-border-left: 3px solid var(–rule-gold);
-padding: 14px 18px;
-margin: 14px 0;
-font-size: 0.97rem;
-color: var(–ink-light);
-}
-.callout strong {
-color: var(–ink);
-font-weight: 600;
-}
+      <div class="ornament">✦ ✦ ✦</div>
 
-.callout.warning {
-border-left-color: var(–red);
-background: #fdf4f4;
-}
-.callout.warning strong { color: var(–red); }
+      <!-- 4. The Deal -->
 
-/* ── Bid examples ── */
-.bid-examples {
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
-margin: 10px 0;
-}
-.bid-tag {
-display: inline-block;
-background: var(–ink);
-color: var(–cream);
-font-family: ‘Playfair Display’, serif;
-font-size: 0.85rem;
-padding: 4px 12px;
-border-radius: 2px;
-letter-spacing: 0.05em;
-}
-.bid-tag.invalid {
-background: transparent;
-color: var(–red);
-border: 1px solid var(–red);
-text-decoration: line-through;
-opacity: 0.7;
-}
+      <section>
+	<h2><span class="section-num">IV</span> The Deal</h2>
+	<p>The dealer shuffles both decks together and deals all 32 cards clockwise,
+	  one at a time, until each player holds 8 cards. After each hand, the deal
+	  passes clockwise to the next player. A full game consists of each player
+	  dealing twice (8 hands total).</p>
+      </section>
 
-/* ── Suit symbols ── */
-.s { color: var(–black-suit); }
-.h { color: var(–red); }
-.d { color: var(–red); }
-.c { color: var(–black-suit); }
+      <!-- 5. Bidding -->
 
-/* ── Score table highlight ── */
-.score-positive { color: #2a6b2a; font-weight: 600; }
-.score-negative { color: var(–red); font-weight: 600; }
+      <section>
+	<h2><span class="section-num">V</span> Bidding</h2>
+	<p>Bidding starts with the player to the dealer''s left and proceeds clockwise.
+	  Each player has exactly one opportunity to either <strong>pass</strong> or
+	  make a <strong>higher bid</strong> than any previous bid. The player who
+	  makes the highest bid wins the contract and leads the first trick.</p>
 
-/* ── Divider ornament ── */
-.ornament {
-text-align: center;
-color: var(–rule-gold);
-font-size: 1.1rem;
-letter-spacing: 12px;
-margin: 28px 0;
-opacity: 0.7;
-}
+	<h3>Anatomy of a Bid</h3>
+	<p>Every valid bid states three things:</p>
+	<ol style="margin-left:20px; color: var(--ink-light);">
+	  <li style="margin-bottom:4px"><strong>Number of tricks</strong> — how many tricks
+	    the bidding team pledges to win (3–8)</li>
+	  <li style="margin-bottom:4px"><strong>Trump designation</strong> — one of the four
+	    suits, or No Trump</li>
+	  <li style="margin-bottom:4px"><strong>High or Low</strong> — which card wins each
+	    trick</li>
+	</ol>
+	<div class="bid-examples">
+	  <span class="bid-tag">4 Clubs High</span>
+	  <span class="bid-tag">5 No Trump Low</span>
+	  <span class="bid-tag">6 Hearts High</span>
+	  <span class="bid-tag">8 Spades Low</span>
+	</div>
 
-/* ── Footer ── */
-.footer {
-text-align: center;
-margin-top: 40px;
-padding-top: 18px;
-border-top: 1px solid var(–rule-gold);
-font-size: 0.82rem;
-color: var(–rule-gold);
-letter-spacing: 0.15em;
-text-transform: uppercase;
-}
+	<h3>Raising the Bid</h3>
+	<p>Each new bid must name <strong>more tricks</strong> than the current high bid.
+	  Suits carry no ranking — you cannot overcall with the same number of tricks in
+	  a different suit or mode. The minimum opening bid is <strong>3 tricks</strong>.</p>
+	<div class="callout">
+	  <strong>Example:</strong> If the current bid is "4 Hearts High," the next bidder
+	  must bid 5 or more tricks. Bids of "4 Spades" or "4 No Trump" are invalid.
+	  <div class="bid-examples" style="margin-top:10px">
+	    <span class="bid-tag">5 Clubs Low ✓</span>
+	    <span class="bid-tag">5 No Trump High ✓</span>
+	    <span class="bid-tag invalid">4 Spades High</span>
+	    <span class="bid-tag invalid">4 No Trump Low</span>
+	  </div>
+	</div>
 
-/* ── Print ── */
-@media print {
-body { background: white; }
-.page {
-margin: 0;
-box-shadow: none;
-padding: 40px 56px;
-max-width: 100%;
-}
-h2 { page-break-after: avoid; }
-section { page-break-inside: avoid; }
-}
-</style>
+	<h3>Lone Hand Bids</h3>
+	<p>Any bid may be declared <strong>Alone</strong>, meaning the bidder''s partner
+	  sits out the hand with cards face down. A lone bid takes precedence over an
+	  equal-trick partnership bid from an opponent — but opponents may counter with
+	  their own lone bid at the same or higher trick count.</p>
 
-</head>
-<body>
-<div class="page">
-  <div class="border-frame"></div>
+	<h3>Partner Exchange (Lone Bids Only)</h3>
+	<p>A lone bidder may optionally exchange cards with their sitting-out partner before
+	  play begins:</p>
+	<ul style="margin-left:20px; color:var(--ink-light)">
+	  <li style="margin-bottom:4px"><strong>1-card exchange:</strong> Bidder
+	    discards 1 card face down; partner passes 1 card face down.</li>
+	  <li><strong>2-card exchange:</strong> Same process with 2 cards each.</li>
+	</ul>
+	<div class="callout warning">
+	  <strong>Critical:</strong> Both the bidder and partner must choose and commit
+	  to their exchange cards <em>simultaneously</em>, before either sees what the other
+	  has passed.
+	</div>
 
-  <!-- Header -->
 
-  <div class="header">
-    <div class="suit-row">
-      <span class="s">♠</span>
-      <span class="h red">♥</span>
-      <span class="d red">♦</span>
-      <span class="c">♣</span>
+      </section>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <!-- 6. Playing the Hand -->
+
+      <section>
+	<h2><span class="section-num">VI</span> Playing the Hand</h2>
+
+	<h3>Opening Lead</h3>
+	<p>The winning bidder leads the first trick. In a Lone hand, the bidder leads
+	  even though only three hands are active.</p>
+
+	<h3>Following Suit</h3>
+	<p>Each player <strong>must</strong> follow the led suit if able. If a player
+	  has no cards of the led suit, they may play any card — including trump.
+	  The Left Bower counts as a member of the <em>trump suit</em>, not its face suit,
+	  for both leading and following.</p>
+
+	<h3>Winning a Trick</h3>
+	<p>The winning card is determined by the game mode:</p>
+	<table>
+	  <thead><tr><th>Mode</th><th>Wins with trump played</th><th>Wins without
+		trump played</th></tr></thead>
+	  <tbody>
+	    <tr><td><strong>High</strong></td><td>Highest trump played</td>
+	      <td>Highest card of led suit</td></tr>
+	    <tr><td><strong>Low</strong></td><td>Lowest trump played</td>
+	      <td>Lowest card of led suit</td></tr>
+	  </tbody>
+	</table>
+	<p style="margin-top:10px">The winner of each trick leads the next.
+	  Play continues until all 8 tricks are complete.</p>
+
+      </section>
+
+      <!-- 7. Scoring -->
+
+      <section>
+	<h2><span class="section-num">VII</span> Scoring</h2>
+
+
+	<h3>Bidding Team</h3>
+	<p>If the bidding team wins <em>at least</em> as many tricks as they bid,
+	  they score the number of tricks actually won (not just the bid amount).
+	  If they fall short, they <em>lose</em> points equal to their bid.</p>
+	<table>
+	  <thead><tr><th>Bid</th><th>Tricks Won</th><th>Result</th></tr></thead>
+	  <tbody>
+	    <tr><td>5</td><td>6</td><td class="score-positive">+6</td></tr>
+	    <tr><td>5</td><td>5</td><td class="score-positive">+5</td></tr>
+	    <tr><td>5</td><td>4</td><td class="score-negative">−5</td></tr>
+	  </tbody>
+	</table>
+
+	<h3>Defending Team</h3>
+	<p>The non-bidding team scores <strong>1 point for every trick they win</strong>,
+	  regardless of whether the bidding team succeeds or fails.</p>
+
+	<h3>Lone Hand Scoring</h3>
+	<table>
+	  <thead><tr><th>Contract</th><th>Outcome</th><th>Score</th></tr></thead>
+	  <tbody>
+	    <tr><td>Any lone bid</td><td>Success</td>
+	      <td class="score-positive">Tricks won +1 bonus</td></tr>
+	    <tr><td>8-trick lone (Shoot the Moon)</td>
+	      <td>Success</td><td class="score-positive">Double tricks won (16)</td></tr>
+	    <tr><td>Any lone bid</td><td>Failure</td>
+	      <td class="score-negative">Lose full bid amount</td></tr>
+	  </tbody>
+	</table>
+
+	<h3>Shooting the Moon</h3>
+	<p>A bid of all 8 tricks — "Shoot the Moon" — is the highest possible contract.
+	  If successful alone, the bidder''s team scores 16 points. If the contract fails,
+	  the team loses 8 points. Defenders still score any tricks they manage to win.</p>
+
+	<h3>Reneging</h3>
+	<p>A renege occurs when a player fails to follow the led suit despite holding a card
+	  of that suit. Agree on the penalty before play begins. Common options:</p>
+	<ul style="margin-left:20px; color:var(--ink-light)">
+	  <li style="margin-bottom:4px">Automatic set: the offending team loses their bid
+	    (or the hand is conceded to the defenders)</li>
+	  <li style="margin-bottom:4px">Deduct 3 points from the offending team</li>
+	  <li>Replay the hand</li>
+	</ul>
+	<div class="callout warning">
+	  <strong>House rule:</strong> Agree on reneging penalties before the first
+	  hand is dealt.
+	</div>
+
+      </section>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <!-- 8. Winning -->
+
+      <section>
+	<h2><span class="section-num">VIII</span> Winning the Game</h2>
+	<p>The game ends when <strong>each player has dealt twice</strong> (8 hands),
+	  or when a team first reaches the agreed target score (commonly
+	  <strong>42 points</strong>). The team with the higher score at game end wins.
+	  In case of a tie, play one additional hand as a tiebreaker.</p>
+      </section>
+
+      <div class="footer">
+	Bid Euchre &nbsp;·&nbsp; High &amp; Low Edition &nbsp;·&nbsp;
+	4 Players &nbsp;·&nbsp; 32 Cards
+      </div>
     </div>
-    <h1>Bid Euchre<em>Official Rules</em></h1>
-    <p class="subtitle">4 Players · Partnership · High &amp; Low · Trick-Taking</p>
-  </div>
-
-  <!-- 1. Overview -->
-
-  <section>
-    <h2><span class="section-num">I</span> Overview</h2>
-    <p>Bid Euchre is a partnership trick-taking game blending Euchre-style trump rules with competitive auction bidding. Players bid contracts specifying the number of tricks they'll win, a trump suit (or No Trump), and whether they're playing High or Low. The team that wins the bid then tries to fulfill — or exceed — their contract, while the defenders try to stop them.</p>
-    <div class="overview-grid">
-      <div class="overview-item"><strong>Players</strong><span>4 (2 teams of 2; partners sit opposite)</span></div>
-      <div class="overview-item"><strong>Deck</strong><span>2 standard Euchre decks, J–A only (32 cards)</span></div>
-      <div class="overview-item"><strong>Cards per Player</strong><span>8 (all cards are dealt)</span></div>
-      <div class="overview-item"><strong>Game Length</strong><span>Each player deals twice, or first to 42 points</span></div>
-    </div>
-  </section>
-
-  <div class="ornament">✦ ✦ ✦</div>
-
-  <!-- 2. The Deck -->
-
-  <section>
-    <h2><span class="section-num">II</span> The Deck</h2>
-    <p>Combine two standard Euchre decks and remove all cards except Jacks, Queens, Kings, and Aces. This yields <strong>32 cards</strong> — 8 per suit, with two identical copies of every card. This duplication creates a special rule throughout the game: <strong>when two identical cards are played in the same trick, the one played first outranks the second.</strong></p>
-  </section>
-
-  <!-- 3. Card Ranking -->
-
-  <section>
-    <h2><span class="section-num">III</span> Card Ranking</h2>
-
-```
-<h3>High Trump (standard play)</h3>
-<p>When a trump suit is named and High is called, cards rank from highest to lowest:</p>
-<table>
-  <thead><tr><th>#</th><th>Card</th><th>Notes</th></tr></thead>
-  <tbody>
-    <tr><td class="rank-num">1</td><td><strong>Right Bower</strong></td><td>Jack of the trump suit</td></tr>
-    <tr><td class="rank-num">2</td><td><strong>Left Bower</strong></td><td>Jack of the other suit of the same color as trump</td></tr>
-    <tr><td class="rank-num">3</td><td>Ace of trump</td><td></td></tr>
-    <tr><td class="rank-num">4</td><td>King of trump</td><td></td></tr>
-    <tr><td class="rank-num">5</td><td>Queen of trump</td><td></td></tr>
-    <tr><td class="rank-num">6</td><td>Second Ace of trump</td><td>Duplicate; loses to the first Ace played</td></tr>
-    <tr><td class="rank-num">7–8</td><td>Second King, Second Queen</td><td>Similarly outranked by their earlier duplicates</td></tr>
-  </tbody>
-</table>
-<div class="callout">
-  <strong>Example — Hearts are trump:</strong> J♥ (Right) &gt; J♦ (Left) &gt; A♥ &gt; K♥ &gt; Q♥ &gt; remaining Hearts in order, first played beats second.
-</div>
-
-<h3>Low Trump (reversed)</h3>
-<p>When Low is called with a trump suit, the ranking completely reverses — the <em>lowest</em> trump wins tricks, not the highest:</p>
-<table>
-  <thead><tr><th>#</th><th>Card</th><th>Notes</th></tr></thead>
-  <tbody>
-    <tr><td class="rank-num">1</td><td>Queen of trump</td><td>Lowest — wins in Low</td></tr>
-    <tr><td class="rank-num">2</td><td>King of trump</td><td></td></tr>
-    <tr><td class="rank-num">3</td><td>Ace of trump</td><td></td></tr>
-    <tr><td class="rank-num">4</td><td>Left Bower</td><td>Jack of same-color suit</td></tr>
-    <tr><td class="rank-num">5</td><td>Right Bower</td><td>Jack of trump suit — highest, weakest in Low</td></tr>
-  </tbody>
-</table>
-<p>Duplicates still follow the first-played rule: the first Queen of trump beats the second.</p>
-
-<h3>No Trump High</h3>
-<p>No trump suit exists. Within each suit, Aces rank highest: <strong>A &gt; K &gt; Q &gt; J</strong>. Highest card of the led suit wins. First-played wins duplicates.</p>
-
-<h3>No Trump Low</h3>
-<p>No trump suit exists. Within each suit, Jacks rank lowest: <strong>J &gt; Q &gt; K &gt; A</strong> (reading lowest to highest). The <em>lowest</em> card of the led suit wins the trick. First-played wins duplicates.</p>
-```
-
-  </section>
-
-  <div class="ornament">✦ ✦ ✦</div>
-
-  <!-- 4. The Deal -->
-
-  <section>
-    <h2><span class="section-num">IV</span> The Deal</h2>
-    <p>The dealer shuffles both decks together and deals all 32 cards clockwise, one at a time, until each player holds 8 cards. After each hand, the deal passes clockwise to the next player. A full game consists of each player dealing twice (8 hands total).</p>
-  </section>
-
-  <!-- 5. Bidding -->
-
-  <section>
-    <h2><span class="section-num">V</span> Bidding</h2>
-    <p>Bidding starts with the player to the dealer''s left and proceeds clockwise. Each player has exactly one opportunity to either <strong>pass</strong> or make a <strong>higher bid</strong> than any previous bid. The player who makes the highest bid wins the contract and leads the first trick.</p>
-
-```
-<h3>Anatomy of a Bid</h3>
-<p>Every valid bid states three things:</p>
-<ol style="margin-left:20px; color: var(--ink-light);">
-  <li style="margin-bottom:4px"><strong>Number of tricks</strong> — how many tricks the bidding team pledges to win (3–8)</li>
-  <li style="margin-bottom:4px"><strong>Trump designation</strong> — one of the four suits, or No Trump</li>
-  <li style="margin-bottom:4px"><strong>High or Low</strong> — which card wins each trick</li>
-</ol>
-<div class="bid-examples">
-  <span class="bid-tag">4 Clubs High</span>
-  <span class="bid-tag">5 No Trump Low</span>
-  <span class="bid-tag">6 Hearts High</span>
-  <span class="bid-tag">8 Spades Low</span>
-</div>
-
-<h3>Raising the Bid</h3>
-<p>Each new bid must name <strong>more tricks</strong> than the current high bid. Suits carry no ranking — you cannot overcall with the same number of tricks in a different suit or mode. The minimum opening bid is <strong>3 tricks</strong>.</p>
-<div class="callout">
-  <strong>Example:</strong> If the current bid is "4 Hearts High," the next bidder must bid 5 or more tricks. Bids of "4 Spades" or "4 No Trump" are invalid.
-  <div class="bid-examples" style="margin-top:10px">
-    <span class="bid-tag">5 Clubs Low ✓</span>
-    <span class="bid-tag">5 No Trump High ✓</span>
-    <span class="bid-tag invalid">4 Spades High</span>
-    <span class="bid-tag invalid">4 No Trump Low</span>
-  </div>
-</div>
-
-<h3>Lone Hand Bids</h3>
-<p>Any bid may be declared <strong>Alone</strong>, meaning the bidder''s partner sits out the hand with cards face down. A lone bid takes precedence over an equal-trick partnership bid from an opponent — but opponents may counter with their own lone bid at the same or higher trick count.</p>
-
-<h3>Partner Exchange (Lone Bids Only)</h3>
-<p>A lone bidder may optionally exchange cards with their sitting-out partner before play begins:</p>
-<ul style="margin-left:20px; color:var(--ink-light)">
-  <li style="margin-bottom:4px"><strong>1-card exchange:</strong> Bidder discards 1 card face down; partner passes 1 card face down.</li>
-  <li><strong>2-card exchange:</strong> Same process with 2 cards each.</li>
-</ul>
-<div class="callout warning">
-  <strong>Critical:</strong> Both the bidder and partner must choose and commit to their exchange cards <em>simultaneously</em>, before either sees what the other has passed.
-</div>
-```
-
-  </section>
-
-  <div class="ornament">✦ ✦ ✦</div>
-
-  <!-- 6. Playing the Hand -->
-
-  <section>
-    <h2><span class="section-num">VI</span> Playing the Hand</h2>
-
-```
-<h3>Opening Lead</h3>
-<p>The winning bidder leads the first trick. In a Lone hand, the bidder leads even though only three hands are active.</p>
-
-<h3>Following Suit</h3>
-<p>Each player <strong>must</strong> follow the led suit if able. If a player has no cards of the led suit, they may play any card — including trump. The Left Bower counts as a member of the <em>trump suit</em>, not its face suit, for both leading and following.</p>
-
-<h3>Winning a Trick</h3>
-<p>The winning card is determined by the game mode:</p>
-<table>
-  <thead><tr><th>Mode</th><th>Wins with trump played</th><th>Wins without trump played</th></tr></thead>
-  <tbody>
-    <tr><td><strong>High</strong></td><td>Highest trump played</td><td>Highest card of led suit</td></tr>
-    <tr><td><strong>Low</strong></td><td>Lowest trump played</td><td>Lowest card of led suit</td></tr>
-  </tbody>
-</table>
-<p style="margin-top:10px">The winner of each trick leads the next. Play continues until all 8 tricks are complete.</p>
-```
-
-  </section>
-
-  <!-- 7. Scoring -->
-
-  <section>
-    <h2><span class="section-num">VII</span> Scoring</h2>
-
-```
-<h3>Bidding Team</h3>
-<p>If the bidding team wins <em>at least</em> as many tricks as they bid, they score the number of tricks actually won (not just the bid amount). If they fall short, they <em>lose</em> points equal to their bid.</p>
-<table>
-  <thead><tr><th>Bid</th><th>Tricks Won</th><th>Result</th></tr></thead>
-  <tbody>
-    <tr><td>5</td><td>6</td><td class="score-positive">+6</td></tr>
-    <tr><td>5</td><td>5</td><td class="score-positive">+5</td></tr>
-    <tr><td>5</td><td>4</td><td class="score-negative">−5</td></tr>
-  </tbody>
-</table>
-
-<h3>Defending Team</h3>
-<p>The non-bidding team scores <strong>1 point for every trick they win</strong>, regardless of whether the bidding team succeeds or fails.</p>
-
-<h3>Lone Hand Scoring</h3>
-<table>
-  <thead><tr><th>Contract</th><th>Outcome</th><th>Score</th></tr></thead>
-  <tbody>
-    <tr><td>Any lone bid</td><td>Success</td><td class="score-positive">Tricks won +1 bonus</td></tr>
-    <tr><td>8-trick lone (Shoot the Moon)</td><td>Success</td><td class="score-positive">Double tricks won (16)</td></tr>
-    <tr><td>Any lone bid</td><td>Failure</td><td class="score-negative">Lose full bid amount</td></tr>
-  </tbody>
-</table>
-
-<h3>Shooting the Moon</h3>
-<p>A bid of all 8 tricks — "Shoot the Moon" — is the highest possible contract. If successful alone, the bidder''s team scores 16 points. If the contract fails, the team loses 8 points. Defenders still score any tricks they manage to win.</p>
-
-<h3>Reneging</h3>
-<p>A renege occurs when a player fails to follow the led suit despite holding a card of that suit. Agree on the penalty before play begins. Common options:</p>
-<ul style="margin-left:20px; color:var(--ink-light)">
-  <li style="margin-bottom:4px">Automatic set: the offending team loses their bid (or the hand is conceded to the defenders)</li>
-  <li style="margin-bottom:4px">Deduct 3 points from the offending team</li>
-  <li>Replay the hand</li>
-</ul>
-<div class="callout warning">
-  <strong>House rule:</strong> Agree on reneging penalties before the first hand is dealt.
-</div>
-```
-
-  </section>
-
-  <div class="ornament">✦ ✦ ✦</div>
-
-  <!-- 8. Winning -->
-
-  <section>
-    <h2><span class="section-num">VIII</span> Winning the Game</h2>
-    <p>The game ends when <strong>each player has dealt twice</strong> (8 hands), or when a team first reaches the agreed target score (commonly <strong>42 points</strong>). The team with the higher score at game end wins. In case of a tie, play one additional hand as a tiebreaker.</p>
-  </section>
-
-  <!-- Quick Reference -->
-
-  <section>
-    <h2><span class="section-num">IX</span> Quick Reference</h2>
-    <table>
-      <thead><tr><th>Rule</th><th>Detail</th></tr></thead>
-      <tbody>
-        <tr><td>Minimum bid</td><td>3 tricks</td></tr>
-        <tr><td>Maximum bid</td><td>8 tricks (Shoot the Moon)</td></tr>
-        <tr><td>Bid options</td><td>Any suit or No Trump; High or Low; Alone or with partner</td></tr>
-        <tr><td>Suit ranking in bidding</td><td>None — only trick count matters</td></tr>
-        <tr><td>Left Bower suit</td><td>Belongs to trump suit for leading and following</td></tr>
-        <tr><td>Duplicate card tie</td><td>First played wins, always</td></tr>
-        <tr><td>Defenders always score</td><td>1 point per trick, win or lose</td></tr>
-        <tr><td>Failed contract</td><td>Lose full bid amount</td></tr>
-        <tr><td>Successful bid</td><td>Score tricks actually won</td></tr>
-        <tr><td>Exchange timing</td><td>Simultaneous and blind</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <div class="footer">
-    Bid Euchre &nbsp;·&nbsp; High &amp; Low Edition &nbsp;·&nbsp; 4 Players &nbsp;·&nbsp; 32 Cards
-  </div>
-</div>
-</body>
+  </body>
 </html>
