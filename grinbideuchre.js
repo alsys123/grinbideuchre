@@ -11,6 +11,34 @@ const RED=new Set(['♥','♦']);
 
 let southSortMode = "base"; // "base" or "bid"
 
+// STATE
+
+const PL=['south','west','north','east'];
+
+const TEAMS={south:'us',north:'us',west:'them',east:'them'};
+const PN={south:'You',north:'North',west:'West',east:'East'};
+
+const G={
+    sc:{us:0,them:0},
+    H:{south:[],west:[],north:[],east:[]},
+    trick:[],
+    done:[],
+    tw:{us:0, them:0 },
+    
+    dealer:'south',leader:'west',cur:null,
+
+    phase:'deal',bids:{},hBid:null,trump:null,hl:'high',sel:null,
+    firstHand: true
+    
+};
+
+// how many hands have each player dealt
+//G.starts = { north:0, east:0, south:0, west:0 };
+G.starts = { north:2, east:2, south:2, west:2 }; //testing ONLY!
+
+G.history = [];
+
+
 // GAME CORE
 
 function deck() {
@@ -105,9 +133,12 @@ function crank(c,t,led,hl){
 }
 
 function twinner(trick,t,hl){
-    const led=esuit(trick[0].card,t,hl);let best=trick[0];
+    const led=esuit(trick[0].card,t,hl);
+    let best=trick[0];
+    
     for(let i=1;i<trick.length;i++)
 	if(crank(trick[i].card,t,led,hl)>crank(best.card,t,led,hl))best=trick[i];
+    
     return best.player;
 }
 
@@ -117,30 +148,6 @@ function legal(hand,led,t,hl){
     const f=hand.filter(c=>esuit(c,t,hl)===led);
     return f.length?f:hand;
 }
-
-// STATE
-
-const PL=['south','west','north','east'];
-
-const TEAMS={south:'us',north:'us',west:'them',east:'them'};
-const PN={south:'You',north:'North',west:'West',east:'East'};
-
-const G={
-    sc:{us:0,them:0},
-    H:{south:[],west:[],north:[],east:[]},
-    trick:[],
-    done:[],
-    tw:{us:0, them:0 },
-    
-    dealer:'south',leader:'west',cur:null,
-
-    phase:'deal',bids:{},hBid:null,trump:null,hl:'high',sel:null,
-    firstHand: true
-    
-};
-
-G.starts = { north:0, east:0, south:0, west:0 };
-G.history = [];
 
 
 // DEAL
@@ -324,7 +331,9 @@ function randomLeader() {
 
 function endGame() {
 
-    speech("south", "Game over — all players have started twice!",2000);
+    speech("south",
+	   "Game over — all players have started twice!",
+	   5000);
 
     // or show a proper overlay if you want
 }
@@ -341,8 +350,11 @@ function showStarterGraphic(player, cb) {
     const el = $('starter-graphic');
 
     //    el.textContent = PN[player] + " starts!";
-
-    el.textContent = PN[dealer] + " is the dealer.";
+    if (PN[dealer] == "You") {
+	el.textContent = "You are the dealer";
+    } else {
+	el.textContent = PN[dealer] + " is the dealer";
+    }
 //    PN[player] + " bids first — "
 
 
