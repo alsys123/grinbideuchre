@@ -622,7 +622,7 @@ function showGameDetails() {
 }
 
 // RUNNING History
-
+/*
 function showHistory() {
     const body = $('history-body');
     body.innerHTML = "";
@@ -644,7 +644,58 @@ function showHistory() {
                 </div>
             `;
         });
+    } */
+function showHistory() {
+    const body = $('history-body');
+    body.innerHTML = "";
+
+    if (G.history.length === 0) {
+        body.innerHTML = `<div style="text-align:center;padding:32px 0;color:#999;font-style:italic;">No hands played yet.</div>`;
+        $('history-modal').classList.remove('hidden');
+        return;
     }
+
+    let runUs = 0, runThem = 0;
+
+    const rows = G.history.map((h, i) => {
+        runUs   += h.score.us;
+        runThem += h.score.them;
+
+        const bidText = h.bid
+            ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}`
+            : "No bid";
+
+        const scoreDelta = h.score.us !== 0 || h.score.them !== 0
+            ? `<span class="hist-delta ${h.score.us > h.score.them ? 'us' : 'them'}">
+                 +${h.score.us > 0 ? h.score.us : h.score.them}
+               </span>`
+            : "";
+
+        return `
+            <div class="hist-row ${i % 2 === 0 ? 'even' : ''}">
+              <div class="hist-hand">${i + 1}</div>
+              <div class="hist-bid">${bidText}</div>
+              <div class="hist-tricks">${h.tricks.us}–${h.tricks.them}</div>
+              <div class="hist-score">${scoreDelta}</div>
+              <div class="hist-running">
+                <span class="run-us">${runUs}</span>
+                <span class="run-sep">·</span>
+                <span class="run-them">${runThem}</span>
+              </div>
+            </div>`;
+    }).join('');
+
+    body.innerHTML = `
+        <div class="hist-table">
+          <div class="hist-header">
+            <div class="hist-hand">#</div>
+            <div class="hist-bid">Bid</div>
+            <div class="hist-tricks">Tricks</div>
+            <div class="hist-score">Pts</div>
+            <div class="hist-running">Running</div>
+          </div>
+          ${rows}
+        </div>`;
 
     $('history-modal').classList.remove('hidden');
 }
