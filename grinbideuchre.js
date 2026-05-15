@@ -265,8 +265,8 @@ function scoreHand(){
 	    extra=' You & North win!';
 	}else
 	    if(G.sc.them>G.sc.us){
-		title='Defeated!';e
-		xtra=' East & West win.';
+		title='Defeated!';
+		extra=' East & West win.';
 	    }else{
 		title='Tie Game!';
 	    }
