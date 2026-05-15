@@ -139,7 +139,7 @@ function resolveT(){
     hud();
     
     const ws=$('ts-'+winner);
-    ws.style.animation='trickWin .4s ease';
+    ws.style.animation='trickWin 1.0s ease'; //0.4
     
     setTimeout(()=>{ws.style.animation='';
 		   },400);
