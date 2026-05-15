@@ -412,8 +412,12 @@ function endGame() {
         $('deal-again-btn').classList.remove('hidden');
 	
         // Reset score
-        G.sc = { us: 0, them: 0 };
-
+// ✅ ADD THESE TWO LINES:
+    G.sc = { us: 0, them: 0 };
+    G.starts = { north: 0, east: 0, south: 0, west: 0 };
+    G.firstHand = true;   // ← makes the spinner run again on hand 1
+    G.history = [];       // ← optional: clear history for fresh game
+		
         // Reset game state
         startNewGame();
 
