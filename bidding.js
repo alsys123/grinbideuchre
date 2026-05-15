@@ -199,10 +199,14 @@ function showBidMod(){
 function pickAmt(amt){
     
     pAmt=amt;
+
+    // ⭐ ALWAYS hide bid-buttons first
+//    $('bid-buttons').style.display = 'none';
+    hideAllPickers();   // ⭐ ALWAYS reset first
     
     if (amt === 8) {
 	pHL = 'high';   // always high for 8‑bid
-	pickAlone();    // now choose 1‑card, 2‑card, or MoonShot
+	pickAlone(amt);    // now choose 1‑card, 2‑card, or MoonShot
 	return;
     }
 
@@ -225,30 +229,53 @@ function pickAmt(amt){
 
 	b.addEventListener('click',()=>
 	    {pHL=v;
-	     pickAlone();
+	     pickAlone(amt);
 	    });
 	hl.appendChild(b);
     });
     
 } //pickAmt
 
-function pickAlone() {
-    $('highlow-picker').style.display = 'none';
+function pickAlone(amt) {
 
+//    $('highlow-picker').style.display = 'none';
+
+    hideAllPickers();   // ⭐ ALWAYS reset first
+    
     // This text is now specific to the 8‑bid scenario
-    $('modal-sub').textContent = 'Choose your 8‑bid option';
+    $('modal-sub').textContent = 'Choose your bid option';
 
     const ap = $('alone-picker');
     ap.style.display = 'flex';
     ap.innerHTML = '';
-
-    // Three options:
-    const options = [
-        { label: 'Ask 1 Card',  alone: true,  cardReq: 1 },
-        { label: 'Ask 2 Cards', alone: true,  cardReq: 2 },
-        { label: 'MoonShot!',   alone: true,  cardReq: 0 }
-    ];
-
+    
+    let options = [];
+    // Options based on what was bid
+    
+    if (amt === 8) {
+	options = [
+            { label: 'Not Alone',   alone: false,  cardReq: 0 },
+            { label: 'Ask 1 Card',  alone: true,   cardReq: 1 },
+            { label: 'Ask 2 Cards', alone: true,   cardReq: 2 },
+            { label: 'MoonShot!',   alone: true,   cardReq: 0 }
+	];
+    } else {
+	options = [
+	    { label: 'Not Alone',   alone: false,  cardReq: 0 },
+            { label: 'Ask 1 Card',  alone: true,   cardReq: 1 },
+            { label: 'Ask 2 Cards', alone: true,   cardReq: 2 }
+	]
+    }
+    
+/*    
+    options = [
+            { label: 'Not Alone',   alone: false,  cardReq: 0 },
+            { label: 'Ask 1 Card',  alone: true,   cardReq: 1 },
+            { label: 'Ask 2 Cards', alone: true,   cardReq: 2 },
+            { label: 'MoonShot!',   alone: true,   cardReq: 0 }
+	];
+*/
+    
     options.forEach(opt => {
         const b = document.createElement('button');
         b.className = 'abtn';
@@ -264,15 +291,31 @@ function pickAlone() {
     });
 } //pickAlone
 
+function hideAllPickers() {
+    $('bid-buttons').style.display = 'none';
+    $('highlow-picker').style.display = 'none';
+    $('alone-picker').style.display = 'none';
+}
+
 function pickCardReq(){
-    $('alone-picker').style.display='none';
+        hideAllPickers();   // ⭐ ALWAYS reset first
+//    $('alone-picker').style.display='none';
     $('modal-sub').textContent='Ask partner for cards?';
-    const cp=$('card-req-picker'); cp.style.display='flex'; cp.innerHTML='';
-    ['0','1','2'].forEach(v=>{const b=document.createElement('button');
-			      b.className='cbtn';
-			      b.textContent=v;
-			      b.addEventListener('click',()=>{pCardReq=parseInt(v);pickTrump();});cp.appendChild(b);
-			     });
+    
+    const cp=$('card-req-picker');
+    cp.style.display='flex';
+    cp.innerHTML='';
+    
+    ['0','1','2'].forEach(v=>{
+	const b=document.createElement('button');
+	b.className='cbtn';
+	b.textContent=v;
+	b.addEventListener('click',()=>{
+	    pCardReq=parseInt(v);
+	    pickTrump();
+	});
+	cp.appendChild(b);
+    });
     
 }
 
