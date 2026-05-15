@@ -1,9 +1,16 @@
 // BIDDING
 let bOrder=[],bIdx=0,pAmt=null,pHL=null,pAlone=null,pCardReq=null;
 
+// Entry Point: startBid --> from mainline
 function startBid(){
-    G.phase='bid';const si=PL.indexOf(G.leader);
-    bOrder=PL.map((_,i)=>PL[(si+i)%4]);bIdx=0;nextBid();
+    G.phase='bid';
+    const si=PL.indexOf(G.leader);
+    
+    bOrder=PL.map((_,i)=>PL[(si+i)%4]);
+
+    bIdx=0;
+    nextBid();
+
 }
 
 function nextBid(){
@@ -200,8 +207,6 @@ function pickAmt(amt){
     
     pAmt=amt;
 
-    // ⭐ ALWAYS hide bid-buttons first
-//    $('bid-buttons').style.display = 'none';
     hideAllPickers();   // ⭐ ALWAYS reset first
     
     if (amt === 8) {
@@ -342,19 +347,23 @@ function pickTrump(){
     });
     // no trump button option
     // Add NT button
-const nt = document.createElement('button');
-nt.className = 'tbtn ntbtn';
-nt.textContent = 'NT';
-nt.addEventListener('click', () => {
-    $('bid-modal').classList.add('hidden');
-    $('bid-buttons').style.display='grid';
-    placeBid('south', pAmt, 'NT', pHL, pAlone, pAlone ? pCardReq : 0);
-    hud();
-    bIdx++;
-    setTimeout(nextBid, 300);
-});
-tp.appendChild(nt);
+    const nt = document.createElement('button');
+    nt.className = 'tbtn ntbtn';
+    nt.textContent = 'NT';
+    nt.addEventListener('click', () => {
 
+	$('bid-modal').classList.add('hidden');
+	$('bid-buttons').style.display='grid';
+	placeBid('south', pAmt, 'NT', pHL, pAlone, pAlone ? pCardReq : 0);
+	hud();
+
+	bIdx++;
+	setTimeout(nextBid, 300);
+
+    });
+
+    tp.appendChild(nt);
+    
 }
 
 function finishBid() {

@@ -33,8 +33,8 @@ const G={
 };
 
 // how many hands have each player dealt
-//G.starts = { north:0, east:0, south:0, west:0 };
-G.starts = { north:2, east:2, south:2, west:2 }; //testing ONLY!
+G.starts = { north:0, east:0, south:0, west:0 };
+//G.starts = { north:2, east:2, south:2, west:2 }; //testing ONLY!
 
 G.history = [];
 
@@ -244,7 +244,9 @@ function scoreHand(){
     hud();
     
     const h=G.hBid,bt=TEAMS[h.player],ot=bt==='us'?'them':'us';
-    const btw=G.tw[bt],otw=G.tw[ot];let detail='';
+    const btw=G.tw[bt],otw=G.tw[ot];
+    
+    let detail='';
     
     if(btw>=h.bid){
 	G.sc[bt]+=btw;
@@ -254,6 +256,7 @@ function scoreHand(){
 	G.sc[bt]-=h.bid;
 	detail=PN[h.player]+"'s team went set! \u2212"+h.bid+' pts.';
     }
+    
     G.sc[ot]+=otw;
     let title='Hand Complete',extra='';
     if(G.sc.us>=32||G.sc.them>=32){
@@ -294,28 +297,32 @@ function scoreHand(){
     G.dealer=PL[(di+1)%4];
     const btn=$('deal-again-btn');
 
-    if(G.sc.us>=32||G.sc.them>=32){
-	btn.textContent='New Game';
-	
-	btn.onclick=()=>{
-	    G.sc={us:0,them:0};
-//	    deal();
-	    startNewGame();
-	};
-
-    }
-    else{
+    // Here we go to new game if done
+    // all players have dealt twice.
+    //    if(G.sc.us>=32||G.sc.them>=32){
+    if( allPlayersHaveTwoStarts() ){
+//	btn.textContent='New Game';
+//	
+//	btn.onclick=()=>{
+//	    G.sc={us:0,them:0};
+	//	    startNewGame();
+	endGame();
+    } else {
 	btn.textContent='Deal Next Hand';
 	btn.onclick=nextHand;
     }
-}
+
+} //scoreHand
 
 $('deal-again-btn').addEventListener('click',deal);
 
 //$('new-game-btn').addEventListener('click',deal);
 $('new-game-btn').addEventListener('click', startNewGame);
 
+
 function nextHand() {
+    // this is more of a double check because
+    // scoreHand will end the game
     if (allPlayersHaveTwoStarts()) {
         endGame();
     } else {
@@ -329,13 +336,90 @@ function randomLeader() {
     return PL[i]; // PL = ["north","east","south","west"]
 }
 
+/*
 function endGame() {
 
-    speech("south",
+    $('result-overlay').classList.remove('hidden');
+
+    speech("north",
 	   "Game over — all players have started twice!",
 	   5000);
 
+    // here we start a new game
+    G.sc={us:0,them:0};
+
+//    btn.textContent='Game over - start New Game';
+//    btn.onclick=nextHand;
+    $('start-screen').classList.remove('hidden');
+    
+    startNewGame();
+
     // or show a proper overlay if you want
+    }
+*/
+/*
+function endGame() {
+
+    // Show final result overlay
+    $('result-overlay').classList.remove('hidden');
+
+    speech("north",
+        "Game over — all players have started twice!",
+        5000
+    );
+
+    // ⭐ Wait 3 seconds so player can see the final score
+    setTimeout(() => {
+
+        // Hide result overlay
+        $('result-overlay').classList.add('hidden');
+
+        // Show start screen
+        $('start-screen').classList.remove('hidden');
+
+        // Reset score for the next game
+        G.sc = { us: 0, them: 0 };
+
+        // Prepare a fresh game but DO NOT start dealing yet
+        startNewGame();
+
+    }, 3000); // adjust delay if you want
+
+} */
+function endGame() {
+
+    // Show final result overlay
+    $('result-overlay').classList.remove('hidden');
+
+    speech("north",
+        "Game over — all players have started twice!",
+        5000
+    );
+
+    $('deal-again-btn').classList.add('hidden');
+    
+    // Show the Play Again button
+    const pb = $('play-again-btn');
+    pb.classList.remove('hidden');
+
+    pb.onclick = () => {
+
+        // Hide result overlay
+        $('result-overlay').classList.add('hidden');
+
+        // Hide the button again for next time
+        pb.classList.add('hidden');
+        $('deal-again-btn').classList.remove('hidden');
+	
+        // Reset score
+        G.sc = { us: 0, them: 0 };
+
+        // Reset game state
+        startNewGame();
+
+        // Show start screen
+        $('start-screen').classList.remove('hidden');
+    };
 }
 
 //showStarterGraphic("south", ()=>{});

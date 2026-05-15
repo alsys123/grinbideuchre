@@ -1,6 +1,8 @@
 
 
 // PLAY
+
+// Entry Point: startTrick --> from bidding.js
 function startTrick(){
     G.trick=[];
     
@@ -124,18 +126,30 @@ function aiFollow(player,legs,led){
     return legs.sort((a,b)=>crank(a,G.trump,led,G.hl)-crank(b,G.trump,led,G.hl))[0];
 }
 
+// Either startTrick looping again
+//  OR scoreHand in mainline to end the hand
 function resolveT(){
     const winner=twinner(G.trick,G.trump,G.hl);
-    G.tw[TEAMS[winner]]++; G.done.push({trick:G.trick,winner}); G.leader=winner;
-    msg(PN[winner]+' wins the trick!',1500); setAct(winner); hud();
-    const ws=$('ts-'+winner); ws.style.animation='trickWin .4s ease';
+    
+    G.tw[TEAMS[winner]]++;
+    G.done.push({trick:G.trick,winner});
+    G.leader=winner;
+    msg(PN[winner]+' wins the trick!',1500);
+    setAct(winner);
+    hud();
+    
+    const ws=$('ts-'+winner);
+    ws.style.animation='trickWin .4s ease';
     
     setTimeout(()=>{ws.style.animation='';
 		   },400);
+    
     setTimeout(()=>{
-	clearTC();G.trick=[];
+	clearTC();
+	G.trick=[];
 	if(G.H.south.length===0)scoreHand();
 	else startTrick();
+	
     },1700);
 }
 
