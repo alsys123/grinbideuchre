@@ -326,7 +326,7 @@ function nextHand() {
     if (allPlayersHaveTwoStarts()) {
         endGame();
     } else {
-        deal();
+    //    deal();  called in startNewGame
         startNewGame();
     }
 }
