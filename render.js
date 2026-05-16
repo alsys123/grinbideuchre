@@ -7,9 +7,27 @@
 function sCol(s){
     return RED.has(s)?'#cc2222':'#111';
 }
+function cardSVG(rank, suit, down) {
+    if (down) return `<svg viewBox="0 0 72 108" xmlns="http://www.w3.org/2000/svg">
+    <rect width="90" height="120" rx="7" fill="#1c3e60"/>
+    <rect x="3" y="3" width="66" height="102" rx="6" fill="none" stroke="#2a5e90" stroke-width="1.2"/>
+    <rect x="5" y="5" width="62" height="98" rx="5" fill="#1c3e60" opacity="0.7"/>
+    <path d="M5 5L67 5M5 103L67 103M5 5L5 103M67 5L67 103" stroke="#2a5e90" stroke-width="0.5"/>
+    <line x1="5" y1="5" x2="67" y2="103" stroke="#2a5e90" stroke-width="0.4"/>
+    <line x1="67" y1="5" x2="5" y2="103" stroke="#2a5e90" stroke-width="0.4"/>
+    <rect x="20" y="30" width="32" height="48" rx="3" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.3"/>
+    <text x="36" y="60" text-anchor="middle" font-family="Georgia,serif" font-size="18" fill="#c9a84c" opacity="0.35">&#10022;</text>
+  </svg>`;
+
+    const faceMap = { 'A': 'a', 'J': 'j', 'Q': 'q', 'K': 'k' };
+    const fileRank = faceMap[rank] ?? rank;
+    const file = `cards/Simple/${suit}${fileRank}.png`;
+
+    return `<img src="${file}" style="width:72px;height:108px;display:block;" draggable="false">`;
+}
 
 // was 72x108
-function cardSVG(rank,suit,down){
+function cardSVGv1(rank,suit,down){
     if(down) return `<svg viewBox="0 0 72 108" xmlns="http://www.w3.org/2000/svg">
     <rect width="90" height="120" rx="7" fill="#1c3e60"/>
     <rect x="3" y="3" width="66" height="102" rx="6" fill="none" stroke="#2a5e90" stroke-width="1.2"/>
