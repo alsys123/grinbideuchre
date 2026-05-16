@@ -38,7 +38,6 @@ G.starts = { north:0, east:0, south:0, west:0 };
 
 G.history = [];
 
-addSampleHistory();
 
 // GAME CORE
 
@@ -315,24 +314,98 @@ function scoreHand(){
     }
 
 } //scoreHand
-function addSampleHistory() {
-G.history.push(
-    {
-        dealer: "south",
-        leader: "west",
-        bid: { player: "north", bid: 5, trump: "♠", hl: "high", alone: false },
-        tricks: { us: 3, them: 2 },
-        score:  { us: 8, them: 6 }
-    },
-    {
-        dealer: "east",
-        leader: "south",
-        bid: { player: "east", bid: 4, trump: "♥", hl: "low", alone: true },
-        tricks: { us: 2, them: 3 },
-        score:  { us: 10, them: 9 }
+
+function showHistory() {
+    const body = $('history-body');
+    body.innerHTML = "";
+
+    if (G.history.length === 0) {
+        body.innerHTML = `<div style="text-align:center;padding:32px 0;color:#999;font-style:italic;">No hands played yet.</div>`;
+        $('history-modal').classList.remove('hidden');
+        return;
     }
-);
+
+    let runUs = 0, runThem = 0;
+
+    const rows = G.history.map((h, i) => {
+        runUs   += h.score.us;
+        runThem += h.score.them;
+
+	cLog("history h=", i, h);
+	
+        const bidText = h.bid
+            ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}`
+            : "No bid";
+
+        const scoreDelta = h.score.us !== 0 || h.score.them !== 0
+            ? `<span class="hist-delta ${h.score.us > h.score.them ? 'us' : 'them'}">
+                 +${h.score.us > 0 ? h.score.us : h.score.them}
+               </span>`
+            : "";
+
+	const weSide   = `${h.tricks.us}   /  ${h.score.us}`;
+	const themSide = `${h.tricks.them} /  ${h.score.them}`;
+	
+	// bid = dealer
+	// tricks = bid - who and amount and suit
+	// score  = We
+	// hist-runnning = them
+	const divString = `
+            <div class="hist-row ${i % 2 === 0 ? 'even' : ''}">
+
+              <div class="hist-hand">${i + 1}</div>
+              <div class="hist-bid">${h.dealer}</div>
+              <div class="hist-tricks">${bidText}</div>
+
+              <div class="hist-score">${weSide}</div>
+              <div class="hist-running">${themSide}</div>
+
+            </div>`;
+	      
+        return divString;
+	
+    }).join('');
+
+    body.innerHTML = `
+        <div class="hist-table">
+          <div class="hist-header">
+            <div class="hist-hand">#</div>
+            <div class="hist-bid">Dealer</div>
+            <div class="hist-tricks">Bid</div>
+            <div class="hist-score">We</div>
+            <div class="hist-running">Them</div>
+          </div>
+          ${rows}
+        </div>`;
+
+    $('history-modal').classList.remove('hidden');
+    
 }
+
+/*
+  addSampleHistory();
+
+// score is the running score total
+function addSampleHistory() {
+    G.history.push(
+	{
+            dealer: "south",
+            leader: "west",
+        bid: { player: "north", bid: 5, trump: "♠", hl: "high", alone: false },
+            tricks: { us: 3, them: 2 },
+            score:  { us: 3, them: 2 }
+	},
+	{
+            dealer: "east",
+            leader: "south",
+        bid: { player: "east", bid: 8, trump: "♥", hl: "low", alone: true },
+            tricks: { us: 2, them: -8 },
+            score:  { us: 5, them: -6 }
+	}
+    );
+}
+*/
+
 
 $('deal-again-btn').addEventListener('click',deal);
 
@@ -597,15 +670,15 @@ $('rules-close').addEventListener('click', () => {
 });
 
 
-$('scoreboard').addEventListener('click', () => {
-    showGameDetails();
-});
+//$('scoreboard').addEventListener('click', () => {
+//    showGameDetails();
+//});
 
 $('details-close').addEventListener('click', () => {
     $('details-modal').classList.add('hidden');
 });
 
-
+// ... here take this out with all the html and css .... !!!!
 function showGameDetails() {
 
     const body = $('details-body');
@@ -664,61 +737,6 @@ function showHistory() {
             `;
         });
     } */
-function showHistory() {
-    const body = $('history-body');
-    body.innerHTML = "";
-
-    if (G.history.length === 0) {
-        body.innerHTML = `<div style="text-align:center;padding:32px 0;color:#999;font-style:italic;">No hands played yet.</div>`;
-        $('history-modal').classList.remove('hidden');
-        return;
-    }
-
-    let runUs = 0, runThem = 0;
-
-    const rows = G.history.map((h, i) => {
-        runUs   += h.score.us;
-        runThem += h.score.them;
-
-        const bidText = h.bid
-            ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}`
-            : "No bid";
-
-        const scoreDelta = h.score.us !== 0 || h.score.them !== 0
-            ? `<span class="hist-delta ${h.score.us > h.score.them ? 'us' : 'them'}">
-                 +${h.score.us > 0 ? h.score.us : h.score.them}
-               </span>`
-            : "";
-
-        return `
-            <div class="hist-row ${i % 2 === 0 ? 'even' : ''}">
-              <div class="hist-hand">${i + 1}</div>
-              <div class="hist-bid">${bidText}</div>
-              <div class="hist-tricks">${h.tricks.us} vs ${h.tricks.them}</div>
-              <div class="hist-score">${scoreDelta}</div>
-			    <div class="hist-score">${h.score.us} vs ${h.score.them}</div>
-              <div class="hist-running">
-                <span class="run-us">${runUs}</span>
-                <span class="run-sep"> vs </span>
-                <span class="run-them">${runThem}</span>
-              </div>
-            </div>`;
-    }).join('');
-
-    body.innerHTML = `
-        <div class="hist-table">
-          <div class="hist-header">
-            <div class="hist-hand">#</div>
-            <div class="hist-bid">Bid</div>
-            <div class="hist-tricks">Tricks</div>
-            <div class="hist-score">Pts</div>
-            <div class="hist-running">Running</div>
-          </div>
-          ${rows}
-        </div>`;
-
-    $('history-modal').classList.remove('hidden');
-}
 
 $('history-close').addEventListener('click', () => {
     $('history-modal').classList.add('hidden');
