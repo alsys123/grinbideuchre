@@ -79,20 +79,37 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 #name-east  { right:24px;  top:50%; transform:translateY(-50%) rotate(90deg);  }
 
 /* HANDS */
+
+
 .hand { position:absolute; display:flex; align-items:center; z-index:5; }
+
+#hand-north {
+    top:68px;    left:50%; transform:translateX(-50%); flex-direction:row; }
+#hand-west  { left:20px;
+	      top:50%;
+	      transform:translateY(-50%);
+	      flex-direction:column;
+	      z-index:1;
+	    }
+#hand-east  { right:20px;
+	      top:50%;
+	      transform:translateY(-50%);
+	      flex-direction:column;
+	      z-index:1;
+	    }
+
+
 #hand-south { bottom:10px; left:50%; transform:translateX(-50%); flex-direction:row; }
-#hand-north { top:68px;    left:50%; transform:translateX(-50%); flex-direction:row; }
-#hand-west  { left:20px;   top:50%; transform:translateY(-50%);  flex-direction:column; }
-#hand-east  { right:20px;  top:50%; transform:translateY(-50%);  flex-direction:column; }
 
-
+/*
 #hand-south .card {
-    width: 110px;   
-    height: 155px;  
-    margin-left:-28px;}
+    width: 140px;   
+    height: 200px;  
+    margin-left:-40px;}
 
 #hand-south .card:first-child {
     margin-left:0; }
+*/
 
 
 #hand-north .card { margin-left:-20px; } #hand-north .card:first-child { margin-left:0; }
@@ -122,10 +139,12 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 */
 
 /* CARD */
-.card { width:var(--cw); height:var(--ch);
+.card { width:var(--cw);
+	height:var(--ch);
 	border-radius:7px;
 	position:relative;
-	cursor:default; flex-shrink:0;
+	cursor:default;
+	flex-shrink:0;
 	filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));
 	transition:transform .16s ease,filter .16s ease; }
 
@@ -237,7 +256,9 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 	text-align:center;
 	box-shadow:0 20px 60px rgba(0,0,0,.8);
 	min-width:290px;
-	animation:mpop .28s ease both; }
+	animation:mpop .28s ease both;
+	margin-bottom: 140px;
+      }
 
 @keyframes mpop { from{transform:scale(.82);opacity:0} to{transform:scale(1);opacity:1} }
 .mtitle { font-size:20px;
@@ -617,3 +638,25 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 .run-them { color: #8b1a1a; }
 .run-sep  { color: #bbb; margin: 0 2px; font-weight: normal; }
 
+/* FINAL SOUTH OVERRIDE — MUST BE LAST */
+/*
+#hand-south {
+    display: block !important;   
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 140px !important;
+    height: 250px !important;
+    overflow: visible !important;
+    transform-origin: bottom center !important;
+    outline: 1px solid red;
+}
+
+#hand-south .card {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    transform-origin: bottom center !important;
+}
+*/

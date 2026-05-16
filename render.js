@@ -8,8 +8,41 @@ function sCol(s){
     return RED.has(s)?'#cc2222':'#111';
 }
 
+
+//v3
+function cardSVG(rank, suit, down) {
+    const downDiv =
+	  `<div style="width:66px;height:100px;
+         background:#1c3e60;border-radius:7px;
+         border:1px solid #2a5e90;"></div>`;
+
+    if (down) return downDiv;
+
+    const faceMap = { 'A': 'a', 'J': 'j', 'Q': 'q', 'K': 'k' };
+    const fileRank = faceMap[rank] ?? rank;
+    const faceCard =
+	  `<img src="cards/Simple/${suit}${fileRank}.png"  
+	style="
+        display:block;
+        width:150px;
+        transform: translateY(-100px) translateX(-50px);
+        z-index:50;
+        draggable="false"
+           >`
+    
+    return faceCard;
+
+}
+//        width:92px;
+//        height:128px;
+
+//v4
 function cardSVGv4(rank, suit, down) {
-    if (down) return `<img src="cards/Simple/back.jpg" style="width:72px;height:108px;display:block;" draggable="false">`;
+    if (down) return `<img src="cards/Simple/back.jpg"
+style="width:72px;
+height:108px;
+display:block;"
+draggable="false">`;
 
     const faceMap = { 'A': 'a', 'J': 'j', 'Q': 'q', 'K': 'k' };
     const fileRank = faceMap[rank] ?? rank;
@@ -17,20 +50,7 @@ function cardSVGv4(rank, suit, down) {
 style="width:72px;height:108px;display:block;" draggable="false">`;
 }
 
-//v3
-function cardSVG(rank, suit, down) {
-    if (down) return `<div style="width:66px;height:100px;
-background:#1c3e60;border-radius:7px;
-border:1px solid #2a5e90;"></div>`;
 
-    const faceMap = { 'A': 'a', 'J': 'j', 'Q': 'q', 'K': 'k' };
-    const fileRank = faceMap[rank] ?? rank;
-    return `<img src="cards/Simple/${suit}${fileRank}.png" 
-	style="width:92px;
-height:128px;
-display:block;"
-draggable="false">`;
-}
 //v2
 function cardSVGv2(rank, suit, down) {
     if (down) return `<svg viewBox="0 0 72 108" xmlns="http://www.w3.org/2000/svg">
@@ -202,8 +222,10 @@ function renderHands(canPlay, onlyPlayer = null) {
         el.innerHTML = '';
 
         const south = (p === 'south');
-
-        G.H[p].forEach(card => {
+	
+	const count = G.H[p].length;
+	
+        G.H[p].forEach((card,i) => {
 
             const d = document.createElement('div');
             d.className = 'card din' + (south && canPlay ? ' playable' : '');
@@ -211,6 +233,26 @@ function renderHands(canPlay, onlyPlayer = null) {
             d.innerHTML = cardSVG(card.r, card.s, !south);
             d.dataset.cid = card.uid;
 
+	    
+	    if (p === "south") {
+		if (i==2) {
+		}
+	    }
+	    
+	    /*
+		const spread = 40; // degrees
+		const angle = ((i / (count - 1)) - 0.5) * spread;
+// was		const offset = (i - (count - 1) / 2) * 26;
+		const offset = (i - (count - 1) / 2) * 120;  // instead of 26 or similar
+
+		d.style.position = "absolute";
+		d.style.bottom = "0";
+		d.style.left = "50%";
+		d.style.transformOrigin = "bottom center";
+		d.style.transform = `translateX(${offset}px) rotate(${angle}deg)`;
+		    d.style.zIndex = i;   // ⭐ THIS FIXES IT
+	    }
+*/	    
             if (south && canPlay) {
                 d.addEventListener('click', () => selCard(card, d));
 
@@ -223,6 +265,8 @@ function renderHands(canPlay, onlyPlayer = null) {
 
             el.appendChild(d);
         });
+
+	
     });
 }
 
