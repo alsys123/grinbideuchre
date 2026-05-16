@@ -7,23 +7,31 @@
 function sCol(s){
     return RED.has(s)?'#cc2222':'#111';
 }
-function cardSVG(rank, suit, down) {
+
+function cardSVGv4(rank, suit, down) {
     if (down) return `<img src="cards/Simple/back.jpg" style="width:72px;height:108px;display:block;" draggable="false">`;
 
     const faceMap = { 'A': 'a', 'J': 'j', 'Q': 'q', 'K': 'k' };
     const fileRank = faceMap[rank] ?? rank;
-    return `<img src="cards/Simple/${suit}${fileRank}.png" style="width:72px;height:108px;display:block;" draggable="false">`;
+    return `<img src="cards/Simple/${suit}${fileRank}.png"
+style="width:72px;height:108px;display:block;" draggable="false">`;
 }
 
-function cardSVGv3(rank, suit, down) {
-    if (down) return `<div style="width:72px;height:108px;background:#1c3e60;border-radius:7px;border:1px solid #2a5e90;"></div>`;
+//v3
+function cardSVG(rank, suit, down) {
+    if (down) return `<div style="width:66px;height:100px;
+background:#1c3e60;border-radius:7px;
+border:1px solid #2a5e90;"></div>`;
 
     const faceMap = { 'A': 'a', 'J': 'j', 'Q': 'q', 'K': 'k' };
     const fileRank = faceMap[rank] ?? rank;
     return `<img src="cards/Simple/${suit}${fileRank}.png" 
-	style="width:72px;height:108px;display:block;" draggable="false">`;
+	style="width:92px;
+height:128px;
+display:block;"
+draggable="false">`;
 }
-
+//v2
 function cardSVGv2(rank, suit, down) {
     if (down) return `<svg viewBox="0 0 72 108" xmlns="http://www.w3.org/2000/svg">
     <rect width="90" height="120" rx="7" fill="#1c3e60"/>
@@ -44,6 +52,7 @@ function cardSVGv2(rank, suit, down) {
 }
 
 // was 72x108
+//v1
 function cardSVGv1(rank,suit,down){
     if(down) return `<svg viewBox="0 0 72 108" xmlns="http://www.w3.org/2000/svg">
     <rect width="90" height="120" rx="7" fill="#1c3e60"/>

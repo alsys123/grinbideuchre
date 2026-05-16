@@ -84,10 +84,42 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 #hand-north { top:68px;    left:50%; transform:translateX(-50%); flex-direction:row; }
 #hand-west  { left:20px;   top:50%; transform:translateY(-50%);  flex-direction:column; }
 #hand-east  { right:20px;  top:50%; transform:translateY(-50%);  flex-direction:column; }
-#hand-south .card { margin-left:-16px; } #hand-south .card:first-child { margin-left:0; }
+
+
+#hand-south .card {
+    width: 110px;   
+    height: 155px;  
+    margin-left:-28px;}
+
+#hand-south .card:first-child {
+    margin-left:0; }
+
+
 #hand-north .card { margin-left:-20px; } #hand-north .card:first-child { margin-left:0; }
 #hand-west  .card { margin-top:-58px;  } #hand-west  .card:first-child { margin-top:0; }
 #hand-east  .card { margin-top:-58px;  } #hand-east  .card:first-child { margin-top:0; }
+
+/* SOUTH FAN 
+#hand-south {
+    position: relative;
+    height: 180px;
+}
+
+#hand-south .card {
+    position: absolute;
+    left: 50%;
+    transform-origin: bottom center;
+    transition: transform .16s ease;
+}
+#hand-south .card:nth-child(1) { transform: translateX(-50%) rotate(-18deg); }
+#hand-south .card:nth-child(2) { transform: translateX(-50%) rotate(-12deg); }
+#hand-south .card:nth-child(3) { transform: translateX(-50%) rotate(-6deg); }
+#hand-south .card:nth-child(4) { transform: translateX(-50%) rotate(0deg); }
+#hand-south .card:nth-child(5) { transform: translateX(-50%) rotate(6deg); }
+#hand-south .card:nth-child(6) { transform: translateX(-50%) rotate(12deg); }
+#hand-south .card:nth-child(7) { transform: translateX(-50%) rotate(18deg); }
+#hand-south .card:nth-child(8) { transform: translateX(-50%) rotate(24deg); }
+*/
 
 /* CARD */
 .card { width:var(--cw); height:var(--ch);
