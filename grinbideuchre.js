@@ -675,11 +675,12 @@ function showHistory() {
             <div class="hist-row ${i % 2 === 0 ? 'even' : ''}">
               <div class="hist-hand">${i + 1}</div>
               <div class="hist-bid">${bidText}</div>
-              <div class="hist-tricks">${h.tricks.us}–${h.tricks.them}</div>
+              <div class="hist-tricks">${h.tricks.us} vs ${h.tricks.them}</div>
               <div class="hist-score">${scoreDelta}</div>
+			    <div class="hist-score">${h.score.us} vs ${h.score.them}</div>
               <div class="hist-running">
                 <span class="run-us">${runUs}</span>
-                <span class="run-sep">·</span>
+                <span class="run-sep"> vs </span>
                 <span class="run-them">${runThem}</span>
               </div>
             </div>`;
