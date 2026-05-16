@@ -549,7 +549,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 }
 
 .hist-bid {
-    color: #333;
+    color: white;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
