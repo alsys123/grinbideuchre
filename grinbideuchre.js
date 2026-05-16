@@ -38,6 +38,7 @@ G.starts = { north:0, east:0, south:0, west:0 };
 
 G.history = [];
 
+addSampleHistory();
 
 // GAME CORE
 
@@ -314,6 +315,24 @@ function scoreHand(){
     }
 
 } //scoreHand
+function addSampleHistory() {
+G.history.push(
+    {
+        dealer: "south",
+        leader: "west",
+        bid: { player: "north", bid: 5, trump: "♠", hl: "high", alone: false },
+        tricks: { us: 3, them: 2 },
+        score:  { us: 8, them: 6 }
+    },
+    {
+        dealer: "east",
+        leader: "south",
+        bid: { player: "east", bid: 4, trump: "♥", hl: "low", alone: true },
+        tricks: { us: 2, them: 3 },
+        score:  { us: 10, them: 9 }
+    }
+);
+}
 
 $('deal-again-btn').addEventListener('click',deal);
 
