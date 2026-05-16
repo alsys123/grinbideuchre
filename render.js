@@ -3,11 +3,19 @@
   Render
   
 */
-
+// delete me
 function sCol(s){
     return RED.has(s)?'#cc2222':'#111';
 }
 function cardSVG(rank, suit, down) {
+    if (down) return `<img src="cards/Simple/back.jpg" style="width:72px;height:108px;display:block;" draggable="false">`;
+
+    const faceMap = { 'A': 'a', 'J': 'j', 'Q': 'q', 'K': 'k' };
+    const fileRank = faceMap[rank] ?? rank;
+    return `<img src="cards/Simple/${suit}${fileRank}.png" style="width:72px;height:108px;display:block;" draggable="false">`;
+}
+
+function cardSVGv3(rank, suit, down) {
     if (down) return `<div style="width:72px;height:108px;background:#1c3e60;border-radius:7px;border:1px solid #2a5e90;"></div>`;
 
     const faceMap = { 'A': 'a', 'J': 'j', 'Q': 'q', 'K': 'k' };
