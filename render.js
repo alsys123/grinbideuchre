@@ -8,6 +8,15 @@ function sCol(s){
     return RED.has(s)?'#cc2222':'#111';
 }
 function cardSVG(rank, suit, down) {
+    if (down) return `<div style="width:72px;height:108px;background:#1c3e60;border-radius:7px;border:1px solid #2a5e90;"></div>`;
+
+    const faceMap = { 'A': 'a', 'J': 'j', 'Q': 'q', 'K': 'k' };
+    const fileRank = faceMap[rank] ?? rank;
+    return `<img src="cards/Simple/${suit}${fileRank}.png" 
+	style="width:72px;height:108px;display:block;" draggable="false">`;
+}
+
+function cardSVGv2(rank, suit, down) {
     if (down) return `<svg viewBox="0 0 72 108" xmlns="http://www.w3.org/2000/svg">
     <rect width="90" height="120" rx="7" fill="#1c3e60"/>
     <rect x="3" y="3" width="66" height="102" rx="6" fill="none" stroke="#2a5e90" stroke-width="1.2"/>
