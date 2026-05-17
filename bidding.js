@@ -186,8 +186,13 @@ function showBidMod(){
     for(let b=3;b<=8;b++){
 	const btn=document.createElement('button');
 	btn.className='bbtn';
-	btn.textContent=b;
 
+	if (b < 8) {
+	    btn.textContent = b;
+	} else {
+	    btn.textContent = "Alone";
+	}
+	
 	if(b<min)btn.disabled=true;
 	else btn.addEventListener('click',()=>pickAmt(b));
 

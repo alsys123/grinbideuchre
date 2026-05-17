@@ -240,6 +240,8 @@ function sortBase(hand) {
 
 // SCORE
 function scoreHand(){
+//    cLog("score: ", G);
+    
     G.phase='result';
     setAct(null);
     hud();
@@ -335,11 +337,11 @@ function showHistory() {
             ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}`
             : "No bid";
 
-        const scoreDelta = h.score.us !== 0 || h.score.them !== 0
-            ? `<span class="hist-delta ${h.score.us > h.score.them ? 'us' : 'them'}">
-                 +${h.score.us > 0 ? h.score.us : h.score.them}
-               </span>`
-            : "";
+ //       const scoreDelta = h.score.us !== 0 || h.score.them !== 0
+ //           ? `<span class="hist-delta ${h.score.us > h.score.them ? 'us' : 'them'}">
+ //                +${h.score.us > 0 ? h.score.us : h.score.them}
+ //              </span>`
+ //           : "";
 
 	const weSide   = `${h.tricks.us}   /  ${h.score.us}`;
 	const themSide = `${h.tricks.them} /  ${h.score.them}`;
