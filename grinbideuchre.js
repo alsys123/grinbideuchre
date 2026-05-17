@@ -34,7 +34,7 @@ const G={
 
 // how many hands have each player dealt
 G.starts = { north:0, east:0, south:0, west:0 };
-//G.starts = { north:2, east:2, south:2, west:2 }; //testing ONLY!
+//G.starts = { north:2, east:2, south:2, west:2 }; //**** testing ONLY!
 
 G.history = [];
 
@@ -489,10 +489,10 @@ function endGame() {
     // Show final result overlay
     $('result-overlay').classList.remove('hidden');
 
-    speech("north",
-        "Game over — all players have started twice!",
-        5000
-    );
+//    speech("north",
+//        "Game over — all players have started twice!",
+//        5000
+//    );
 
     $('deal-again-btn').classList.add('hidden');
     
@@ -500,10 +500,16 @@ function endGame() {
     const pb = $('play-again-btn');
     pb.classList.remove('hidden');
 
+    $('result-title').textContent = "Game Over";
+    if (G.sc.us > G.sc.them) {
+	$('result-title').textContent += " - YOU WON!"; 
+    }
+    
     pb.onclick = () => {
 
         // Hide result overlay
         $('result-overlay').classList.add('hidden');
+	$('result-title').textContent = "Hand complete";
 
         // Hide the button again for next time
         pb.classList.add('hidden');
@@ -520,7 +526,7 @@ function endGame() {
         startNewGame();
 
         // Show start screen
-        $('start-screen').classList.remove('hidden');
+     //   $('start-screen').classList.remove('hidden');
     };
 }
 
