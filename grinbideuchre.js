@@ -301,12 +301,10 @@ function scoreHand(){
     // Here we go to new game if done
     // all players have dealt twice.
     //    if(G.sc.us>=32||G.sc.them>=32){
+
+    cLog("Next Hand?",G.starts, allPlayersHaveTwoStarts() );
+    
     if( allPlayersHaveTwoStarts() ){
-//	btn.textContent='New Game';
-//	
-//	btn.onclick=()=>{
-//	    G.sc={us:0,them:0};
-	//	    startNewGame();
 	endGame();
     } else {
 	btn.textContent='Deal Next Hand';
@@ -331,7 +329,7 @@ function showHistory() {
         runUs   += h.score.us;
         runThem += h.score.them;
 
-	cLog("history h=", i, h);
+//	cLog("history h=", i, h);
 	
         const bidText = h.bid
             ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}`
@@ -567,10 +565,12 @@ function showStarterGraphic(player, cb) {
 }
 
 // this is actually starting a new deal
+// start new game AND start new hand
 function startNewGame() {
     deal(); // deal resets hands
 
     let leader;
+    let dealer;
     
     if (G.firstHand) {
 	// Pick winner BEFORE spinning
@@ -578,10 +578,8 @@ function startNewGame() {
 	G.leader = leader;
 	G.firstHand = false;
 	
-
-	
 	const i = PL.indexOf(leader); // first to play
-	const dealer = PL[(i + 3) % 4];   // right-hand player
+	dealer = PL[(i + 3) % 4];   // right-hand player
 
 	let leaderLabel = "";
 	if (dealer === "north") dealerLabel = "➡️ N";
@@ -618,18 +616,19 @@ function startNewGame() {
 	
     } else {
 	// All later hands: leader is left of dealer
-        const di = PL.indexOf(G.dealer);
-        leader = PL[(di + 1) % 4];
+        dealerIdx = PL.indexOf(G.dealer);
+        leader = PL[(dealerIdx + 1) % 4];
 	
         showStarterGraphic(leader, () => startBid());
 
-	cLog("previous dealer: ", G.dealer);
-	cLog("next dealer:", leader);
+//	cLog("previous dealer: ", dealer);
+//	cLog("next dealer:", leader);
     }
+ //   cLog("Leader:",leader, ".  Dealer is: ",G.dealer);
     
-    G.starts[leader]++;
+    G.starts[G.dealer]++;
     G.leader = leader;
-}
+} //startNewGame
 
 function showStarterSpinner(winner,cb) {
     const el = $('starter-spinner');
@@ -664,12 +663,13 @@ function showStarterSpinner(winner,cb) {
 
 
 function allPlayersHaveTwoStarts() {
-    return (
-        G.starts.north >= 2 &&
-        G.starts.east  >= 2 &&
-        G.starts.south >= 2 &&
-        G.starts.west  >= 2
-    );
+    const started =
+	  G.starts.north >= 2 &&
+          G.starts.east  >= 2 &&
+          G.starts.south >= 2 &&
+          G.starts.west  >= 2;
+
+    return (started);
 }
 
 $('rules-btn').addEventListener('click', () => {

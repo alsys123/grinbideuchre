@@ -134,7 +134,7 @@ function resolveT(){
     G.tw[TEAMS[winner]]++;
     G.done.push({trick:G.trick,winner});
     G.leader=winner;
-    msg(PN[winner]+' wins the trick!',1500);
+//    msg(PN[winner]+' wins the trick!',1500);
     setAct(winner);
     hud();
     

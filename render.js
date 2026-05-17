@@ -272,7 +272,7 @@ function renderHands(canPlay, onlyPlayer = null) {
 
 function selCard(card,el){
 
-    cLog("select a card");
+  //  cLog("select a card");
     
     if(G.cur!=='south'||G.phase!=='play')
 	return;
