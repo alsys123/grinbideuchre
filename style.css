@@ -73,10 +73,15 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 	 position:absolute; z-index:6; }
 .pname.active { color:#fff; text-shadow:0 0 10px var(--gold-light); }
 
-#name-south { bottom:150px; left:50%; transform:translateX(-50%); }
+#name-south { bottom:220px; left:80%; transform:translateX(-50%); }
+
 #name-north { top:110px;   left:50%; transform:translateX(-50%); }
-#name-west  { left:24px;   top:50%; transform:translateY(-50%) rotate(-90deg); }
-#name-east  { right:24px;  top:50%; transform:translateY(-50%) rotate(90deg);  }
+#name-west  { left:24px;
+	      top:50%;
+	      transform:translateY(180%) rotate(-90deg); }
+#name-east  { right:60px;
+	      top:50%;
+	      transform:translateY(180%) rotate(90deg);  }
 
 /* HANDS */
 
@@ -85,36 +90,42 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 
 #hand-north {
     top:68px;    left:50%; transform:translateX(-50%); flex-direction:row; }
+
 #hand-west  { left:20px;
 	      top:50%;
-	      transform:translateY(-50%);
+	      transform:translateY(-80%);
 	      flex-direction:column;
 	      z-index:1;
+	      height: 220px;          /* ⭐ controls vertical size */
+	      justify-content: center;
 	    }
+
 #hand-east  { right:20px;
 	      top:50%;
-	      transform:translateY(-50%);
+	      transform:translateY(-80%);
 	      flex-direction:column;
 	      z-index:1;
+	      height: 220px;          /* ⭐ controls vertical size */
+	      justify-content: center;
 	    }
 
 
 #hand-south { bottom:10px; left:50%; transform:translateX(-50%); flex-direction:row; }
 
-/*
-#hand-south .card {
-    width: 140px;   
-    height: 200px;  
-    margin-left:-40px;}
-
-#hand-south .card:first-child {
-    margin-left:0; }
-*/
-
 
 #hand-north .card { margin-left:-20px; } #hand-north .card:first-child { margin-left:0; }
-#hand-west  .card { margin-top:-58px;  } #hand-west  .card:first-child { margin-top:0; }
-#hand-east  .card { margin-top:-58px;  } #hand-east  .card:first-child { margin-top:0; }
+
+#hand-west  .card {
+    margin-top:-110px;  }
+#hand-west  .card:first-child {
+    margin-top:50px; }
+
+#hand-east  .card {
+    margin-top:-110px;
+		  }
+#hand-east  .card:first-child {
+    margin-top:50px; }
+
 
 /* SOUTH FAN 
 #hand-south {
@@ -179,7 +190,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 
 /* TRICK PILES was buttom 132*/
 #trick-piles { position:absolute;
-	       bottom:175px;
+	       bottom:210px;
 	       left:50%;
 	       transform:translateX(-50%);
 	       display:flex;
@@ -199,10 +210,19 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
        display:block; }
 
 /* PLAY BTN */
-#play-btn { position:absolute; bottom:130px; left:50%; transform:translateX(-50%);
-	    background:var(--gold-dark); border:1px solid var(--gold); border-radius:30px;
-	    color:var(--cream); font-family:Georgia,serif; font-size:12px; letter-spacing:1px;
-	    padding:7px 26px; cursor:pointer; z-index:20; transition:background .15s; }
+#play-btn { position:absolute;
+	    bottom:220px;
+	    left:50%; transform:translateX(-50%);
+	    background:var(--gold-dark);
+	    border:1px solid var(--gold);
+	    border-radius:30px;
+	    color:var(--cream);
+	    font-family:Georgia,serif;
+	    font-size:12px; letter-spacing:1px;
+	    padding:7px 26px;
+	    cursor:pointer;
+	    z-index:20;
+	    transition:background .15s; }
 
 #play-btn:hover { background:var(--gold); color:#000; }
 
@@ -574,7 +594,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 .hist-header,
 .hist-row {
     display: grid;
-    grid-template-columns: 30px 70px 200px 50px 50px;
+    grid-template-columns: 30px 80px 200px 80px 80px;
     align-items: center;
     gap: 0 8px;
     padding: 7px 10px;
@@ -582,7 +602,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 }
 
 .hist-header {
-    font-size: 11px;
+    font-size: 20px;
     font-weight: bold;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -598,7 +618,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 
 .hist-hand {
     color: white;
-    font-size: 11px;
+    font-size: 14px;
     text-align: center;
 }
 
@@ -607,37 +627,34 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 14px;
 }
 
 .hist-tricks {
     text-align: center;
     color: white;
     font-variant-numeric: tabular-nums;
+    font-size: 14px;
 }
 
-.hist-score {
+.hist-we {
+    color: white;
     text-align: center;
+    font-size: 14px;
 }
 
 .hist-delta {
     display: inline-block;
-    font-weight: bold;
-    font-size: 13px;
+    font-size: 14px;
     padding: 1px 5px;
     border-radius: 4px;
 }
-.hist-delta.us   { color: black; background: #e6f4ea; }
-.hist-delta.them { color: #8b1a1a; background: #fce8e8; }
 
-.hist-running {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-    font-weight: bold;
-    white-space: nowrap;
+.hist-them {
+    color: white;
+    font-size: 14px;
+    text-align: center;
 }
-.run-us   { color: #1a6e2e; }
-.run-them { color: #8b1a1a; }
-.run-sep  { color: #bbb; margin: 0 2px; font-weight: normal; }
 
 /* FINAL SOUTH OVERRIDE — MUST BE LAST */
 /*

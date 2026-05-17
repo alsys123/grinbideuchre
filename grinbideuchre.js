@@ -357,8 +357,8 @@ function showHistory() {
               <div class="hist-bid">${h.dealer}</div>
               <div class="hist-tricks">${bidText}</div>
 
-              <div class="hist-score">${weSide}</div>
-              <div class="hist-running">${themSide}</div>
+              <div class="hist-we">${weSide}</div>
+              <div class="hist-them">${themSide}</div>
 
             </div>`;
 	      
@@ -372,8 +372,8 @@ function showHistory() {
             <div class="hist-hand">#</div>
             <div class="hist-bid">Dealer</div>
             <div class="hist-tricks">Bid</div>
-            <div class="hist-score">We</div>
-            <div class="hist-running">Them</div>
+            <div class="hist-we">We</div>
+            <div class="hist-them">Them</div>
           </div>
           ${rows}
         </div>`;
@@ -383,6 +383,9 @@ function showHistory() {
 }
 
 /*
+
+// **** START OF TEST DATA
+
   addSampleHistory();
 
 // score is the running score total
@@ -404,7 +407,9 @@ function addSampleHistory() {
 	}
     );
 }
+// **** END OF TEST DATA
 */
+
 
 
 $('deal-again-btn').addEventListener('click',deal);

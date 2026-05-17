@@ -25,7 +25,7 @@ function cardSVG(rank, suit, down) {
 	style="
         display:block;
         width:125px;
-        transform: translateY(-140px) translateX(-50px);
+        transform: translateY(-60px) translateX(-30px);
         z-index:50;
         draggable="false"
            >`
