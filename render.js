@@ -24,7 +24,7 @@ function cardSVG(rank, suit, down) {
 	  `<img src="cards/Simple/${suit}${fileRank}.png"  
 	style="
         display:block;
-        width:150px;
+        width:125px;
         transform: translateY(-100px) translateX(-50px);
         z-index:50;
         draggable="false"
