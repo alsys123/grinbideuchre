@@ -38,7 +38,6 @@ G.starts = { north:0, east:0, south:0, west:0 };
 
 G.history = [];
 
-
 // GAME CORE
 
 function deck() {
@@ -250,14 +249,36 @@ function scoreHand(){
     const btw=G.tw[bt],otw=G.tw[ot];
     
     let detail='';
+    let pts = 0;
     
-    if(btw>=h.bid){
-	G.sc[bt]+=btw;
-	detail=PN[h.player]+"'s team made it! +"+btw+' pts.';
-    }
-    else{
-	G.sc[bt]-=h.bid;
-	detail=PN[h.player]+"'s team went set! \u2212"+h.bid+' pts.';
+    // Lone hand?
+    const isLone = h.alone === true;
+    const ex = G.lastExchangeCount || 0;   // 0,1,2
+    const lonePts = [24, 18, 12];
+    
+    if (isLone) {
+	// Lone hand scoring
+	if (btw === 8) {
+            // Made the lone hand
+            pts = lonePts[ex];
+            G.sc[bt] += pts;
+            detail = PN[h.player] + " made a lone hand! +" + pts + " pts.";
+	} else {
+            // Failed lone hand
+            pts = lonePts[ex];
+            G.sc[bt] -= pts;
+            detail = PN[h.player] + " failed the lone hand! −" + pts + " pts.";
+	}
+    } else {
+	if(btw>=h.bid){
+	    G.sc[bt]+=btw;
+	    detail=PN[h.player]+"'s team made it! +"+btw+' pts.';
+	}
+	else{
+	    G.sc[bt]-=h.bid;
+	    detail=PN[h.player]+"'s team went set! \u2212"+h.bid+' pts.';
+	}
+	
     }
     
     G.sc[ot]+=otw;
@@ -284,7 +305,8 @@ function scoreHand(){
             bid: G.hBid.bid,
             trump: G.hBid.trump,
             hl: G.hBid.hl,
-            alone: G.hBid.alone
+            alone: G.hBid.alone,
+	    exchanges: G.lastExchangeCount || 0
 	} : null,
 	tricks: { us: G.tw.us, them: G.tw.them },
 	score: { us: G.sc.us, them: G.sc.them }
@@ -299,6 +321,9 @@ function scoreHand(){
     const di=PL.indexOf(G.dealer);
     G.dealer=PL[(di+1)%4];
     const btn=$('deal-again-btn');
+
+    // we done saving this.  Clear for next time.
+    G.lastExchangeCount = 0;
 
     // Here we go to new game if done
     // all players have dealt twice.
@@ -333,10 +358,18 @@ function showHistory() {
 
 //	cLog("history h=", i, h);
 	
-        const bidText = h.bid
-            ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}`
-            : "No bid";
+//        const bidText = h.bid
+//            ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}`
+//            : "No bid";
 
+	const ex = h.bid?.exchanges || 0;
+const exText = ex ? ` · ${ex} exch` : "";
+
+const bidText = h.bid
+    ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}${exText}`
+    : "No bid";
+
+	
  //       const scoreDelta = h.score.us !== 0 || h.score.them !== 0
  //           ? `<span class="hist-delta ${h.score.us > h.score.them ? 'us' : 'them'}">
  //                +${h.score.us > 0 ? h.score.us : h.score.them}

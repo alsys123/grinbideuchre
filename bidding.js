@@ -544,6 +544,8 @@ function finalizeExchange() {
     sortBase(G.H.south);
     sortBase(G.H[partner]);
 
+    G.lastExchangeCount = n;  // save this for scoring
+
     // --- CLEAR EXCHANGE STATE ---
     G.exchangeGive = [];
     G.exchangeGet = [];
