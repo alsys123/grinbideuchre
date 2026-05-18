@@ -149,7 +149,8 @@ function showBidMod(){
 	bidText = "you must bid at least " + min;
     }
 
-	  //    $('modal-sub').textContent='Min bid: '+min+(G.hBid?' (beat '+G.hBid.bid+')':'');
+    //    $('modal-sub').textContent='Min bid: '+min+(G.hBid?' (beat '+G.hBid.bid+')':'');
+
     if (G.hBid) {
 	let desc = G.hBid.bid + " " + G.hBid.hl + " in " + G.hBid.trump;
 	
@@ -213,13 +214,14 @@ function pickAmt(amt){
     pAmt=amt;
 
     hideAllPickers();   // ⭐ ALWAYS reset first
-    
+
+  /*  
     if (amt === 8) {
 	pHL = 'high';   // always high for 8‑bid
 	pickAlone(amt);    // now choose 1‑card, 2‑card, or MoonShot
 	return;
     }
-
+*/
 //    cLog("pickAmt",amt);
     
     $('bid-buttons').style.display='none';
@@ -426,7 +428,7 @@ function finishBid() {
         // If no exchange, cardReq should be 0
         if (!h.cardReq) h.cardReq = 0;
 
-        h.hl = 'high'; // 8 is always high
+    //    h.hl = 'high'; // 8 is always high  ... alone can go high/low
     } else {
         // All other bids cannot go alone
         h.alone = false;
