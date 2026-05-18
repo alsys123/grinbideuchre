@@ -296,6 +296,27 @@ function scoreHand(){
 	    }
     }
 
+    //calc code
+    let calc = "";
+    // lone hand made
+if (isLone && btw === 8) {
+    pts = lonePts[ex];
+    calc = `(✔️ 8 tricks → +${pts})`;
+}
+    //lone hand failed
+if (isLone && btw !== 8) {
+    pts = lonePts[ex];
+    calc = `(❌ failed lone → −${pts})`;
+}
+    // normal hand
+    if (!isLone && btw >= h.bid) {
+	calc = `(✔️ ${btw} tricks)`;
+}
+    // normal hand failed
+    if (!isLone && btw < h.bid) {
+    calc = `(❌set → −${h.bid})`;
+}
+
     
     G.history.push({
 	dealer: G.dealer,
@@ -309,7 +330,8 @@ function scoreHand(){
 	    exchanges: G.lastExchangeCount || 0
 	} : null,
 	tricks: { us: G.tw.us, them: G.tw.them },
-	score: { us: G.sc.us, them: G.sc.them }
+	score: { us: G.sc.us, them: G.sc.them },
+	calc: calc,
     });
     
     $('result-title').textContent=title;
@@ -345,8 +367,13 @@ function showHistory() {
     body.innerHTML = "";
 
     if (G.history.length === 0) {
-        body.innerHTML = `<div style="text-align:center;padding:32px 0;color:#999;font-style:italic;">No hands played yet.</div>`;
+        body.innerHTML = `<div style="text-align:center;
+padding:32px 0;
+color:#999;
+font-style:italic;">No hands played yet.</div>`;
+	
         $('history-modal').classList.remove('hidden');
+	
         return;
     }
 
@@ -389,6 +416,7 @@ const bidText = h.bid
               <div class="hist-hand">${i + 1}</div>
               <div class="hist-bid">${h.dealer}</div>
               <div class="hist-tricks">${bidText}</div>
+              <div class="hist-calc">${h.calc}</div>
 
               <div class="hist-we">${weSide}</div>
               <div class="hist-them">${themSide}</div>
@@ -405,6 +433,7 @@ const bidText = h.bid
             <div class="hist-hand">#</div>
             <div class="hist-bid">Dealer</div>
             <div class="hist-tricks">Bid</div>
+            <div class="hist-calc">Results</div>
             <div class="hist-we">We</div>
             <div class="hist-them">Them</div>
           </div>
@@ -415,8 +444,8 @@ const bidText = h.bid
     
 }
 
-/*
 
+/*
 // **** START OF TEST DATA
 
   addSampleHistory();
@@ -429,14 +458,16 @@ function addSampleHistory() {
             leader: "west",
         bid: { player: "north", bid: 5, trump: "♠", hl: "high", alone: false },
             tricks: { us: 3, them: 2 },
-            score:  { us: 3, them: 2 }
+            score:  { us: 3, them: 2 },
+	    calc: "not made"
 	},
 	{
             dealer: "east",
             leader: "south",
         bid: { player: "east", bid: 8, trump: "♥", hl: "low", alone: true },
             tricks: { us: 2, them: -8 },
-            score:  { us: 5, them: -6 }
+            score:  { us: 5, them: -6 },
+	    calc: "not made"
 	}
     );
 }
