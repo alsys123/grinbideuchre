@@ -178,25 +178,25 @@ function hud(){
     else{
 	$('trump-suit').textContent='—';
 	$('trump-suit').style.color='';
-	 $('trump-hl').textContent='';
+	$('trump-hl').textContent='';
     }
     
-//    $('bid-info').textContent=G.hBid?PN[G.hBid.player]+
-//	': '+
-//	G.hBid.bid+' tricks':'—';
+    //    $('bid-info').textContent=G.hBid?PN[G.hBid.player]+
+    //	': '+
+    //	G.hBid.bid+' tricks':'—';
 
     if (G.hBid) {
-    const b = G.hBid;
-    const suit = b.trump === "NT" ? "NT" : b.trump;
-    const hl = b.hl.toUpperCase();
-    const alone = b.alone ? " alone" : "";
+	const b = G.hBid;
+	const suit = b.trump === "NT" ? "NT" : b.trump;
+	const hl = b.hl.toUpperCase();
+	const alone = b.alone ? " alone" : "";
 	const suitSpan =
 	      `<span style="color:${RED.has(b.trump)?'#e03030':'#f0ece0'}">${suit}</span>`;
 	$('bid-info').innerHTML =
 	    `${PN[b.player]}: ${b.bid} in ${suitSpan} (${hl})${alone}`;
 
-//	$('bid-info').textContent =
-//            `${PN[b.player]}: ${b.bid} in ${suit} (${hl})${alone}`;
+	//	$('bid-info').textContent =
+	//            `${PN[b.player]}: ${b.bid} in ${suit} (${hl})${alone}`;
     } else {
 	$('bid-info').textContent = '—';
     }
@@ -240,19 +240,19 @@ function renderHands(canPlay, onlyPlayer = null) {
 	    }
 	    
 	    /*
-		const spread = 40; // degrees
-		const angle = ((i / (count - 1)) - 0.5) * spread;
-// was		const offset = (i - (count - 1) / 2) * 26;
-		const offset = (i - (count - 1) / 2) * 120;  // instead of 26 or similar
+	      const spread = 40; // degrees
+	      const angle = ((i / (count - 1)) - 0.5) * spread;
+	      // was		const offset = (i - (count - 1) / 2) * 26;
+	      const offset = (i - (count - 1) / 2) * 120;  // instead of 26 or similar
 
-		d.style.position = "absolute";
-		d.style.bottom = "0";
-		d.style.left = "50%";
-		d.style.transformOrigin = "bottom center";
-		d.style.transform = `translateX(${offset}px) rotate(${angle}deg)`;
-		    d.style.zIndex = i;   // ⭐ THIS FIXES IT
-	    }
-*/	    
+	      d.style.position = "absolute";
+	      d.style.bottom = "0";
+	      d.style.left = "50%";
+	      d.style.transformOrigin = "bottom center";
+	      d.style.transform = `translateX(${offset}px) rotate(${angle}deg)`;
+	      d.style.zIndex = i;   // ⭐ THIS FIXES IT
+	      }
+	    */	    
             if (south && canPlay) {
                 d.addEventListener('click', () => selCard(card, d));
 
@@ -272,7 +272,7 @@ function renderHands(canPlay, onlyPlayer = null) {
 
 function selCard(card,el){
 
-  //  cLog("select a card");
+    //  cLog("select a card");
     
     if(G.cur!=='south'||G.phase!=='play')
 	return;
@@ -290,15 +290,19 @@ function selCard(card,el){
     document.querySelectorAll('#hand-south .card.selected').forEach(e=>e.classList.remove('selected'));
     
     G.sel=card; el.classList.add('selected');
+    el.classList.add('selected');
+    playCard('south', card);
     
-    $('play-btn').classList.remove('hidden');
-}
+//    $('play-btn').classList.remove('hidden');
+} //selCard
 
+/*
 $('play-btn').addEventListener('click',()=>{
     if(!G.sel)return;
     $('play-btn').classList.add('hidden');
     playCard('south',G.sel);
 });
+*/
 
 // UI
 
