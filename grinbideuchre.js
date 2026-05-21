@@ -598,7 +598,8 @@ function endGame() {
 
 // player is next to bid -- dealer is to the right
 function showStarterGraphic(player, cb) {
-
+//    return; // do not want his anymore
+    
     // compute dealer = player to the right
     const i = PL.indexOf(player);
     const dealer = PL[(i + 3) % 4];   // right-hand player
@@ -611,9 +612,6 @@ function showStarterGraphic(player, cb) {
     } else {
 	el.textContent = PN[dealer] + " is the dealer";
     }
-//    PN[player] + " bids first — "
-
-
 
     el.classList.remove('hidden');
 

@@ -35,7 +35,11 @@ function nextBid(){
 
 }
 
+// record the bid
 function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
+
+    cLog("Place bid: ",player,amt,trump,hl,alone,cardReq);
+    
     G.bids[player]={amt,trump,hl,alone,cardReq};
 
     if(!G.hBid||amt>G.hBid.bid)
@@ -134,7 +138,7 @@ function aiBid(player){
         bIdx++;
         setTimeout(nextBid, 1300);
     }
-}
+} //aiBid
 
 // show the current bid modal box
 function showBidMod(){
@@ -209,44 +213,18 @@ function showBidMod(){
     $('bid-modal').classList.remove('hidden');
 }//showBidMod
 
+// this was picking high/low but we do not need this anymore
 function pickAmt(amt){
     
     pAmt=amt;
 
     hideAllPickers();   // ⭐ ALWAYS reset first
+    pickAlone(amt);
 
-  /*  
-    if (amt === 8) {
-	pHL = 'high';   // always high for 8‑bid
-	pickAlone(amt);    // now choose 1‑card, 2‑card, or MoonShot
-	return;
-    }
-*/
-//    cLog("pickAmt",amt);
-    
-    $('bid-buttons').style.display='none';
-
-    $('modal-sub').textContent='High or Low?';
-
-    const hl=$('highlow-picker');
-    hl.style.display='flex';
-    hl.innerHTML='';
-
-    ['high','low'].forEach(v=>{
-	const b=document.createElement('button');
-
-	b.className='hlbtn';
-	
-	b.textContent=v[0].toUpperCase()+v.slice(1);
-
-	b.addEventListener('click',()=>
-	    {pHL=v;
-	     pickAlone(amt);
-	    });
-	hl.appendChild(b);
-    });
     
 } //pickAmt
+
+// check if we are picking alone, if not go onto picking trump
 function pickAlone(amt) {
 
     hideAllPickers();   // always reset
@@ -287,53 +265,6 @@ function pickAlone(amt) {
     });
 }
 
-/*
-function pickAlone(amt) {
-
-//    $('highlow-picker').style.display = 'none';
-
-    hideAllPickers();   // ⭐ ALWAYS reset first
-    
-    // This text is now specific to the 8‑bid scenario
-    $('modal-sub').textContent = 'Choose your bid option';
-
-    const ap = $('alone-picker');
-    ap.style.display = 'flex';
-    ap.innerHTML = '';
-    
-    let options = [];
-    // Options based on what was bid
-    
-    if (amt === 8) {
-	options = [
-            { label: 'Ask 1 Card',  alone: true,   cardReq: 1 },
-            { label: 'Ask 2 Cards', alone: true,   cardReq: 2 },
-            { label: 'MoonShot!',   alone: true,   cardReq: 0 }
-	];
-    } else {
-	options = [
-	    { label: 'Not Alone',   alone: false,  cardReq: 0 },
-            { label: 'Ask 1 Card',  alone: true,   cardReq: 1 },
-            { label: 'Ask 2 Cards', alone: true,   cardReq: 2 }
-	]
-    }
-    
-   
-    options.forEach(opt => {
-        const b = document.createElement('button');
-        b.className = 'abtn';
-        b.textContent = opt.label;
-
-        b.addEventListener('click', () => {
-            pAlone   = opt.alone;      // always true for 8‑bid
-            pCardReq = opt.cardReq;    // 0, 1, or 2
-            pickTrump();
-        });
-
-        ap.appendChild(b);
-    });
-} //pickAlone
-*/
 function hideAllPickers() {
     $('bid-buttons').style.display = 'none';
     $('highlow-picker').style.display = 'none';
@@ -363,7 +294,7 @@ function pickCardReq(){
     
 }
 
-// pick the suite or hight/low or NT
+// pick the suite or NT hight or NT low
 function pickTrump(){
     $('card-req-picker').style.display='none';
     $('alone-picker').style.display='none';
@@ -372,6 +303,7 @@ function pickTrump(){
     tp.style.display='flex'; tp.innerHTML='';
     
     SUITS.forEach(s=>{
+	pHL = null;
 	const b=document.createElement('button');
 	b.className='tbtn '+(RED.has(s)?'red-s':'blk-s');
 	b.textContent=s;
@@ -384,27 +316,53 @@ function pickTrump(){
 	});
 	tp.appendChild(b);
 
-    });
-    // no trump button option
-    // Add NT button
-    const nt = document.createElement('button');
-    nt.className = 'tbtn ntbtn';
-    nt.textContent = 'NT';
-    nt.addEventListener('click', () => {
+    });  // append the suit selection buttons
 
+    // Add NT button - no trump LOW button option
+//    pHL = 'low';
+    const ntLow = document.createElement('button');
+    ntLow.className = 'tbtn ntbtnLow';
+    ntLow.textContent = 'NT low';
+    ntLow.addEventListener('click', () => {
+	const hl = 'low';   // <‑‑ capture value HERE
 	$('bid-modal').classList.add('hidden');
 	$('bid-buttons').style.display='grid';
-	placeBid('south', pAmt, 'NT', pHL, pAlone, pAlone ? pCardReq : 0);
+
+	cLog("placing low bid:",pHL);
+	
+	placeBid('south', pAmt, 'NT', hl, pAlone, pAlone ? pCardReq : 0);
+
 	hud();
 
 	bIdx++;
 	setTimeout(nextBid, 300);
 
-    });
+    }); // append NT LOW button
 
-    tp.appendChild(nt);
+    tp.appendChild(ntLow);
+
     
-}
+    // Add NT button - no trump HIGH button option
+  //  pHL = 'High';
+    const ntHigh = document.createElement('button');
+    ntHigh.className = 'tbtn ntbtnHigh';
+    ntHigh.textContent = 'NT high';
+    ntHigh.addEventListener('click', () => {
+	const hl = 'high';  // <‑‑ capture value HERE
+	$('bid-modal').classList.add('hidden');
+	$('bid-buttons').style.display='grid';
+	placeBid('south', pAmt, 'NT', hl, pAlone, pAlone ? pCardReq : 0);
+	hud();
+
+	bIdx++;
+	setTimeout(nextBid, 300);
+
+    }); // append NT LOW button
+
+    tp.appendChild(ntHigh);
+
+    
+} //pickTrump
 
 function finishBid() {
     if (!G.hBid) return;

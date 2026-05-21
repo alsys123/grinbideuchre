@@ -173,7 +173,8 @@ function hud(){
 	const ts=$('trump-suit');
 	ts.textContent=G.trump;
 	ts.style.color=RED.has(G.trump)?'#e03030':'#f0ece0';
-	$('trump-hl').textContent=G.hl.toUpperCase();
+//	$('trump-hl').textContent=G.hl.toUpperCase();
+	$('trump-hl').textContent = G.hl ? G.hl.toUpperCase() : '';
     }
     else{
 	$('trump-suit').textContent='—';
@@ -188,15 +189,20 @@ function hud(){
     if (G.hBid) {
 	const b = G.hBid;
 	const suit = b.trump === "NT" ? "NT" : b.trump;
-	const hl = b.hl.toUpperCase();
+//	const hl = b.hl.toUpperCase();
+	const hl = b.hl ? b.hl.toUpperCase() : '';
+
 	const alone = b.alone ? " alone" : "";
 	const suitSpan =
 	      `<span style="color:${RED.has(b.trump)?'#e03030':'#f0ece0'}">${suit}</span>`;
+	if (hl === '') {
 	$('bid-info').innerHTML =
-	    `${PN[b.player]}: ${b.bid} in ${suitSpan} (${hl})${alone}`;
+		`${PN[b.player]}: ${b.bid} in ${suitSpan} ${alone}`;
+	} else {
+	$('bid-info').innerHTML =
+		`${PN[b.player]}: ${b.bid} in ${suitSpan} (${hl})${alone}`;
+	}
 
-	//	$('bid-info').textContent =
-	//            `${PN[b.player]}: ${b.bid} in ${suit} (${hl})${alone}`;
     } else {
 	$('bid-info').textContent = '—';
     }
