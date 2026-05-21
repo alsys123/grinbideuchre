@@ -86,7 +86,7 @@ function aiBid(player){
     
     if (isBalanced && ntStrength >= 8) {
 	bs = "NT";
-	    str = ntStrength;   // ⭐ important
+	str = ntStrength;   // ⭐ important
     }
     
     // --- FIXED BID LOGIC ---
@@ -112,7 +112,13 @@ function aiBid(player){
 	cardReq = 0;
     }
 
-    const hl = 'high';
+    let hl = null;
+
+    if (bs === 'NT') {
+	hl = 'high';
+    } else {
+	hl = null;
+    }
     
     // --- PLACE BID ---
     if (bid >= min) {
@@ -122,7 +128,8 @@ function aiBid(player){
 	const suitSymbol = bs; // already a symbol like ♥ ♦ ♣ ♠
 	
         const text =
-              bid + " " + hl +
+//              bid + " " + hl +
+              bid +
 	      " in " + suitSymbol +
             (alone ? " alone" : "");
 
@@ -328,7 +335,7 @@ function pickTrump(){
 	$('bid-modal').classList.add('hidden');
 	$('bid-buttons').style.display='grid';
 
-	cLog("placing low bid:",pHL);
+//	cLog("placing low bid:",pHL);
 	
 	placeBid('south', pAmt, 'NT', hl, pAlone, pAlone ? pCardReq : 0);
 
