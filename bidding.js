@@ -340,6 +340,7 @@ function hideAllPickers() {
     $('alone-picker').style.display = 'none';
 }
 
+// from going alone. Pick 1 or 2 cards or Moonshot.
 function pickCardReq(){
         hideAllPickers();   // ⭐ ALWAYS reset first
 //    $('alone-picker').style.display='none';
@@ -362,6 +363,7 @@ function pickCardReq(){
     
 }
 
+// pick the suite or hight/low or NT
 function pickTrump(){
     $('card-req-picker').style.display='none';
     $('alone-picker').style.display='none';
