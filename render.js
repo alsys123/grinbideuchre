@@ -197,10 +197,10 @@ function hud(){
 	      `<span style="color:${RED.has(b.trump)?'#e03030':'#f0ece0'}">${suit}</span>`;
 	if (hl === '') {
 	$('bid-info').innerHTML =
-		`${PN[b.player]}: ${b.bid} in ${suitSpan} ${alone}`;
+		`${PN[b.player]}: ${b.bid} ${suitSpan} ${alone}`;
 	} else {
 	$('bid-info').innerHTML =
-		`${PN[b.player]}: ${b.bid} in ${suitSpan} (${hl})${alone}`;
+		`${PN[b.player]}: ${b.bid} ${suitSpan} (${hl})${alone}`;
 	}
 
     } else {
