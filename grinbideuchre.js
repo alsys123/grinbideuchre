@@ -613,6 +613,7 @@ function showStarterGraphic(player, cb) {
 	el.textContent = PN[dealer] + " is the dealer";
     }
 
+/* remove this display    
     el.classList.remove('hidden');
 
     // fade in
@@ -625,7 +626,11 @@ function showStarterGraphic(player, cb) {
             el.classList.add('hidden');
             cb(); // continue game
         }, 600);
-    }, 1800);
+	}, 1800);
+*/
+
+    cb(); // just continue the bidding
+    
 }
 
 // this is actually starting a new deal
@@ -752,6 +757,12 @@ $('rules-close').addEventListener('click', () => {
 $('details-close').addEventListener('click', () => {
     $('details-modal').classList.add('hidden');
 });
+
+
+$('showScoreBoardHistory-btn').addEventListener('click', () => {
+    showHistory();
+});
+
 
 // ... here take this out with all the html and css .... !!!!
 function showGameDetails() {

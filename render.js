@@ -259,6 +259,8 @@ function renderHands(canPlay, onlyPlayer = null) {
 	      d.style.zIndex = i;   // ⭐ THIS FIXES IT
 	      }
 	    */	    
+	    d.style.zIndex = i;   // ⭐ THIS FIXES IT
+
             if (south && canPlay) {
                 d.addEventListener('click', () => selCard(card, d));
 
@@ -298,8 +300,11 @@ function selCard(card,el){
     G.sel=card; el.classList.add('selected');
     el.classList.add('selected');
     playCard('south', card);
+
+
+    renderHands(true, "south");   // <‑‑ FIX FOR IPAD
+
     
-//    $('play-btn').classList.remove('hidden');
 } //selCard
 
 /*

@@ -113,14 +113,38 @@ function showBidMod(){
 	if (b < 8) {
 	    btn.textContent = b;
 	} else {
-	    btn.textContent = "Alone";
+	    // for buttons when 8 ticks is wanted
+	    btn.textContent = "MoonShot";
+	    btn.style.background = "gold"
+	    btn.style.color      = "black";
 	}
 	
-	if(b<min)btn.disabled=true;
+	if (b<min) btn.disabled=true;
 	else btn.addEventListener('click',()=>pickAmt(b));
 
 	bb.appendChild(btn);
     }
+
+    // add buttons for pick 1 or 2 cards
+    // pick 1 card .. artificial 9 tick call
+    const btn1=document.createElement('button');
+    btn1.className='bbtn';
+    btn1.textContent = "Ask 1 Card";
+    btn1.style.background = "blue"
+    btn1.style.color      = "white";
+
+    btn1.addEventListener('click',()=>pickAmt(9));
+    bb.appendChild(btn1);
+    // pick 2 card .. artificial 10 tick call
+    const btn2=document.createElement('button');
+    btn2.className='bbtn';
+    btn2.textContent = "Ask 2 Cards";
+    btn2.style.background = "blue"
+    btn2.style.color      = "white";
+
+    btn2.addEventListener('click',()=>pickAmt(10));
+    bb.appendChild(btn2);
+    
     
     const pb=document.createElement('button');pb.className='bbtn pbtn';
     pb.textContent='Pass';
@@ -133,9 +157,15 @@ function showBidMod(){
 
 // this was picking high/low but we do not need this anymore
 function pickAmt(amt){
-    
-    pAmt=amt;
 
+    // 9 is artifical we want to pick 1 card
+    // 10 is artifical we want to pick 2 card2
+    if (amt >= 8) {
+	pAmt = 8;
+    } else {
+	pAmt=amt;
+    }
+    
     hideAllPickers();   // ⭐ ALWAYS reset first
     pickAlone(amt);
 
@@ -151,13 +181,31 @@ function pickAlone(amt) {
     ap.innerHTML = '';
 
     // ⭐ If NOT 8 → no alone options, skip picker entirely
-    if (amt !== 8) {
+    // ie. less than 8
+    if (amt < 8) {
         pAlone   = false;  // not going alone
         pCardReq = 0;      // no cards requested
         pickTrump();       // go straight to trump picker
         return;
     }
 
+    // we don't need the picker anymore
+    // 9 is pick 1 card.  10 is pick 2 cards
+    pAlone   = true;
+
+//    if (amt === 9) {
+//	pCardReq = 1;
+//    } else if (amt === 10) {
+//	pCardReq = 2;
+//    } else {
+//	pCardReq = 0;
+//    }
+    const reqMap = {9: 1,10: 2};
+    pCardReq = reqMap[amt] || 0;
+    
+    pickTrump();
+    
+/*
     // ⭐ If 8 → show the 3 alone options
     $('modal-sub').textContent = 'Choose your bid option';
     ap.style.display = 'flex';
@@ -180,7 +228,9 @@ function pickAlone(amt) {
         });
 
         ap.appendChild(b);
-    });
+	});
+*/
+    
 }
 
 function hideAllPickers() {
