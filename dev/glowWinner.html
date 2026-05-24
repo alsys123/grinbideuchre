@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grow & Glow — Win Animation</title>
+<style>
+  body {
+    background: radial-gradient(ellipse at center, #2d6a4f 0%, #1b4332 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    gap: 20px;
+  }
+
+  /* ── The 4 cards in the centre of the table ── */
+  #table {
+    position: relative;
+    width: 220px;
+    height: 220px;
+  }
+
+  .card {
+    position: absolute;
+    width: 60px;
+    height: 86px;
+    border-radius: 6px;
+    border: 2px solid #ccc;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.4);
+    /* smooth transition for dimming losers */
+    transition: opacity 0.4s ease;
+  }
+  .card.red   { color: #cc0000; }
+  .card.black { color: #111; }
+
+  /* card positions — adjust to match your layout */
+  .card[data-player="N"] { top:  0px;  left: 80px; }
+  .card[data-player="S"] { bottom: 0px; left: 80px; }
+  .card[data-player="W"] { top:  67px; left:  0px; }
+  .card[data-player="E"] { top:  67px; right: 0px; }
+
+  /* loser cards fade out */
+  .card.loser { opacity: 0.35; }
+
+  /* ── GROW & GLOW animation ── */
+  @keyframes growGlow {
+    0%   { transform: scale(1);    box-shadow: 2px 3px 8px rgba(0,0,0,0.4); }
+    60%  { transform: scale(1.45); box-shadow: 0 0 30px 12px rgba(255,215,0,0.9); }
+    100% { transform: scale(1.3);  box-shadow: 0 0 20px 8px  rgba(255,215,0,0.7); }
+  }
+
+  .card.winner {
+    animation: growGlow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    z-index: 10;
+  }
+
+  /* ── Demo controls ── */
+  .controls {
+    display: flex;
+    gap: 10px;
+  }
+  button {
+    background: #0f3460;
+    border: 1px solid #4da6ff;
+    color: #add8e6;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  button:hover { background: #ffd700; color: #111; border-color: #ffd700; font-weight: bold; }
+  p { color: rgba(255,255,255,0.6); font-size: 0.8em; }
+</style>
+</head>
+<body>
+
+<div id="table">
+  <div class="card black" data-player="N">A♠</div>
+  <div class="card red"   data-player="S">K♥</div>
+  <div class="card red"   data-player="W">Q♦</div>
+  <div class="card black" data-player="E">J♣</div>
+</div>
+
+<div class="controls">
+  <button onclick="showWinner('N')">N wins</button>
+  <button onclick="showWinner('S')">S wins</button>
+  <button onclick="showWinner('W')">W wins</button>
+  <button onclick="showWinner('E')">E wins</button>
+</div>
+<p>Click any button to trigger the win animation</p>
+
+<script>
+  function showWinner(player) {
+    const cards = document.querySelectorAll('.card');
+
+    // 1. Reset all cards
+    cards.forEach(card => {
+      card.classList.remove('winner', 'loser');
+      // Force reflow so the animation re-triggers if same player wins again
+      void card.offsetWidth;
+    });
+
+    // 2. Mark winner and losers
+    cards.forEach(card => {
+      if (card.dataset.player === player) {
+        card.classList.add('winner');
+      } else {
+        card.classList.add('loser');
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
