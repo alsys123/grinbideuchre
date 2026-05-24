@@ -310,7 +310,17 @@ if (isLone && btw !== 8) {
 }
     // normal hand
     if (!isLone && btw >= h.bid) {
-	calc = `(✔️ ${btw} tricks)`;
+//	calc = `(✔️ ${btw} tricks)`;
+//	calc = `(<span style="
+//color:#ffcc33;
+//font-weight:bold;
+//">✔️</span>${btw} tricks)`;
+	calc = `(<span style="
+color:#00ff66;
+font-size:1.4em;
+font-weight:bold;
+">✔</span> ${btw} tricks)`;
+
 }
     // normal hand failed
     if (!isLone && btw < h.bid) {

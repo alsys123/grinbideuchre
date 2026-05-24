@@ -194,7 +194,13 @@ function hud(){
 
 	const alone = b.alone ? " alone" : "";
 	const suitSpan =
-	      `<span style="color:${RED.has(b.trump)?'#e03030':'#f0ece0'}">${suit}</span>`;
+	      `<span style="
+color:${RED.has(b.trump)?'#e03030':'#f0ece0'};
+font-size: 1.4em;
+">
+${suit}
+</span>`;
+	
 	if (hl === '') {
 	$('bid-info').innerHTML =
 		`${PN[b.player]}: ${b.bid} ${suitSpan} ${alone}`;

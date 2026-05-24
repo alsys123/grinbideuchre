@@ -6,7 +6,7 @@ let msgT=null;
 
 function msg(t,d=2400){
 
-    cLog("got a message: ",t);
+//    cLog("got a message: ",t);
     
     const e=$('message');
     e.textContent=t;

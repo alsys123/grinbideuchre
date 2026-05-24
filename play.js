@@ -22,6 +22,11 @@ function startTrick(){
 //    renderHands(true, 'south');   // redraw ONLY south
     
     if(G.cur!=='south')setTimeout(()=>aiPlay(G.cur),900);
+
+    if (G.cur === 'south') {
+	msg("Your Move!", 2600);
+    }
+    
 }
 
 function removeOneCard(hand, card){

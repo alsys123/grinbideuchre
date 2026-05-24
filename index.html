@@ -12,11 +12,11 @@
       <div id="scoreboard">
 	<div class="st"><div class="sl">You &amp; North</div>
 	  <div class="sv" id="score-us">0</div>
-	  <div class="sk" id="tricks-us">0 tricks</div>
+	  <div class="hidden sk" id="tricks-us">0 tricks</div>
 	</div>
 	<div class="st"><div class="sl">East &amp; West</div>
 	  <div class="sv" id="score-them">0</div>
-	  <div class="sk" id="tricks-them">0 tricks</div>
+	  <div class="hidden sk" id="tricks-them">0 tricks</div>
 	</div>
       </div>
 
@@ -28,20 +28,21 @@
 	</div>
       </div>
 
-<div id="history-modal" class="hidden details-modal">
-  <div class="details-box">
-    <div class="details-title">Game History</div>
-    <div id="history-body" class="history-scroll"></div>
-    <button id="history-close">Close</button>
-  </div>
-</div>
-      
-      <div id="trump-display">
-	<div class="pl">Trump</div>
-	<div id="trump-suit">&#x2014;</div>
-	<div id="trump-hl"></div>
+      <div id="history-modal" class="hidden details-modal">
+	<div class="details-box">
+	  <div class="details-title">Game History</div>
+	  <div id="history-body" class="history-scroll"></div>
+	  <button id="history-close">Close</button>
+	</div>
       </div>
-      
+
+      <!-- hide trump display - eventually remove it -->
+      <div id="hidden trump-display">
+	<div class="hidden pl">Trump</div>
+	<div id="trump-suit" class="hidden" >&#x2014;</div>
+	<div id="trump-hl" class="hidden" ></div>
+      </div>
+
       <div id="bid-display">
 	<div class="pl">Contract</div>
 	<div id="bid-info">&#x2014;</div>
@@ -50,6 +51,7 @@
       <div id="top-bar">
 	<button id="rules-btn" class="top-btn">Rules</button>
       </div>
+      
       <div id="rules-modal" class="hidden rules-modal">
 	<div class="rules-box">
           <button id="rules-close" class="close-btn">✖</button>
@@ -137,14 +139,14 @@
     <div id="starter-graphic" class="hidden"></div>
 
     <div id="starter-spinner" class="hidden">
-    <div class="spinner-ring">
+      <div class="spinner-ring">
         <div class="spinner-label north">N</div>
         <div class="spinner-label east">E</div>
         <div class="spinner-label south">S</div>
         <div class="spinner-label west">W</div>
-    </div>
+      </div>
 
-    <!--     <div class="spinner-text">Randomly picking the dealer</div> -->
+      <!--     <div class="spinner-text">Randomly picking the dealer</div> -->
 
     </div>
 
