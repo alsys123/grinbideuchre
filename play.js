@@ -153,20 +153,28 @@ function resolveT(){
 	setTimeout(() => cardImg.style.animation = '', 5200);
     }
     */
-    
+/*
+    const cardImg = ws.querySelector('img');
+    if (cardImg) {
+	cardImg.style.animation = 'growGlow 5.0s ease-out';
+	setTimeout(() => cardImg.style.animation = '', 5200);
+    }
+*/    
 
     ws.style.animation='trickWin 1.0s ease'; //0.4    
     setTimeout(()=>{
 	ws.style.animation='';
     },400);
+
     
     setTimeout(()=>{
 	clearTC();
 	G.trick=[];
 	if(G.H.south.length===0)scoreHand();
-	else startTrick();
-	
+	else startTrick();	
     },1700);
+
+    
 }
 
 const PARTNER = {
@@ -180,3 +188,5 @@ function lonePartner() {
     if (!G.alone) return null;
     return PARTNER[G.hBid.player];
 }
+
+
