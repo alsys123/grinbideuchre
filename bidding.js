@@ -50,7 +50,7 @@ function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
 
 // show the current bid modal box
 function showBidMod(){
-    const min = G.hBid?G.hBid.bid+1:3;
+    const min = G.hBid?G.hBid.bid+1:1;
     
     $('modal-title').textContent='Your Bid';
 
