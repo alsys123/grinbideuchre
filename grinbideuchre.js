@@ -102,13 +102,13 @@ function esuit(c,t,hl){
 function crank(c,t,led,hl){
 
     if (t === "NT") {
-    const orderHigh = { J:1, Q:2, K:3, A:4 };
-    const orderLow  = { A:1, K:2, Q:3, J:4 };
-    const order = (hl === "low") ? orderLow : orderHigh;
+	const orderHigh = { J:1, Q:2, K:3, A:4 };
+	const orderLow  = { A:1, K:2, Q:3, J:4 };
+	const order = (hl === "low") ? orderLow : orderHigh;
 
-    if (c.s === led) return order[c.r];
-    return 0;
-}
+	if (c.s === led) return order[c.r];
+	return 0;
+    }
 
     if(hl==='low'){
 	const lr={J:4,Q:3,K:2,A:1};
@@ -179,14 +179,14 @@ function deal(){
     
     renderHands(false);
     // setTimeout(startBid(),500);
-//    startBid();
+    //    startBid();
 
     //!!! put this in later --- MAYBE!!!
-////    setTimeout(() => {
-////	speech("south",
-////	       "Double‑click to re‑sort your hand, anytime",
-////	       3500);
-////    }, 800);
+    ////    setTimeout(() => {
+    ////	speech("south",
+    ////	       "Double‑click to re‑sort your hand, anytime",
+    ////	       3500);
+    ////    }, 800);
     
 }
 
@@ -239,7 +239,7 @@ function sortBase(hand) {
 
 // SCORE
 function scoreHand(){
-//    cLog("score: ", G);
+    //    cLog("score: ", G);
     
     G.phase='result';
     setAct(null);
@@ -299,33 +299,33 @@ function scoreHand(){
     //calc code
     let calc = "";
     // lone hand made
-if (isLone && btw === 8) {
-    pts = lonePts[ex];
-    calc = `(✔️ 8 tricks → +${pts})`;
-}
+    if (isLone && btw === 8) {
+	pts = lonePts[ex];
+	calc = `(✔️ 8 tricks → +${pts})`;
+    }
     //lone hand failed
-if (isLone && btw !== 8) {
-    pts = lonePts[ex];
-    calc = `(❌ failed lone → −${pts})`;
-}
+    if (isLone && btw !== 8) {
+	pts = lonePts[ex];
+	calc = `(❌ failed lone → −${pts})`;
+    }
     // normal hand
     if (!isLone && btw >= h.bid) {
-//	calc = `(✔️ ${btw} tricks)`;
-//	calc = `(<span style="
-//color:#ffcc33;
-//font-weight:bold;
-//">✔️</span>${btw} tricks)`;
+	//	calc = `(✔️ ${btw} tricks)`;
+	//	calc = `(<span style="
+	//color:#ffcc33;
+	//font-weight:bold;
+	//">✔️</span>${btw} tricks)`;
 	calc = `(<span style="
 color:#00ff66;
 font-size:1.4em;
 font-weight:bold;
 ">✔</span> ${btw} tricks)`;
 
-}
+    }
     // normal hand failed
     if (!isLone && btw < h.bid) {
-    calc = `(❌set → −${h.bid})`;
-}
+	calc = `(❌set → −${h.bid})`;
+    }
 
     
     G.history.push({
@@ -370,6 +370,7 @@ font-weight:bold;
 	btn.onclick=nextHand;
     }
 
+    hud();
 } //scoreHand
 
 function showHistory() {
@@ -393,25 +394,25 @@ font-style:italic;">No hands played yet.</div>`;
         runUs   += h.score.us;
         runThem += h.score.them;
 
-//	cLog("history h=", i, h);
+	//	cLog("history h=", i, h);
 	
-//        const bidText = h.bid
-//            ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}`
-//            : "No bid";
+	//        const bidText = h.bid
+	//            ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}`
+	//            : "No bid";
 
 	const ex = h.bid?.exchanges || 0;
-const exText = ex ? ` · ${ex} exch` : "";
+	const exText = ex ? ` · ${ex} exch` : "";
 
-const bidText = h.bid
-    ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}${exText}`
-    : "No bid";
+	const bidText = h.bid
+	      ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}${exText}`
+	      : "No bid";
 
 	
- //       const scoreDelta = h.score.us !== 0 || h.score.them !== 0
- //           ? `<span class="hist-delta ${h.score.us > h.score.them ? 'us' : 'them'}">
- //                +${h.score.us > 0 ? h.score.us : h.score.them}
- //              </span>`
- //           : "";
+	//       const scoreDelta = h.score.us !== 0 || h.score.them !== 0
+	//           ? `<span class="hist-delta ${h.score.us > h.score.them ? 'us' : 'them'}">
+	//                +${h.score.us > 0 ? h.score.us : h.score.them}
+	//              </span>`
+	//           : "";
 
 	const weSide   = `${h.tricks.us}   /  ${h.score.us}`;
 	const themSide = `${h.tricks.them} /  ${h.score.them}`;
@@ -432,7 +433,7 @@ const bidText = h.bid
               <div class="hist-them">${themSide}</div>
 
             </div>`;
-	      
+	
         return divString;
 	
     }).join('');
@@ -458,28 +459,28 @@ const bidText = h.bid
 /*
 // **** START OF TEST DATA
 
-  addSampleHistory();
+addSampleHistory();
 
 // score is the running score total
 function addSampleHistory() {
-    G.history.push(
-	{
-            dealer: "south",
-            leader: "west",
-        bid: { player: "north", bid: 5, trump: "♠", hl: "high", alone: false },
-            tricks: { us: 3, them: 2 },
-            score:  { us: 3, them: 2 },
-	    calc: "not made"
-	},
-	{
-            dealer: "east",
-            leader: "south",
-        bid: { player: "east", bid: 8, trump: "♥", hl: "low", alone: true },
-            tricks: { us: 2, them: -8 },
-            score:  { us: 5, them: -6 },
-	    calc: "not made"
-	}
-    );
+G.history.push(
+{
+dealer: "south",
+leader: "west",
+bid: { player: "north", bid: 5, trump: "♠", hl: "high", alone: false },
+tricks: { us: 3, them: 2 },
+score:  { us: 3, them: 2 },
+calc: "not made"
+},
+{
+dealer: "east",
+leader: "south",
+bid: { player: "east", bid: 8, trump: "♥", hl: "low", alone: true },
+tricks: { us: 2, them: -8 },
+score:  { us: 5, them: -6 },
+calc: "not made"
+}
+);
 }
 // **** END OF TEST DATA
 */
@@ -498,7 +499,7 @@ function nextHand() {
     if (allPlayersHaveTwoStarts()) {
         endGame();
     } else {
-    //    deal();  called in startNewGame
+	//    deal();  called in startNewGame
         startNewGame();
     }
 }
@@ -509,64 +510,64 @@ function randomLeader() {
 }
 
 /*
-function endGame() {
+  function endGame() {
 
-    $('result-overlay').classList.remove('hidden');
+  $('result-overlay').classList.remove('hidden');
 
-    speech("north",
-	   "Game over — all players have started twice!",
-	   5000);
+  speech("north",
+  "Game over — all players have started twice!",
+  5000);
 
-    // here we start a new game
-    G.sc={us:0,them:0};
+  // here we start a new game
+  G.sc={us:0,them:0};
 
-//    btn.textContent='Game over - start New Game';
-//    btn.onclick=nextHand;
-    $('start-screen').classList.remove('hidden');
-    
-    startNewGame();
+  //    btn.textContent='Game over - start New Game';
+  //    btn.onclick=nextHand;
+  $('start-screen').classList.remove('hidden');
+  
+  startNewGame();
 
-    // or show a proper overlay if you want
-    }
+  // or show a proper overlay if you want
+  }
 */
 /*
+  function endGame() {
+
+  // Show final result overlay
+  $('result-overlay').classList.remove('hidden');
+
+  speech("north",
+  "Game over — all players have started twice!",
+  5000
+  );
+
+  // ⭐ Wait 3 seconds so player can see the final score
+  setTimeout(() => {
+
+  // Hide result overlay
+  $('result-overlay').classList.add('hidden');
+
+  // Show start screen
+  $('start-screen').classList.remove('hidden');
+
+  // Reset score for the next game
+  G.sc = { us: 0, them: 0 };
+
+  // Prepare a fresh game but DO NOT start dealing yet
+  startNewGame();
+
+  }, 3000); // adjust delay if you want
+
+  } */
 function endGame() {
 
     // Show final result overlay
     $('result-overlay').classList.remove('hidden');
 
-    speech("north",
-        "Game over — all players have started twice!",
-        5000
-    );
-
-    // ⭐ Wait 3 seconds so player can see the final score
-    setTimeout(() => {
-
-        // Hide result overlay
-        $('result-overlay').classList.add('hidden');
-
-        // Show start screen
-        $('start-screen').classList.remove('hidden');
-
-        // Reset score for the next game
-        G.sc = { us: 0, them: 0 };
-
-        // Prepare a fresh game but DO NOT start dealing yet
-        startNewGame();
-
-    }, 3000); // adjust delay if you want
-
-} */
-function endGame() {
-
-    // Show final result overlay
-    $('result-overlay').classList.remove('hidden');
-
-//    speech("north",
-//        "Game over — all players have started twice!",
-//        5000
-//    );
+    //    speech("north",
+    //        "Game over — all players have started twice!",
+    //        5000
+    //    );
 
     $('deal-again-btn').classList.add('hidden');
     
@@ -590,17 +591,17 @@ function endGame() {
         $('deal-again-btn').classList.remove('hidden');
 	
         // Reset score
-// ✅ ADD THESE TWO LINES:
-    G.sc = { us: 0, them: 0 };
-    G.starts = { north: 0, east: 0, south: 0, west: 0 };
-    G.firstHand = true;   // ← makes the spinner run again on hand 1
-    G.history = [];       // ← optional: clear history for fresh game
-		
+	// ✅ ADD THESE TWO LINES:
+	G.sc = { us: 0, them: 0 };
+	G.starts = { north: 0, east: 0, south: 0, west: 0 };
+	G.firstHand = true;   // ← makes the spinner run again on hand 1
+	G.history = [];       // ← optional: clear history for fresh game
+	
         // Reset game state
         startNewGame();
 
         // Show start screen
-     //   $('start-screen').classList.remove('hidden');
+	//   $('start-screen').classList.remove('hidden');
     };
 }
 
@@ -608,7 +609,7 @@ function endGame() {
 
 // player is next to bid -- dealer is to the right
 function showStarterGraphic(player, cb) {
-//    return; // do not want his anymore
+    //    return; // do not want his anymore
     
     // compute dealer = player to the right
     const i = PL.indexOf(player);
@@ -623,21 +624,21 @@ function showStarterGraphic(player, cb) {
 	el.textContent = PN[dealer] + " is the dealer";
     }
 
-/* remove this display    
-    el.classList.remove('hidden');
+    /* remove this display    
+       el.classList.remove('hidden');
 
-    // fade in
-    setTimeout(() => el.classList.add('show'), 20);
+       // fade in
+       setTimeout(() => el.classList.add('show'), 20);
 
-    // fade out after 1.8s
-    setTimeout(() => {
-        el.classList.remove('show');
-        setTimeout(() => {
-            el.classList.add('hidden');
-            cb(); // continue game
-        }, 600);
-	}, 1800);
-*/
+       // fade out after 1.8s
+       setTimeout(() => {
+       el.classList.remove('show');
+       setTimeout(() => {
+       el.classList.add('hidden');
+       cb(); // continue game
+       }, 600);
+       }, 1800);
+    */
 
     cb(); // just continue the bidding
     
@@ -672,17 +673,17 @@ function startNewGame() {
 	}, 1200);
 
 	/*
-	if (leader === "north") leaderLabel = "➡️ N";
-	if (leader === "south") leaderLabel = "➡️ S";
-	if (leader === "east" ) leaderLabel = "➡️ E";
-	if (leader === "west" ) leaderLabel = "➡️️ W";
-	
-	setTimeout(() => {
-	    document.querySelector('.spinner-label.' +
-				   leader).textContent = leaderLabel;
-	}, 1200);
+	  if (leader === "north") leaderLabel = "➡️ N";
+	  if (leader === "south") leaderLabel = "➡️ S";
+	  if (leader === "east" ) leaderLabel = "➡️ E";
+	  if (leader === "west" ) leaderLabel = "➡️️ W";
+	  
+	  setTimeout(() => {
+	  document.querySelector('.spinner-label.' +
+	  leader).textContent = leaderLabel;
+	  }, 1200);
 
-	 */
+	*/
 	
 	// Step 1: show spinner
 	showStarterSpinner(leader, () => {
@@ -700,10 +701,10 @@ function startNewGame() {
 	
         showStarterGraphic(leader, () => startBid());
 
-//	cLog("previous dealer: ", dealer);
-//	cLog("next dealer:", leader);
+	//	cLog("previous dealer: ", dealer);
+	//	cLog("next dealer:", leader);
     }
- //   cLog("Leader:",leader, ".  Dealer is: ",G.dealer);
+    //   cLog("Leader:",leader, ".  Dealer is: ",G.dealer);
     
     G.starts[G.dealer]++;
     G.leader = leader;
@@ -760,10 +761,6 @@ $('rules-close').addEventListener('click', () => {
 });
 
 
-//$('scoreboard').addEventListener('click', () => {
-//    showGameDetails();
-//});
-
 $('details-close').addEventListener('click', () => {
     $('details-modal').classList.add('hidden');
 });
@@ -792,8 +789,8 @@ function showGameDetails() {
     const hl = G.hl ? G.hl.toUpperCase() : "";
 
     const bid = G.hBid
-        ? `${PN[G.hBid.player]} bid ${G.hBid.bid} in ${G.hBid.trump} (${G.hBid.hl})`
-        : "No bids yet";
+          ? `${PN[G.hBid.player]} bid ${G.hBid.bid} in ${G.hBid.trump} (${G.hBid.hl})`
+          : "No bids yet";
 
     body.innerHTML = `
         <div><b>Dealer:</b> ${PN[dealer]}</div>
@@ -811,28 +808,28 @@ function showGameDetails() {
 
 // RUNNING History
 /*
-function showHistory() {
-    const body = $('history-body');
-    body.innerHTML = "";
+  function showHistory() {
+  const body = $('history-body');
+  body.innerHTML = "";
 
-    if (G.history.length === 0) {
-        body.innerHTML = "<div>No hands played yet.</div>";
-    } else {
-        G.history.forEach((h, i) => {
-            const bidText = h.bid
-                ? `${PN[h.bid.player]} bid ${h.bid.bid} in ${h.bid.trump} (${h.bid.hl})${h.bid.alone ? " alone" : ""}`
-                : "No bid";
+  if (G.history.length === 0) {
+  body.innerHTML = "<div>No hands played yet.</div>";
+  } else {
+  G.history.forEach((h, i) => {
+  const bidText = h.bid
+  ? `${PN[h.bid.player]} bid ${h.bid.bid} in ${h.bid.trump} (${h.bid.hl})${h.bid.alone ? " alone" : ""}`
+  : "No bid";
 
-            body.innerHTML += `
-                <div style="margin-bottom:12px;">
-                    <b>Hand ${i+1}</b>, Dealer: ${PN[h.dealer]}, Leader: ${PN[h.leader]}<br>
-                    Bid: ${bidText}<br>
-                    Tricks: Us ${h.tricks.us} — ${h.tricks.them}, 
-                    Score: Us ${h.score.us} — ${h.score.them}
-                </div>
-            `;
-        });
-    } */
+  body.innerHTML += `
+  <div style="margin-bottom:12px;">
+  <b>Hand ${i+1}</b>, Dealer: ${PN[h.dealer]}, Leader: ${PN[h.leader]}<br>
+  Bid: ${bidText}<br>
+  Tricks: Us ${h.tricks.us} — ${h.tricks.them}, 
+  Score: Us ${h.score.us} — ${h.score.them}
+  </div>
+  `;
+  });
+  } */
 
 $('history-close').addEventListener('click', () => {
     $('history-modal').classList.add('hidden');
