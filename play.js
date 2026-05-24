@@ -142,12 +142,23 @@ function resolveT(){
 //    msg(PN[winner]+' wins the trick!',1500);
     setAct(winner);
     hud();
+
     
     const ws=$('ts-'+winner);
-    ws.style.animation='trickWin 1.0s ease'; //0.4
+
+    /*
+    const cardImg = ws.querySelector('img');
+    if (cardImg) {
+	cardImg.style.animation = 'trickGlow 5.0s ease-out';
+	setTimeout(() => cardImg.style.animation = '', 5200);
+    }
+    */
     
-    setTimeout(()=>{ws.style.animation='';
-		   },400);
+
+    ws.style.animation='trickWin 1.0s ease'; //0.4    
+    setTimeout(()=>{
+	ws.style.animation='';
+    },400);
     
     setTimeout(()=>{
 	clearTC();

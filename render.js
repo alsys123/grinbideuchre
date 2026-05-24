@@ -301,6 +301,7 @@ function selCard(card,el){
 	    return;
 	}
     }
+    
     document.querySelectorAll('#hand-south .card.selected').forEach(e=>e.classList.remove('selected'));
     
     G.sel=card; el.classList.add('selected');
@@ -337,10 +338,15 @@ function setAct(who){
 
 
 
-function showTC(p,c){const s=$('ts-'+p);s.innerHTML='';
-		     const d=document.createElement('div');
-		     d.className='card';
-		     d.innerHTML=cardSVG(c.r,c.s,false);
-		     s.appendChild(d);
-		    }
-function clearTC(){['south','north','west','east'].forEach(p=>$('ts-'+p).innerHTML='');}
+function showTC(p,c){
+    const s=$('ts-'+p);
+    s.innerHTML='';
+    const d=document.createElement('div');
+    d.className='card';
+    d.innerHTML=cardSVG(c.r,c.s,false);
+    s.appendChild(d);
+}
+
+function clearTC(){
+    ['south','north','west','east'].forEach(p=>$('ts-'+p).innerHTML='');
+}
