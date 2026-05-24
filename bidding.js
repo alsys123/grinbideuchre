@@ -106,7 +106,7 @@ function showBidMod(){
     pAlone=null;
     pCardReq=null;
 
-    for(let b=3;b<=8;b++){
+    for(let b=1;b<=8;b++){
 	const btn=document.createElement('button');
 	btn.className='bbtn';
 
