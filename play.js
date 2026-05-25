@@ -1,6 +1,9 @@
 
+/*
 
-// PLAY
+  PLAY of the hand
+
+*/
 
 // Entry Point: startTrick --> from bidding.js
 function startTrick(){
@@ -133,9 +136,19 @@ function aiFollow(player,legs,led){
 
 // Either startTrick looping again
 //  OR scoreHand in mainline to end the hand
+// This shows the winner of the hand.
 function resolveT(){
     const winner=twinner(G.trick,G.trump,G.hl);
-    
+
+    // Dim all other players' trick cards
+    ['north','east','south','west'].forEach(p => {
+	if (p !== winner) {
+            const el = $('ts-' + p);
+            const img = el && el.querySelector('img');
+            if (img) img.classList.add('dimCard');
+	}
+    });
+
     G.tw[TEAMS[winner]]++;
     G.done.push({trick:G.trick,winner});
     G.leader=winner;
@@ -146,13 +159,13 @@ function resolveT(){
     
     const ws=$('ts-'+winner);
 
-    /*
+    
     const cardImg = ws.querySelector('img');
     if (cardImg) {
-	cardImg.style.animation = 'trickGlow 5.0s ease-out';
-	setTimeout(() => cardImg.style.animation = '', 5200);
+	cardImg.style.animation = 'trickGlow 3.0s ease-out';
+	setTimeout(() => cardImg.style.animation = '', 3200);
     }
-    */
+    
 /*
     const cardImg = ws.querySelector('img');
     if (cardImg) {
@@ -161,10 +174,8 @@ function resolveT(){
     }
 */    
 
-    ws.style.animation='trickWin 1.0s ease'; //0.4    
-    setTimeout(()=>{
-	ws.style.animation='';
-    },400);
+//    ws.style.animation='trickWin 1.0s ease'; //0.4    
+//    setTimeout(()=>{ws.style.animation=''; },400);
 
     
     setTimeout(()=>{
@@ -172,7 +183,7 @@ function resolveT(){
 	G.trick=[];
 	if(G.H.south.length===0)scoreHand();
 	else startTrick();	
-    },1700);
+    },2500); // was 1700
 
     
 }

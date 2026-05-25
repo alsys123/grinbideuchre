@@ -316,7 +316,7 @@ function scoreHand(){
 	//font-weight:bold;
 	//">✔️</span>${btw} tricks)`;
 	calc = `(<span style="
-color:#00ff66;
+color:green;
 font-size:1.4em;
 font-weight:bold;
 ">✔</span> ${btw} tricks)`;
