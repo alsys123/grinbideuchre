@@ -140,6 +140,32 @@ function aiFollow(player,legs,led){
 function resolveT(){
     const winner=twinner(G.trick,G.trump,G.hl);
 
+    G.tw[TEAMS[winner]]++;
+    G.done.push({trick:G.trick,winner});
+    G.leader=winner;
+    setAct(winner);
+    hud();
+
+    
+    const ws=$('ts-'+winner);
+
+    ws.style.animation='trickWin 1.0s ease'; //0.4    
+    setTimeout(()=>{ws.style.animation=''; },400);
+
+    
+    setTimeout(()=>{
+	clearTC();
+	G.trick=[];
+	if(G.H.south.length===0)scoreHand();
+	else startTrick();	
+    },1700); // was 1700
+
+    
+} //resolveT
+
+function resolveT_v2(){
+    const winner=twinner(G.trick,G.trump,G.hl);
+
     // Dim all other players' trick cards
     ['north','east','south','west'].forEach(p => {
 	if (p !== winner) {
