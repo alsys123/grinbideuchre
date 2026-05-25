@@ -16,7 +16,7 @@ function startBid(){
 function nextBid(){
     if(bIdx>=bOrder.length){
 	if(!G.hBid){
-	    msg('All passed — dealer must bid 3!',2200);
+	    msg('All passed — dealer must bid 1!',2200);
 	    
 	    setTimeout(()=>{
 		placeBid(G.dealer,3,G.H[G.dealer][0].s,'high',false,0);

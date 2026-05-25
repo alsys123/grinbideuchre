@@ -226,8 +226,8 @@ tr:last-child td { border-bottom: none; }
 .bid-examples {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin: 10px 0;
+    gap: 4px;
+    margin: 5px 0;
 }
 .bid-tag {
     display: inline-block;
