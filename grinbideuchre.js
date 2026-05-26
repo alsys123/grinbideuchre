@@ -561,6 +561,8 @@ function randomLeader() {
   } */
 function endGame() {
 
+    $('concedeBtn').style.display = 'none';
+
     // Show final result overlay
     $('result-overlay').classList.remove('hidden');
 

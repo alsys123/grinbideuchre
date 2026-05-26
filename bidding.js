@@ -398,6 +398,8 @@ function finishBid() {
     G.cur = h.player;
     G.phase = 'play';
 
+    updateConcedeButton();
+
     renderHands(true, 'south');
 
     setTimeout(startTrick, 2700);
@@ -508,3 +510,85 @@ function partnerOf(p) {
     const idx = PL.indexOf(p);
     return PL[(idx + 2) % 4];
 }
+
+/*
+function updateConcedeButton() {
+    const btn = $('concedeBtn');
+
+    // If WE are defending, show the button
+    if (TEAMS[G.bidder] !== 'us') {
+        btn.style.display = 'block';
+    } else {
+        btn.style.display = 'none';
+    }
+}
+*/
+function updateConcedeButton() {
+    const btn = $('concedeBtn');
+
+    // The player who won the bid
+    const bidder = G.hBid ? G.hBid.player : null;
+
+    if (!bidder) {
+        btn.style.display = 'none';
+        return;
+    }
+
+    // Show only if WE are defending
+    if (TEAMS[bidder] === 'them') {
+        btn.style.display = 'block';
+    } else {
+        btn.style.display = 'none';
+    }
+}
+
+/*
+$('concedeBtn').onclick = function () {
+    // Opponents have the contract, so they score their bid
+    const bid = G.hBid;  // your existing bid object
+
+    if (!bid) return;     // safety
+    
+ //   const tricks = bid.tricks;
+
+    // Lone hand scoring
+//    let score = tricks;
+    let score;
+    if (bid.alone) {
+        if (bid.ask === 0) score = 24;
+        else if (bid.ask === 1) score = 18;
+        else if (bid.ask === 2) score = 12;
+    }else {
+        score = bid.tricks;   // normal contract
+    }
+
+    // Apply score to the bidding team
+    G.tw[TEAMS[bid.player]] += score;
+
+    scoreHand();
+    // Clear the table and start next hand
+  //  clearTC();
+  //  nextHand(); // or whatever your function is
+};
+*/
+$('concedeBtn').onclick = function () {
+
+    const bid = G.hBid;
+    if (!bid) return;
+
+    const bt = TEAMS[bid.player];          // bidding team
+    const ot = bt === 'us' ? 'them' : 'us'; // defenders
+
+    // When conceding, the bidding team gets all 8 tricks.
+    G.tw[bt] = 8;
+    G.tw[ot] = 0;
+
+    // Now scoreHand() will apply the correct scoring:
+    // - Lone hand success (24/18/12)
+    // - Normal bid success (btw >= bid)
+    // - Defenders get 0
+    scoreHand();
+
+    $('concedeBtn').style.display = 'none';
+
+};
