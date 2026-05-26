@@ -678,7 +678,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 
 .hist-we {
     color: white;
-    text-align: left;
+    text-align: center;
     font-size: 14px;
 }
 
@@ -686,7 +686,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 .hist-them {
     color: white;
     font-size: 14px;
-    text-align: left;
+    text-align: center;
 }
 
 @keyframes trickGlow {

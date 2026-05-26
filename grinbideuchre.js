@@ -303,7 +303,7 @@ function scoreHand(){
 	pts = lonePts[ex];
 //	calc = `(✔️ 8 tricks → +${pts})`;
 	calc = `(<span style="
-color:green;
+color:#00ff00;
 font-size:1.4em;
 font-weight:bold;
 ">✔</span> 8 Tricks →  ${pts} tricks)`;
@@ -316,7 +316,7 @@ font-weight:bold;
     // normal hand
     if (!isLone && btw >= h.bid) {
 	calc = `(<span style="
-color:green;
+color:#00ff00;
 font-size:1.4em;
 font-weight:bold;
 ">✔</span> ${btw} tricks)`;
@@ -445,8 +445,8 @@ font-style:italic;">No hands played yet.</div>`;
             <div class="hist-bid">Dealer</div>
             <div class="hist-tricks">Bid</div>
             <div class="hist-calc">Results</div>
-            <div class="hist-we">We</div>
-            <div class="hist-them">Them</div>
+            <div class="hist-we">We  Total</div>
+            <div class="hist-them">Them  Total</div>
           </div>
           ${rows}
         </div>`;
