@@ -5,12 +5,9 @@ Complete with grphics and animation.  This game is the double deck version with 
 Totally free.
 Have fun!
 
-v1.0 May 27, 2026.  Fully working.
-
-v0.2 May 17, 2026. Lots of fixes.  Currently working on the end game.
-
-v0.1 May 14, 2026. Almost done 99% working
-
+v1.0 May 27, 2026.  Fully working.  
+v0.2 May 17, 2026. Lots of fixes.  Currently working on the end game.  
+v0.1 May 14, 2026. Almost done 99% working  
 vO.0 May 11, 2026. Just starting to code.  
 
 Public site with latest release:
