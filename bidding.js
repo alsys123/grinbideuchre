@@ -581,7 +581,7 @@ $('concedeBtn').onclick = function () {
 
     // When conceding, the bidding team gets all 8 tricks.
 	// gets what they bid only - all 8 was roo high.
-    G.tw[bt] = bid; //8;
+    G.tw[bt] = bid.bid; //8;
     G.tw[ot] = 0;
 
     // Now scoreHand() will apply the correct scoring:
