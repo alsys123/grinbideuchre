@@ -302,12 +302,15 @@ function scoreHand(){
     if (isLone && btw === 8) {
 	pts = lonePts[ex];
 //	calc = `(✔️ 8 tricks → +${pts})`;
+		calc = `(✅ made it → +${pts})`;
+/*
 	calc = `(<span style="
 color:#00ff00;
 -webkit-text-fill-color:#00ff00;
 font-size:1.4em;
 font-weight:bold;
 ">✔</span> 8 Tricks →  ${pts} tricks)`;
+		*/
     }
     //lone hand failed
     if (isLone && btw !== 8) {
@@ -316,13 +319,15 @@ font-weight:bold;
     }
     // normal hand
     if (!isLone && btw >= h.bid) {
+		calc = `(✅ made it → +${pts})`;
+/*
 	calc = `(<span style="
 color:#00ff00;
 -webkit-text-fill-color:#00ff00;
 font-size:1.4em;
 font-weight:bold;
 ">✔</span> ${btw} tricks)`;
-
+*/
     }
     // normal hand failed
     if (!isLone && btw < h.bid) {
