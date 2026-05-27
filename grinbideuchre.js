@@ -304,6 +304,7 @@ function scoreHand(){
 //	calc = `(✔️ 8 tricks → +${pts})`;
 	calc = `(<span style="
 color:#00ff00;
+-webkit-text-fill-color:#00ff00;
 font-size:1.4em;
 font-weight:bold;
 ">✔</span> 8 Tricks →  ${pts} tricks)`;
@@ -317,6 +318,7 @@ font-weight:bold;
     if (!isLone && btw >= h.bid) {
 	calc = `(<span style="
 color:#00ff00;
+-webkit-text-fill-color:#00ff00;
 font-size:1.4em;
 font-weight:bold;
 ">✔</span> ${btw} tricks)`;
