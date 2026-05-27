@@ -240,7 +240,8 @@ function sortBase(hand) {
 // SCORE
 function scoreHand(){
     //    cLog("score: ", G);
-    
+    $('concedeBtn').style.display = 'none';
+	
     G.phase='result';
     setAct(null);
     hud();
