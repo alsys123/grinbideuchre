@@ -426,7 +426,7 @@ function activateSouthHand() {
 }
 
 // *** Going alone - asking for 1 or 2 cards ***
-
+// exchange the cards
 function startExchange(n) {
     G.phase = 'exchange';
     G.exchangeCount = n;
@@ -459,7 +459,7 @@ function pickExchangeCard(el) {
         finalizeExchange();
     }
 }
-
+/*
 function partnerBestCards(partner, n) {
     const hand = [...G.H[partner]];
 
@@ -471,6 +471,32 @@ function partnerBestCards(partner, n) {
 
         if (aTrump !== bTrump) return bTrump - aTrump;
         return rankVal[b.r] - rankVal[a.r];
+    });
+
+    return hand.slice(0, n);
+    }
+*/
+
+function partnerBestCards(partner, n) {
+    const hand = [...G.H[partner]];
+
+    const rankVal = { 'J':1, 'Q':2, 'K':3, 'A':4 };
+
+    hand.sort((a,b) => {
+        const aTrump = (a.s === G.trump);
+        const bTrump = (b.s === G.trump);
+
+        // HIGH mode → give strongest cards
+        if (G.hl === 'high') {
+            if (aTrump !== bTrump) return bTrump - aTrump;
+            return rankVal[b.r] - rankVal[a.r];
+        }
+
+        // LOW mode → give weakest cards
+        if (G.hl === 'low') {
+            if (aTrump !== bTrump) return aTrump - bTrump;
+            return rankVal[a.r] - rankVal[b.r];
+        }
     });
 
     return hand.slice(0, n);
