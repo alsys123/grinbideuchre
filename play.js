@@ -149,8 +149,12 @@ function resolveT(){
     
     const ws=$('ts-'+winner);
 
-    ws.style.animation='trickWin 1.0s ease'; //0.4    
-    setTimeout(()=>{ws.style.animation=''; },400);
+//    ws.style.animation='trickWin 1.0s ease'; //0.4    
+  //  setTimeout(()=>{ws.style.animation=''; },400);
+//ws.style.animation = 'trickWinSmooth 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)';
+//setTimeout(() => { ws.style.animation = ''; }, 950);
+ws.style.animation = 'trickWinSoft 1.2s ease-out';
+setTimeout(() => { ws.style.animation = ''; }, 1300);
 
     
     setTimeout(()=>{

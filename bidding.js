@@ -45,8 +45,38 @@ function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
     if(!G.hBid||amt>G.hBid.bid)
 	G.hBid={player,bid:amt,trump,hl,alone,cardReq};
 
+    showTheBid(player,amt,trump,hl,alone,cardReq);
+    
 }
 
+
+function showTheBid(player, amt, trump, hl, alone, cardReq) {
+
+    // Build base text: "5 in ♥" or "6 NT"
+    let text = amt;
+
+    if (trump === "NT") {
+        text += " NT";
+    } else {
+        text += " in " + trump;   // trump is already a symbol ♥ ♦ ♣ ♠
+    }
+
+    // Alone?
+    if (alone) {
+        text += " alone";
+    }
+
+    // Ask?
+    // cardReq = 0, 1, or 2
+    if (alone && (cardReq === 1 || cardReq === 2)) {
+        text += ` (ask ${cardReq})`;
+    }
+
+    // Speak it
+    speech(player, text, 1800);
+
+
+} // showTheBid
 
 // show the current bid modal box
 function showBidMod(){
@@ -205,33 +235,8 @@ function pickAlone(amt) {
     
     pickTrump();
     
-/*
-    // ⭐ If 8 → show the 3 alone options
-    $('modal-sub').textContent = 'Choose your bid option';
-    ap.style.display = 'flex';
-
-    const options = [
-        { label: 'Ask 1 Card',  alone: true, cardReq: 1 },
-        { label: 'Ask 2 Cards', alone: true, cardReq: 2 },
-        { label: 'MoonShot!',   alone: true, cardReq: 0 }
-    ];
-
-    options.forEach(opt => {
-        const b = document.createElement('button');
-        b.className = 'abtn';
-        b.textContent = opt.label;
-
-        b.addEventListener('click', () => {
-            pAlone   = opt.alone;
-            pCardReq = opt.cardReq;
-            pickTrump();
-        });
-
-        ap.appendChild(b);
-	});
-*/
     
-}
+} //pickAlone
 
 function hideAllPickers() {
     $('bid-buttons').style.display = 'none';
@@ -400,11 +405,25 @@ function finishBid() {
 
     updateConcedeButton();
 
-    renderHands(true, 'south');
+//    renderHands(true, 'south');  // ??? Somehow we need this otherwise we cannot select
 
+    activateSouthHand();
+    
     setTimeout(startTrick, 2700);
-}
+} //finishBid
 
+function activateSouthHand() {
+    const hand = $('hand-south').children;
+
+    for (let el of hand) {
+        el.classList.remove('dimCard', 'exchange-select', 'selected');
+        el.onclick = () => {
+            const cid = parseInt(el.dataset.cid);
+            const card = G.H.south.find(c => c.uid === cid);
+            if (card) playCard('south', card);
+        };
+    }
+}
 
 // *** Going alone - asking for 1 or 2 cards ***
 
