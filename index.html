@@ -32,6 +32,50 @@
 	</div>
       </div>
 
+ 
+	<!-- Deterministic deal display and select -->
+<div id="deal-number"
+     style="font-size:11px;
+            color:var(--gold);
+            letter-spacing:1px;
+            cursor:pointer;
+            margin-top: 50px;
+            margin-left: 75%;
+            "
+     title="Click to copy deal number"
+     onclick="copyDealNumber(); promptReplay();">
+</div>
+
+<div id="replay-box"
+     style="display:none;
+            gap:6px;
+            margin-top:10px;
+            margin-left: 75%;
+            align-items:center;">
+
+  <input id="replay-input" type="text"
+         placeholder="047-82341-067459821"
+         style="font-family:Georgia,serif;
+                font-size:13px;
+                background:rgba(0,0,0,0.5);
+                color:var(--cream);
+                border:1px solid var(--gold-dark);
+                border-radius:2px;
+                padding:1px 2px;
+		margin-top: 20px;
+		width:fit-content;
+		max-width:fit-content;
+		box-sizing:content-box;
+		display:inline-block;">
+ 
+  <button onclick="replayDeal(document.getElementById('replay-input').value)"
+          class="abtn"
+	  style="padding:2px 6px; font-size:12px;" >
+    Go</button>
+</div>
+
+	<!--- END OF ... Deterministic deal display and select  -->
+	
       <div id="details-modal" class="hidden details-modal">
 	<div class="details-box">
 	  <div class="details-title">Game Details</div>

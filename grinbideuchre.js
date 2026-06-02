@@ -38,6 +38,9 @@ G.starts = { north:0, east:0, south:0, west:0 };
 
 G.history = [];
 
+let lastDealNumber = 0n;   // BigInt
+let requestedDeal = null;  // null = random, BigInt = specific deal
+
 // GAME CORE
 
 function deck() {
@@ -148,6 +151,85 @@ function legal(hand,led,t,hl){
     return f.length?f:hand;
 }
 
+/*
+  Deterministic dealing 
+*/
+
+function randomDealNumber() {
+    const hi  = BigInt(Math.floor(Math.random() * 1000));
+    const mid = BigInt(Math.floor(Math.random() * 100000));
+    const lo  = BigInt(Math.floor(Math.random() * 1000000000));
+    return hi * 100000000000000n + mid * 1000000000n + lo + 1n;
+}
+
+function formatDealNumber(n) {
+    const s = n.toString().padStart(17, '0');
+    return s.slice(0,3) + ' - ' + s.slice(3,8) + ' - ' + s.slice(8,17);
+}
+
+function parseDealNumber(str) {
+    const cleaned = str.replace(/[\s\-]/g, '');
+    if (!/^\d{1,17}$/.test(cleaned)) return null;
+    return BigInt(cleaned);
+}
+
+function shuffleByDeal(deckArr, dealNumber) {
+    if (!dealNumber || dealNumber === 0n) {
+        dealNumber = randomDealNumber();
+    }
+    lastDealNumber = dealNumber;
+
+    let n = dealNumber;
+    const a = [...deckArr];
+    const len = a.length;
+
+    for (let i = len - 1; i > 0; i--) {
+        const j = Number(n % BigInt(i + 1));
+        n = n / BigInt(i + 1);
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function showDealNumber() {
+    const el = document.getElementById('deal-number');
+    if (el) el.textContent = 'Deal # ' + formatDealNumber(lastDealNumber);
+}
+
+function replayDeal(inputStr) {
+    const n = parseDealNumber(inputStr);
+    if (!n) { alert('Invalid deal number'); return; }
+    requestedDeal = n;
+    //deal();
+    startNewGame();
+}
+
+function promptReplay() {
+    const box = document.getElementById('replay-box');
+    box.style.display = box.style.display === 'none' ? 'flex' : 'none';
+}
+
+/*
+function copyDealNumber() {
+    const txt = formatDealNumber(lastDealNumber);
+    navigator.clipboard.writeText(txt).then(() => {
+        console.log("Copied:", txt);
+    });
+    }
+    */
+function copyDealNumber() {
+    const txt = formatDealNumber(lastDealNumber);
+    navigator.clipboard.writeText(txt).then(() => {
+        const el = document.getElementById('deal-number');
+        const old = el.textContent;
+        el.textContent = "Copied!";
+        setTimeout(() => el.textContent = old, 700);
+    });
+}
+
+/*
+ Dealing 
+  */
 
 // DEAL
 function deal(){
@@ -167,8 +249,12 @@ function deal(){
     $('message').classList.add('hidden');
     $('start-screen').classList.add('hidden');
     
-    const dk=shuffle(deck());
+    //    const dk=shuffle(deck());
     
+    const dk = shuffleByDeal(deck(), requestedDeal);
+    requestedDeal = null;   // reset to random after replay
+    showDealNumber();
+
     //    PL.forEach((p,i)=>G.H[p]=dk.slice(i*6,i*6+6));
     PL.forEach((p,i)=>G.H[p]=dk.slice(i*8,i*8+8));
     
