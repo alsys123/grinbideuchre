@@ -369,7 +369,7 @@ font-weight:bold;
     // all players have dealt twice.
     //    if(G.sc.us>=32||G.sc.them>=32){
 
-    cLog("Next Hand?",G.starts, allPlayersHaveTwoStarts() );
+//    cLog("Next Hand?",G.starts, allPlayersHaveTwoStarts() );
     
     if( allPlayersHaveTwoStarts() ){
 	endGame();

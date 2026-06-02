@@ -146,15 +146,22 @@ function resolveT(){
     setAct(winner);
     hud();
 
+    if (winner === 'north') speech(winner,'↓', 2000);
+    if (winner === 'south') speech(winner,'↑', 2000);
+    if (winner === 'east')  speech(winner,'←', 2000);
+    if (winner === 'west')  speech(winner,'→', 2000);
     
-    const ws=$('ts-'+winner);
+//    const ws=$('ts-'+winner);
+//    ws.style.animation = 'trickWinSoft 1.2s ease-out';
+//    setTimeout(() => { ws.style.animation = ''; }, 1300);
 
-//    ws.style.animation='trickWin 1.0s ease'; //0.4    
-  //  setTimeout(()=>{ws.style.animation=''; },400);
-//ws.style.animation = 'trickWinSmooth 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)';
-//setTimeout(() => { ws.style.animation = ''; }, 950);
-ws.style.animation = 'trickWinSoft 1.2s ease-out';
-setTimeout(() => { ws.style.animation = ''; }, 1300);
+    /* ... other samples
+    //    ws.style.animation='trickWin 1.0s ease'; //0.4    
+    //  setTimeout(()=>{ws.style.animation=''; },400);
+    //ws.style.animation = 'trickWinSmooth 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)';
+    //setTimeout(() => { ws.style.animation = ''; }, 950);
+    */
+    
 
     
     setTimeout(()=>{
@@ -162,7 +169,7 @@ setTimeout(() => { ws.style.animation = ''; }, 1300);
 	G.trick=[];
 	if(G.H.south.length===0)scoreHand();
 	else startTrick();	
-    },1700); // was 1700
+    },1200); // was 1700
 
     
 } //resolveT

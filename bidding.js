@@ -38,7 +38,7 @@ function nextBid(){
 // record the bid
 function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
 
-    cLog("Place bid: ",player,amt,trump,hl,alone,cardReq);
+//    cLog("Place bid: ",player,amt,trump,hl,alone,cardReq);
     
     G.bids[player]={amt,trump,hl,alone,cardReq};
 
