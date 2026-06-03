@@ -8,6 +8,7 @@
 17 digits  =  100 quadrillion
             =  more than all the deals that exist
 
+30 quadrillion possibilities.
 /* ═══════════════════════════════════════════════════════════════
  DEAL NUMBER SYSTEM — full 17-digit coverage, 3-5-9 format
  e.g. "047 - 82341 - 067459821"
