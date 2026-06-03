@@ -8,18 +8,19 @@
   </head>
   <body>
     <div id="wrap">
-<div id="northBackdoor"
-     style="
-        position:absolute;
-        top:0;
-        left:0;
-        width:40px;
-        height:40px;
-        opacity:0;
-        z-index:9999;
-        cursor:pointer;
-     ">
-</div>
+      
+      <div id="northBackdoor"
+	   style="
+		  position:absolute;
+		  top:0;
+		  left:0;
+		  width:40px;
+		  height:40px;
+		  opacity:0;
+		  z-index:9999;
+		  cursor:pointer;
+		  ">
+      </div>
 
       <div id="scoreboard">
 	<div class="st"><div class="sl">You &amp; North</div>
@@ -32,50 +33,66 @@
 	</div>
       </div>
 
- 
-	<!-- Deterministic deal display and select -->
-<div id="deal-number"
-     style="font-size:11px;
-            color:var(--gold);
-            letter-spacing:1px;
-            cursor:pointer;
-            margin-top: 50px;
-            margin-left: 75%;
-            "
-     title="Click to copy deal number"
-     onclick="copyDealNumber(); promptReplay();">
-</div>
+      
+      <!-- Deterministic deal display and select -->
+      <div id="DealBackdoor"
+	   style="
+		  position:absolute;
+		  top:0;
+		  left:25%;
+		  width:40px;
+		  height:40px;
+		  opacity:0;
+		  z-index:9999;
+		  cursor:pointer;
+		  ">
+      </div>
+	  
+      <div id="deal-number"
+	   style="font-size:11px;
+		  color:var(--gold);
+		  letter-spacing:1px;
+		  cursor:pointer;
+		  margin-top: 50px;
+		  margin-left: 75%;
+		  display:none;
+		  "
+	   title="Click to copy deal number"
+	   onclick="copyDealNumber(); ">
+      </div>
 
-<div id="replay-box"
-     style="display:none;
-            gap:6px;
-            margin-top:10px;
-            margin-left: 75%;
-            align-items:center;">
-
-  <input id="replay-input" type="text"
-         placeholder="047-82341-067459821"
-         style="font-family:Georgia,serif;
-                font-size:13px;
-                background:rgba(0,0,0,0.5);
-                color:var(--cream);
-                border:1px solid var(--gold-dark);
-                border-radius:2px;
-                padding:1px 2px;
-		margin-top: 20px;
-		width:fit-content;
-		max-width:fit-content;
-		box-sizing:content-box;
-		display:inline-block;">
- 
-  <button onclick="replayDeal(document.getElementById('replay-input').value)"
-          class="abtn"
-	  style="padding:2px 6px; font-size:12px;" >
-    Go</button>
-</div>
-
-	<!--- END OF ... Deterministic deal display and select  -->
+      <div id="replay-box"
+	   style="display:none;
+		  gap:6px;
+		  margin-top:10px;
+		  margin-left: 75%;
+		  align-items:center;">
 	
+	<input id="replay-input" type="text"
+               placeholder="047-82341-067459821"
+               style="font-family:Georgia,serif;
+                      font-size:13px;
+                      background:rgba(0,0,0,0.5);
+                      color:var(--cream);
+                      border:1px solid var(--gold-dark);
+                      border-radius:2px;
+                      padding:1px 2px;
+		      margin-top: 20px;
+		      width:fit-content;
+		      max-width:fit-content;
+		      box-sizing:content-box;
+		      display:inline-block;">
+	
+	<button onclick="replayDeal(document.getElementById('replay-input').value)"
+		class="abtn"
+		style="padding:2px 6px; font-size:12px;" >
+	  Go
+	</button>
+	
+      </div>
+
+      <!--- END OF ... Deterministic deal display and select  -->
+      
       <div id="details-modal" class="hidden details-modal">
 	<div class="details-box">
 	  <div class="details-title">Game Details</div>
@@ -105,22 +122,25 @@
       </div>
 
       <div id="top-bar">
-	<button id="rules-btn" class="top-btn">Rules</button>
-<button id="concedeBtn" style="
-    position:absolute;
-    top:10px;
-    right:100px;
-    padding:6px 12px;
-    font-size:16px;
-    cursor:pointer;
-    border-radius:6px;
-    background:#c33;
-    color:white;
-    border:none;
-    display:none;
-">
-  Concede
-</button>
+	<button id="rules-btn" class="top-btn">
+	  Rules
+	</button>
+	
+	<button id="concedeBtn" style="
+				       position:absolute;
+				       top:10px;
+				       right:100px;
+				       padding:6px 12px;
+				       font-size:16px;
+				       cursor:pointer;
+				       border-radius:6px;
+				       background:#c33;
+				       color:white;
+				       border:none;
+				       display:none;
+				       ">
+	  Concede
+	</button>
 
       </div>
       

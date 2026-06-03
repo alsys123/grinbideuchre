@@ -27,33 +27,6 @@ $('northBackdoor').onclick = function () {
     }
     
 };
-/*
-function showNorthHand() {
-    const hand = G.H.north;
-    const el = $('hand-north');
-    el.innerHTML = '';
-
-    hand.forEach(card => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = cardSVG(card.r, card.s, false);
-        el.appendChild(div);
-    });
-}
-
-function hideNorthHand() {
-    const hand = G.H.north;
-    const el = $('hand-north');
-    el.innerHTML = '';
-
-    hand.forEach(card => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = cardSVG(card.r, card.s, true); // face‑down
-        el.appendChild(div);
-    });
-}
-*/
 
 function toggleReveal(hand, show) {
     const el = $('hand-' + hand);
@@ -92,3 +65,27 @@ function hideHandCards(player) {
         el.appendChild(div);
     });
 }
+
+// *** deal backdoor  -- to deal number and entry display
+let dealClicks = 0;  // for all hands not just north
+let dealReveal = false;
+
+$('DealBackdoor').onclick = function () {
+    dealClicks++;
+
+    if (dealClicks >= 5) {
+        dealClicks = 0;       // reset
+        dealReveal = !dealReveal;
+
+	dei('deal-number').style.display = 'block';
+	dei('replay-box').style.display = 'flex';
+	
+	
+    } else {
+	dei('deal-number').style.display = 'none';
+	dei('replay-box').style.display = 'none';
+	
+    }
+    
+};
+

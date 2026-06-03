@@ -193,7 +193,13 @@ function shuffleByDeal(deckArr, dealNumber) {
 
 function showDealNumber() {
     const el = document.getElementById('deal-number');
-    if (el) el.textContent = 'Deal # ' + formatDealNumber(lastDealNumber);
+    const text =
+	  'Deal # ' +
+	  formatDealNumber(lastDealNumber) +
+	  ` ${G.dealer}`;
+	  ;
+    
+    if (el) el.textContent = text;
 }
 
 function replayDeal(inputStr) {
@@ -204,10 +210,6 @@ function replayDeal(inputStr) {
     startNewGame();
 }
 
-function promptReplay() {
-    const box = document.getElementById('replay-box');
-    box.style.display = box.style.display === 'none' ? 'flex' : 'none';
-}
 
 /*
 function copyDealNumber() {
@@ -849,6 +851,7 @@ function allPlayersHaveTwoStarts() {
 }
 
 $('rules-btn').addEventListener('click', () => {
+    updateHelpDetail();
     $('rules-modal').classList.remove('hidden');
 });
 
