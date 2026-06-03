@@ -12,3 +12,7 @@ north ask for 2 cards - alone spades
 384 - 73480 - 305215115N
 west moonshot NT high
 
+163 - 51530 - 379312803E
+east alone ask for 2
+
+
