@@ -1,5 +1,7 @@
 Hands to consider:
 
+deal id: nnnD - D is dealer:  (NSEW - north, south, east, west) optional.
+
 369 - 17661 - 235525306S
 west has 7 aces. go alone.
 
