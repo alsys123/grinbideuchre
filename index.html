@@ -21,7 +21,22 @@
 		  cursor:pointer;
 		  ">
       </div>
-
+<!-- Visible star (does NOT block clicks) -->
+<div style="
+     position:absolute;
+     top:0;
+     left:0;
+     width:40px;
+     height:40px;
+     display:flex;
+     align-items:center;
+     justify-content:center;
+     pointer-events:none;   /* star stays click‑through */
+     z-index:9998;          /* or 10000 if needed */
+">
+    <span style="color:var(--gold); font-size:18px;">★</span>
+</div>
+      
       <div id="scoreboard">
 	<div class="st"><div class="sl">You &amp; North</div>
 	  <div class="sv" id="score-us">0</div>
@@ -47,7 +62,24 @@
 		  cursor:pointer;
 		  ">
       </div>
-	  
+      
+      <!-- Visible star (does NOT block clicks) -->
+      <div style="
+		  position:absolute;
+		  top:0;
+		  left:25%;
+		  width:40px;
+		  height:40px;
+		  display:flex;
+		  align-items:center;
+		  justify-content:center;
+		  pointer-events:none;   /* star stays click‑through */
+		  z-index:9998;          /* or 10000 if needed */
+		  ">
+	<span style="color:var(--gold); font-size:18px;">★</span>
+      </div>
+      
+      
       <div id="deal-number"
 	   style="font-size:11px;
 		  color:var(--gold);
@@ -123,15 +155,15 @@
 
       <div id="top-bar">
 	<button id="rules-btn" class="top-btn">
-	  Rules
+	  Rules & Info
 	</button>
 	
 	<button id="concedeBtn" style="
 				       position:absolute;
 				       top:10px;
-				       right:100px;
+				       right:130px;
 				       padding:6px 12px;
-				       font-size:16px;
+				       font-size:14px;
 				       cursor:pointer;
 				       border-radius:6px;
 				       background:#c33;

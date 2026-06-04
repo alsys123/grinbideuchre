@@ -15,4 +15,8 @@ west moonshot NT high
 163 - 51530 - 379312803E
 east alone ask for 2
 
+732 - 90979 - 965966982W
+east should bid 5NT low .. JJ make the Q an automatic win
+
+
 
