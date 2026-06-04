@@ -56,6 +56,57 @@ function evalTrump(hand, trump) {
     return tricks;
 }
 
+function evalNTHigh(hand) {
+    // Group cards by suit
+    const bySuit = {};
+    hand.forEach(c => {
+        if (!bySuit[c.s]) bySuit[c.s] = [];
+        bySuit[c.s].push(c.r);
+    });
+
+    let tricks = 0;
+
+    SUITS.forEach(s => {
+        const cards = bySuit[s] || [];
+        if (cards.length === 0) return;
+
+        // Count duplicates
+        const countA = cards.filter(r => r === 'A').length;
+        const countK = cards.filter(r => r === 'K').length;
+        const countQ = cards.filter(r => r === 'Q').length;
+        const countJ = cards.filter(r => r === 'J').length;
+
+        // --- 1. Aces are guaranteed winners ---
+        // 1 Ace = 1 trick, 2 Aces = 2 tricks
+        let suitTricks = countA;
+
+        // --- 2. Kings become winners if you hold both Aces ---
+        if (countA === 2 && countK > 0) {
+            suitTricks += countK;   // both Kings win
+        }
+
+        // --- 3. Queens become winners if Aces+Kings exhaust 3 rounds ---
+        // Opponents have 4 cards of each suit total.
+        // If you win 3 rounds, the 4th round is yours automatically.
+        const roundsWon = suitTricks;
+
+        if (roundsWon >= 3) {
+            // All remaining cards in this suit are winners
+            const totalCards = countA + countK + countQ + countJ;
+            suitTricks = totalCards;
+        } else {
+            // Otherwise, Queens and Jacks are marginal
+            if (countQ > 0) suitTricks += 0.2 * countQ;
+            if (countJ > 0) suitTricks += 0.05 * countJ;
+        }
+
+        tricks += suitTricks;
+    });
+
+    return tricks;
+}
+
+/*
 // Estimate tricks for NT High
 function evalNTHigh(hand) {
     let tricks = 0;
@@ -80,7 +131,56 @@ function evalNTHigh(hand) {
 
     return tricks;
 }
+*/
+function evalNTLow(hand) {
+    // Group cards by suit
+    const bySuit = {};
+    hand.forEach(c => {
+        if (!bySuit[c.s]) bySuit[c.s] = [];
+        bySuit[c.s].push(c.r);
+    });
 
+    let tricks = 0;
+
+    SUITS.forEach(s => {
+        const cards = bySuit[s] || [];
+        if (cards.length === 0) return;
+
+        // Count duplicates
+        const countJ = cards.filter(r => r === 'J').length;
+        const countQ = cards.filter(r => r === 'Q').length;
+        const countK = cards.filter(r => r === 'K').length;
+        const countA = cards.filter(r => r === 'A').length;
+
+        // --- 1. Jacks are guaranteed winners ---
+        // 1 Jack = 1 trick, 2 Jacks = 2 tricks
+        let suitTricks = countJ;
+
+        // --- 2. Queens become winners if you hold both Jacks ---
+        if (countJ === 2 && countQ > 0) {
+            suitTricks += countQ;   // both Queens win
+        }
+
+        // --- 3. If you win 3 rounds, you own the suit ---
+        const roundsWon = suitTricks;
+
+        if (roundsWon >= 3) {
+            // All remaining cards in this suit are winners
+            const totalCards = countJ + countQ + countK + countA;
+            suitTricks = totalCards;
+        } else {
+            // Otherwise, K/A get marginal value
+            if (countK > 0) suitTricks += 0.2 * countK;
+            if (countA > 0) suitTricks += 0.05 * countA;
+        }
+
+        tricks += suitTricks;
+    });
+
+    return tricks;
+}
+
+/*
 // Estimate tricks for NT Low  (J wins, then Q, K, A worst)
 function evalNTLow(hand) {
     let tricks = 0;
@@ -105,7 +205,7 @@ function evalNTLow(hand) {
 
     return Math.max(tricks, 0);
 }
-
+*/
 // Return the best { suit, hl, score } across all contracts
 function bestContract(hand) {
     let best = null;
