@@ -11,8 +11,12 @@
     <link rel="stylesheet" href="rules.css">
 
   </head>
+  
+  <button onclick="location.href='#gameSpecificId'">Game Specifics</button>
+
+
   <body>
-    <div class="page">
+    <div id="TopId" class="page">
       <div class="border-frame"></div>
 
       <!-- Header -->
@@ -441,10 +445,14 @@
 
       <!-- 10. Game Specifics -->
 
-      <section>
+      <section id="gameSpecificId">
+	
 	<h2><span class="section-num">X</span>Game Specifics</h2>
+	  <button onclick="location.href='#topId'">Top</button>
 	<p>This section is about implementation specifics.
 
+	
+	  
 	  <h3>Deterministic Deals</h3>
 
 <p><strong>Number of Possible Deals:  </strong>

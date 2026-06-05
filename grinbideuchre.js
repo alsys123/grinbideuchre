@@ -881,14 +881,6 @@ function allPlayersHaveTwoStarts() {
     return (started);
 }
 
-$('rules-btn').addEventListener('click', () => {
-    updateHelpDetail();
-    $('rules-modal').classList.remove('hidden');
-});
-
-$('rules-close').addEventListener('click', () => {
-    $('rules-modal').classList.add('hidden');
-});
 
 
 $('details-close').addEventListener('click', () => {
