@@ -1,6 +1,6 @@
 Web-based Bid Eurche Card Game.
 
-Complete with grphics and animation.  This game is the double deck version with no 9 or 10's.  The game has a rules button where you can read all the rules.  It supports lone hands with asking for 1 or 2 cards.  This version of Bid Euchre is sometimes called Florida Rules Bid Euchre.
+Complete with graphics and animation.  This game is the double deck version with no 9 or 10's.  The game has a rules button where you can read all the rules.  It supports lone hands with asking for 1 or 2 cards.  This version of Bid Euchre is sometimes called Florida Rules Bid Euchre.
 
 Totally free.
 Have fun!
