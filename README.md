@@ -5,6 +5,7 @@ Complete with grphics and animation.  This game is the double deck version with 
 Totally free.
 Have fun!
 
+v1.01 Jun 04, 2026. Improve compuer bidding and play.  Streamline Ui. Numbered all hands.   Restore a previous game number.  
 v1.0 May 27, 2026.  Fully working.  
 v0.2 May 17, 2026. Lots of fixes.  Currently working on the end game.  
 v0.1 May 14, 2026. Almost done 99% working  
