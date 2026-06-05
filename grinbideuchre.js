@@ -28,7 +28,8 @@ const G={
     dealer:'south',leader:'west',cur:null,
 
     phase:'deal',bids:{},hBid:null,trump:null,hl:'high',sel:null,
-    firstHand: true
+    firstHand: true,
+    dealNumber: null
     
 };
 
@@ -288,6 +289,9 @@ function deal(){
     requestedDeal = null;   // reset to random after replay
     showDealNumber();
 
+
+    G.dealNumber = formatDealNumber(lastDealNumber);
+    
     //    PL.forEach((p,i)=>G.H[p]=dk.slice(i*6,i*6+6));
     PL.forEach((p,i)=>G.H[p]=dk.slice(i*8,i*8+8));
     
@@ -469,6 +473,7 @@ font-weight:bold;
 	tricks: { us: G.tw.us, them: G.tw.them },
 	score: { us: G.sc.us, them: G.sc.them },
 	calc: calc,
+	dealNumber: G.dealNumber
     });
     
     $('result-title').textContent=title;
