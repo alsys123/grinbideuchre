@@ -40,7 +40,7 @@ function updateHelpDetail() {
 }//updateHelpDetail
 
 
-
+/*
 
 function showHistoryInfo(gameDetailInfoId) {
 
@@ -92,27 +92,7 @@ font-style:italic;">No hands played yet.</div>`;
         return divString;
 	
     }).join('');
-    /*
- <div class="hist-table">
-          <div class="hist-header">
-            <div class="hist-hand">#</div>
-            <div class="hist-bid">Dealer</div>
-            <div class="hist-tricks">Bid</div>
-            <div class="hist-calc">Results</div>
-            <div class="hist-we">We  Total</div>
-            <div class="hist-them">Them  Total</div>
-          </div>
-     */
- /*   
-    gameDetailInfoId.innerHTML = `
-<ul style="margin-left:0; padding-left:16px; line-height:1.4;">
-       
-          ${rows}
-        </ul`;
 
-//    $('history-modal').classList.remove('hidden');
-
-*/
     gameDetailInfoId.innerHTML = `
   <table class="hist-table">
     <thead>
@@ -133,6 +113,75 @@ font-style:italic;">No hands played yet.</div>`;
     
 }
 
+*/
+
+	function showHistoryInfo(gameDetailInfoId) {
+
+    gameDetailInfoId.innerHTML = "";
+
+    if (G.history.length === 0) {
+        gameDetailInfoId.innerHTML = `<div style="text-align:center;
+            padding:32px 0; color:#999; font-style:italic;">
+            No hands played yet.</div>`;
+        return;
+    }
+
+    let runUs = 0, runThem = 0;
+
+    const rows = G.history.map((h, i) => {
+        runUs   += h.score.us;
+        runThem += h.score.them;
+
+        const ex = h.bid?.exchanges || 0;
+        const exText = ex ? ` · ${ex} exch` : "";
+
+        const bidText = h.bid
+            ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}${exText}`
+            : "No bid";
+
+        const weSide   = `${h.tricks.us} / ${h.score.us}`;
+        const themSide = `${h.tricks.them} / ${h.score.them}`;
+
+        // Deal number on row 2 — only show if recorded
+        const dealLine = (i === 0 && h.dealNumber)
+            ? `<tr class="deal-num-row">
+                 <td colspan="6" style="font-size:11px; color:var(--gold);
+                     letter-spacing:1px; text-align:center; padding:2px 0;">
+                   Deal # ${formatDealNumber(h.dealNumber)}
+                 </td>
+               </tr>`
+            : '';
+
+        return `
+            ${dealLine}
+            <tr class="${i % 2 === 0 ? 'even' : 'odd'}">
+                <td>${i + 1}</td>
+                <td>${PN[h.dealer] ?? h.dealer}</td>
+                <td>${bidText}</td>
+                <td>${h.calc}</td>
+                <td>${weSide}</td>
+                <td>${themSide}</td>
+            </tr>`;
+
+    }).join('');
+
+    gameDetailInfoId.innerHTML = `
+        <table class="hist-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Dealer</th>
+                    <th>Bid</th>
+                    <th>Results</th>
+                    <th>We</th>
+                    <th>Them</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows}
+            </tbody>
+        </table>`;
+}
 
 $('rules-btn').addEventListener('click', () => {
     updateHelpDetail();
