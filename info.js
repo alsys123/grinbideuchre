@@ -36,7 +36,7 @@ function updateHelpDetail() {
 
 <li style="margin-top:10px;"><strong>Bids this hand:</strong></li>
     ${bidList}
-<li>Deal # ${formatDealNumber(G.dealNumber)}</li
+<li>Deal # ${formatDealNumber(G.dealNumber)}</li>
 
 </ul>
     `;
@@ -255,7 +255,7 @@ function buildHistoryRows() {
 	
 
 	    
-	const BidList = buildBidList(h);
+	const BidList = buildBidListFromHistory(h);
 	cLog("show h:",h, ", bid list: ", BidList);
 	
 	// --- ROW 2: deal number (always) ---
@@ -271,6 +271,29 @@ function buildHistoryRows() {
     }
 
     return html;
+}
+// New function to format bids from history
+function buildBidListFromHistory(historyEntry) {
+    if (!historyEntry.bids) return "No bids recorded";
+    
+    const order = [];
+    const start = PL.indexOf(historyEntry.leader);
+    for (let i = 0; i < 4; i++) {
+        order.push(PL[(start + i) % 4]);
+    }
+
+    return order.map(p => {
+        const b = historyEntry.bids[p];
+        if (!b) return `${PN[p]}: —`;
+
+        const parts = [];
+        if (b.bid) parts.push(b.bid);
+        if (b.trump) parts.push(b.trump);
+        if (b.hl) parts.push(b.hl === 'high' ? 'High' : 'Low');
+        if (b.alone) parts.push('Alone');
+
+        return `${PN[p]}: ${parts.join(' ')}`;
+    }).join(', ');
 }
 
 $('rules-btn').addEventListener('click', () => {
