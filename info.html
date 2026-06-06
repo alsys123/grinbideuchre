@@ -12,7 +12,7 @@
 
   </head>
   
-  <button onclick="location.href='#gameSpecificId'">Game Specifics</button>
+  <button onclick="location.href='#gameData'">Game Data</button>
 
 
   <body>
@@ -55,63 +55,63 @@
       </section>
 
       <div class="ornament">✦ ✦ ✦</div>
-<!-- Quick Start -->
+      <!-- Quick Start -->
 
-<section>
-  <h2><span class="section-num">II</span> Quick Start</h2>
+      <section>
+	<h2><span class="section-num">II</span> Quick Start</h2>
 
-  <p>This section gives new players a fast overview of how a hand of Bid Euchre
-     is played from deal to scoring.</p>
+	<p>This section gives new players a fast overview of how a hand of Bid Euchre
+	  is played from deal to scoring.</p>
 
-  <ol class="quickstart-list" style="margin-left:20px; color:var(--ink-light);">
+	<ol class="quickstart-list" style="margin-left:20px; color:var(--ink-light);">
 
-    <li style="margin-bottom:6px">
-      <strong>Deal the Cards</strong> — Each player receives 8 cards from the 32‑card deck.
-    </li>
+	  <li style="margin-bottom:6px">
+	    <strong>Deal the Cards</strong> — Each player receives 8 cards from the 32‑card deck.
+	  </li>
 
-    <li style="margin-bottom:6px">
-      <strong>Bid Once Around</strong> — Starting left of the dealer, each player may pass
-      or make a higher bid. Highest bid wins the contract and chooses trump
-      (or No Trump High/Low).
-    </li>
+	  <li style="margin-bottom:6px">
+	    <strong>Bid Once Around</strong> — Starting left of the dealer, each player may pass
+	    or make a higher bid. Highest bid wins the contract and chooses trump
+	    (or No Trump High/Low).
+	  </li>
 
-    <li style="margin-bottom:6px">
-      <strong>Lone Hand Option</strong> — The bidder may declare Alone and optionally
-      exchange 1 or 2 cards with their partner before play begins.
-    </li>
+	  <li style="margin-bottom:6px">
+	    <strong>Lone Hand Option</strong> — The bidder may declare Alone and optionally
+	    exchange 1 or 2 cards with their partner before play begins.
+	  </li>
 
-    <li style="margin-bottom:6px">
-      <strong>Lead the First Trick</strong> — The winning bidder leads. In a Lone hand,
-      the bidder still leads even though only three players are active.
-    </li>
+	  <li style="margin-bottom:6px">
+	    <strong>Lead the First Trick</strong> — The winning bidder leads. In a Lone hand,
+	    the bidder still leads even though only three players are active.
+	  </li>
 
-    <li style="margin-bottom:6px">
-      <strong>Follow Suit</strong> — Players must follow the led suit if able.
-      If not, they may play any card. The Left Bower always counts as part of
-      the trump suit.
-    </li>
+	  <li style="margin-bottom:6px">
+	    <strong>Follow Suit</strong> — Players must follow the led suit if able.
+	    If not, they may play any card. The Left Bower always counts as part of
+	    the trump suit.
+	  </li>
 
-    <li style="margin-bottom:6px">
-      <strong>Determine the Trick Winner</strong> —
-      <ul style="margin-left:20px; margin-top:4px; color:var(--ink-light)">
-        <li><strong>Suit Bid:</strong> Highest trump wins; otherwise highest card of the led suit.</li>
-        <li><strong>No Trump High:</strong> Highest card of the led suit.</li>
-        <li><strong>No Trump Low:</strong> Lowest card of the led suit.</li>
-      </ul>
-    </li>
+	  <li style="margin-bottom:6px">
+	    <strong>Determine the Trick Winner</strong> —
+	    <ul style="margin-left:20px; margin-top:4px; color:var(--ink-light)">
+              <li><strong>Suit Bid:</strong> Highest trump wins; otherwise highest card of the led suit.</li>
+              <li><strong>No Trump High:</strong> Highest card of the led suit.</li>
+              <li><strong>No Trump Low:</strong> Lowest card of the led suit.</li>
+	    </ul>
+	  </li>
 
-    <li style="margin-bottom:6px">
-      <strong>Winner Leads Next</strong> — Continue until all 8 tricks are played.
-    </li>
+	  <li style="margin-bottom:6px">
+	    <strong>Winner Leads Next</strong> — Continue until all 8 tricks are played.
+	  </li>
 
-    <li style="margin-bottom:6px">
-      <strong>Score the Hand</strong> —
-      Bidding team scores the number of tricks they win (or loses their bid if short).
-      Defenders score 1 point per trick. Lone bids and Moonshots use special scoring.
-    </li>
+	  <li style="margin-bottom:6px">
+	    <strong>Score the Hand</strong> —
+	    Bidding team scores the number of tricks they win (or loses their bid if short).
+	    Defenders score 1 point per trick. Lone bids and Moonshots use special scoring.
+	  </li>
 
-  </ol>
-</section>
+	</ol>
+      </section>
 
       <!-- 3. The Deck -->
 
@@ -448,141 +448,154 @@
       <section id="gameSpecificId">
 	
 	<h2><span class="section-num">X</span>Game Specifics</h2>
-	  <button onclick="location.href='#topId'">Top</button>
+	<button onclick="location.href='#topId'">Top</button>
 	<p>This section is about implementation specifics.
 
-	
+	  
 	  
 	  <h3>Deterministic Deals</h3>
 
-<p><strong>Number of Possible Deals:  </strong>
-A double–deck JQKA game has an enormous number of possible card combinations — 
-far beyond what a human could ever encounter naturally. 
-Even with only four ranks and four suits, the number of unique 8‑card hands 
-dealt to four players is measured in <em>quintillions</em> (that’s a 1 followed by 18 zeros). 
-This means that almost every deal you see is effectively unique in the lifetime of the universe.</p>
+	<p><strong>Number of Possible Deals:  </strong>
+	  A double–deck JQKA game has an enormous number of possible card combinations — 
+	  far beyond what a human could ever encounter naturally. 
+	  Even with only four ranks and four suits, the number of unique 8‑card hands 
+	  dealt to four players is measured in <em>quintillions</em> (that’s a 1 followed by 18 zeros). 
+	  This means that almost every deal you see is effectively unique in the lifetime of the universe.</p>
 
-<p><strong>What “Quintillions” Means:  </strong>
-If you played one new deal every second, nonstop, it would take millions of years 
-to see even a tiny fraction of all possible combinations. 
-In practical terms: no two games will ever be the same unless you intentionally replay one.</p>
+	<p><strong>What “Quintillions” Means:  </strong>
+	  If you played one new deal every second, nonstop, it would take millions of years 
+	  to see even a tiny fraction of all possible combinations. 
+	  In practical terms: no two games will ever be the same unless you intentionally replay one.</p>
 
-<p><strong>How This Game Generates Deals:  </strong>
-This implementation uses a deterministic deal generator. 
-Each deal is produced from a 17‑digit number called the <strong>Deal Number</strong>. 
-The same deal number will always produce the exact same shuffle, 
-the same hands, the same dealer, and the same starting conditions.</p>
+	<p><strong>How This Game Generates Deals:  </strong>
+	  This implementation uses a deterministic deal generator. 
+	  Each deal is produced from a 17‑digit number called the <strong>Deal Number</strong>. 
+	  The same deal number will always produce the exact same shuffle, 
+	  the same hands, the same dealer, and the same starting conditions.</p>
 
-<p><strong>Replaying a Deal:  </strong>
-You can replay any specific hand by entering its deal number into the Replay box. 
-This allows you to revisit interesting hands, study strategy, 
-or share a deal with someone else so they can play the exact same cards.</p>
+	<p><strong>Replaying a Deal:  </strong>
+	  You can replay any specific hand by entering its deal number into the Replay box. 
+	  This allows you to revisit interesting hands, study strategy, 
+	  or share a deal with someone else so they can play the exact same cards.</p>
 
-<p><strong>Copying the Deal Number:  </strong>
-Click the deal number at the top of the screen to copy it. 
-You can paste it into the Replay box at any time to reproduce that exact hand.</p>
-
-
-<h3>Data for this particular game</h3>
-
-<div id="helpDetail"></div>
-
-<div id="gameDetailInfo"></div>
+	<p><strong>Copying the Deal Number:  </strong>
+	  Click the deal number at the top of the screen to copy it. 
+	  You can paste it into the Replay box at any time to reproduce that exact hand.</p>
 
 
+	
+	<h3>Developer Backdoors</h3>
+
+	<p>This implementation includes two hidden developer backdoors. 
+	  They are not part of normal gameplay, but they are extremely useful for 
+	  testing, debugging, and verifying deterministic behavior.</p>
+
+	<h4>1. View All Hands (5‑Tap Backdoor)</h4>
+	<p>
+	  There is an invisible 40×40 pixel hotspot at the top of the screen.  
+	  Tapping it five times reveals all four players’ cards.  
+	  This is used for debugging AI behavior, validating trick logic, 
+	  and confirming that the shuffle and deal generator are working correctly.
+	</p>
+	<p>
+	  The backdoor does not affect gameplay logic — it only reveals information 
+	  that is normally hidden.
+	</p>
+
+	<h4>2. Deal Number Reveal & Replay</h4>
+	<p>
+	  Another backdoor just to the right of the reveal backdoor
+	  reveals the current <strong>Deal Number</strong> and 
+	  the <strong>Replay Box</strong>.  
+	  Every deal in this game is generated deterministically from a 17‑digit number.  
+	  This means:
+	</p>
+	<ul>
+	  <li>The same deal number always produces the exact same shuffle</li>
+	  <li>You can replay any specific hand by entering its deal number</li>
+	  <li>You can share a deal number with someone else and they will get the identical hand</li>
+	  <li>An exmaple is this string:  "163 - 51530 - 379312803".  In the input box it will load
+	    this game number.  </li>
+	  <li>Another exmaple is:  "718 - 76501 - 046555253N".  In this example, the
+	    specified game will load but also the dealer will be set to North.  Specified
+	    by the trailing "N" in the string.  Use E, W, S, N to set East, West, South or North
+	    as the deler.</li>
 	  
-	  <h3>Developer Backdoors</h3>
+	</ul>
 
-<p>This implementation includes two hidden developer backdoors. 
-They are not part of normal gameplay, but they are extremely useful for 
-testing, debugging, and verifying deterministic behavior.</p>
+	<p>
+	  This is essential for debugging, regression testing, and reproducing rare or 
+	  interesting hands.  
+	  It also allows developers to verify that the AI behaves consistently across 
+	  identical game states.
+	</p>
 
-<h4>1. View All Hands (5‑Tap Backdoor)</h4>
-<p>
-There is an invisible 40×40 pixel hotspot at the top of the screen.  
-Tapping it five times reveals all four players’ cards.  
-This is used for debugging AI behavior, validating trick logic, 
-and confirming that the shuffle and deal generator are working correctly.
-</p>
-<p>
-The backdoor does not affect gameplay logic — it only reveals information 
-that is normally hidden.
-</p>
+	<h4>Scale of the Deal Numbers (fun fact!)</h4>
 
-<h4>2. Deal Number Reveal & Replay</h4>
-<p>
-  Another backdoor just to the right of the reveal backdoor
-  reveals the current <strong>Deal Number</strong> and 
-the <strong>Replay Box</strong>.  
-Every deal in this game is generated deterministically from a 17‑digit number.  
-This means:
-</p>
-<ul>
-  <li>The same deal number always produces the exact same shuffle</li>
-  <li>You can replay any specific hand by entering its deal number</li>
-  <li>You can share a deal number with someone else and they will get the identical hand</li>
-  <li>An exmaple is this string:  "163 - 51530 - 379312803".  In the input box it will load
-    this game number.  </li>
-  <li>Another exmaple is:  "718 - 76501 - 046555253N".  In this example, the
-    specified game will load but also the dealer will be set to North.  Specified
-    by the trailing "N" in the string.  Use E, W, S, N to set East, West, South or North
-    as the deler.</li>
-  
-</ul>
+	<p>The size of the deal number gives a sense of how vast the space of possible games is:</p>
 
-<p>
-This is essential for debugging, regression testing, and reproducing rare or 
-interesting hands.  
-It also allows developers to verify that the AI behaves consistently across 
-identical game states.
-</p>
+	<ul>
+	  <li>
+	    <strong>9 digits</strong> &mdash; 1 billion<br>
+	    &nbsp;&nbsp;&bull; roughly the world&apos;s population<br>
+	    &nbsp;&nbsp;&bull; every deal you could play once a second for about 31 years
+	  </li>
 
-<h4>Scale of the Deal Numbers (fun fact!)</h4>
+	  <li style="margin-top:0.5em;">
+	    <strong>14 digits</strong> &mdash; 100 trillion<br>
+	    &nbsp;&nbsp;&bull; about 100,000,000,000,000<br>
+	    &nbsp;&nbsp;&bull; roughly every second since the Big Bang &times; 3000
+	  </li>
 
-<p>The size of the deal number gives a sense of how vast the space of possible games is:</p>
+	  <li style="margin-top:0.5em;">
+	    <strong>17 digits</strong> &mdash; 100 quadrillion<br>
+	    &nbsp;&nbsp;&bull; 100,000,000,000,000,000<br>
+	    &nbsp;&nbsp;&bull; more than all the deals that practically exist in this game
+	  </li>
+	</ul>
 
-<ul>
-  <li>
-    <strong>9 digits</strong> &mdash; 1 billion<br>
-    &nbsp;&nbsp;&bull; roughly the world&apos;s population<br>
-    &nbsp;&nbsp;&bull; every deal you could play once a second for about 31 years
-  </li>
-
-  <li style="margin-top:0.5em;">
-    <strong>14 digits</strong> &mdash; 100 trillion<br>
-    &nbsp;&nbsp;&bull; about 100,000,000,000,000<br>
-    &nbsp;&nbsp;&bull; roughly every second since the Big Bang &times; 3000
-  </li>
-
-  <li style="margin-top:0.5em;">
-    <strong>17 digits</strong> &mdash; 100 quadrillion<br>
-    &nbsp;&nbsp;&bull; 100,000,000,000,000,000<br>
-    &nbsp;&nbsp;&bull; more than all the deals that practically exist in this game
-  </li>
-</ul>
-
-<p style="margin-top:0.75em;">
-Overall, this implementation spans on the order of <strong>30 quadrillion</strong> distinct deal possibilities.
-Almost every hand you see is effectively unique.
-</p>
+	<p style="margin-top:0.75em;">
+	  Overall, this implementation spans on the order of <strong>30 quadrillion</strong> distinct deal possibilities.
+	  Almost every hand you see is effectively unique.
+	</p>
 
 
-<h4>Why These Backdoors Exist</h4>
-<p>
-Card games with hidden information are notoriously difficult to debug.  
-These tools allow developers to:
-</p>
-<ul>
-  <li>Inspect all hands to verify trick‑taking logic</li>
-  <li>Reproduce bugs by replaying the exact same deal</li>
-  <li>Test AI decisions with full visibility</li>
-  <li>Confirm that the deterministic shuffle is stable across browsers and devices</li>
-</ul>
+	<h4>Why These Backdoors Exist</h4>
+	<p>
+	  Card games with hidden information are notoriously difficult to debug.  
+	  These tools allow developers to:
+	</p>
+	<ul>
+	  <li>Inspect all hands to verify trick‑taking logic</li>
+	  <li>Reproduce bugs by replaying the exact same deal</li>
+	  <li>Test AI decisions with full visibility</li>
+	  <li>Confirm that the deterministic shuffle is stable across browsers and devices</li>
+	</ul>
 
-<p>
-These features are invisible to normal players and do not affect scoring, 
-shuffling, or gameplay integrity.
-</p>
+	<p>
+	  These features are invisible to normal players and do not affect scoring, 
+	  shuffling, or gameplay integrity.
+	</p>
+
+      </section>
+
+      <!-- 11. Game Data -->
+
+      
+      <section id="gameData">
+	
+	<h2><span class="section-num">XI</span>Game Data</h2>
+	<button onclick="location.href='#topId'">Top</button>
+	
+	<p>This section display what is currently known about the current game
+	  
+	  
+	  <h3>Data for this particular game</h3>
+
+	  <div id="helpDetail"></div>
+
+	  <div id="gameDetailInfo"></div>
+
 
       </section>
 

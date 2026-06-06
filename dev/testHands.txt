@@ -21,6 +21,13 @@ east should bid 5NT low .. JJ make the Q an automatic win
 156 - 23569 - 472058548
 North ask 2 NT Low
 
+983 - 44315 - 001751627
+East ask 2 card NT high
+
+988 - 31117 - 889607123W
+South ask for 1 card hearts
+
+
 
 
 

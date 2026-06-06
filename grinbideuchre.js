@@ -780,6 +780,8 @@ function showStarterGraphic(player, cb) {
 
 // this is actually starting a new deal
 // start new game AND start new hand
+
+// ???? .... here is am ... i think the leader is wrong here
 function startNewGame() {
     deal(); // deal resets hands
 
@@ -794,7 +796,11 @@ function startNewGame() {
 	
 	const i = PL.indexOf(leader); // first to play
 	dealer = PL[(i + 3) % 4];   // right-hand player
+	
+	cLog("1st order: dealer:", dealer, " - leader: ", leader);
 
+	G.dealer = dealer;
+	
 	let leaderLabel = "";
 	if (dealer === "north") dealerLabel = "➡️ N";
 	if (dealer === "south") dealerLabel = "➡️ S";
@@ -806,18 +812,7 @@ function startNewGame() {
 				   dealer).textContent = dealerLabel;
 	}, 1200);
 
-	/*
-	  if (leader === "north") leaderLabel = "➡️ N";
-	  if (leader === "south") leaderLabel = "➡️ S";
-	  if (leader === "east" ) leaderLabel = "➡️ E";
-	  if (leader === "west" ) leaderLabel = "➡️️ W";
-	  
-	  setTimeout(() => {
-	  document.querySelector('.spinner-label.' +
-	  leader).textContent = leaderLabel;
-	  }, 1200);
 
-	*/
 	
 	// Step 1: show spinner
 	showStarterSpinner(leader, () => {
@@ -832,6 +827,8 @@ function startNewGame() {
 	// All later hands: leader is left of dealer
         dealerIdx = PL.indexOf(G.dealer);
         leader = PL[(dealerIdx + 1) % 4];
+
+	G.dealer = PL[(dealerIdx + 1) % 4];
 	
         showStarterGraphic(leader, () => startBid());
 
@@ -844,6 +841,51 @@ function startNewGame() {
     G.leader = leader;
 } //startNewGame
 
+/*
+function startNewGame() {
+    deal(); // deal resets hands
+
+    let dealer, leader;
+
+    if (G.firstHand) {
+        // First hand: pick a random dealer
+        dealer = randomLeader();   // better: rename to randomDealer()
+        G.firstHand = false;
+    } else {
+        // Later hands: dealer moves one seat clockwise
+        const dealerIdx = PL.indexOf(G.dealer);
+        dealer = PL[(dealerIdx + 1) % 4];
+    }
+
+    // Leader is always left of dealer
+    const di = PL.indexOf(dealer);
+    leader = PL[(di + 1) % 4];
+
+    G.dealer = dealer;
+    G.leader = leader;
+    G.starts[dealer]++;
+
+    // Spinner label for dealer
+    let dealerLabel = "";
+    if (dealer === "north") dealerLabel = "➡️ N";
+    if (dealer === "south") dealerLabel = "➡️ S";
+    if (dealer === "east" ) dealerLabel = "➡️ E";
+    if (dealer === "west" ) dealerLabel = "➡️️ W";
+
+//    setTimeout(function () {
+  //      document.querySelector('.spinner-label.' + dealer).textContent = dealerLabel;
+   // }, 1200);
+setTimeout(() => {
+        document.querySelector('.spinner-label.' + dealer).textContent = dealerLabel;
+}, 1200);
+    
+showStarterGraphic(leader, () => startBid());
+    // Starter graphic + bidding
+//    showStarterGraphic(leader, () {
+  //      startBid();
+    //});
+}
+*/
 function showStarterSpinner(winner,cb) {
     const el = $('starter-spinner');
     const ring = el.querySelector('.spinner-ring');

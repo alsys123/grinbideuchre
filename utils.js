@@ -39,3 +39,7 @@ function cid(card) {
     return card.uid;
 }
 
+function partnerOf(p) {
+    const idx = PL.indexOf(p);
+    return PL[(idx + 2) % 4];
+}
