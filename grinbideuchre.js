@@ -263,7 +263,7 @@ function copyDealNumber() {
 
 /*
  Dealing 
-  */
+   */
 
 // DEAL
 function deal(){
@@ -727,23 +727,23 @@ function endGame() {
         $('result-overlay').classList.add('hidden');
 	$('result-title').textContent = "Hand complete";
 
-        // Hide the button again for next time
-        pb.classList.add('hidden');
-        $('deal-again-btn').classList.remove('hidden');
+         // Hide the button again for next time
+         pb.classList.add('hidden');
+         $('deal-again-btn').classList.remove('hidden');
 	
-        // Reset score
-	// ✅ ADD THESE TWO LINES:
-	G.sc = { us: 0, them: 0 };
-	G.starts = { north: 0, east: 0, south: 0, west: 0 };
-	G.firstHand = true;   // ← makes the spinner run again on hand 1
-	G.history = [];       // ← optional: clear history for fresh game
+         // Reset score
+	 // ✅ ADD THESE TWO LINES:
+	 G.sc = { us: 0, them: 0 };
+	 G.starts = { north: 0, east: 0, south: 0, west: 0 };
+	 G.firstHand = true;   // ← makes the spinner run again on hand 1
+	 G.history = [];       // ← optional: clear history for fresh game
 	
-        // Reset game state
-        startNewGame();
+         // Reset game state
+         startNewGame();
 
-        // Show start screen
-	//   $('start-screen').classList.remove('hidden');
-    };
+         // Show start screen
+	 //   $('start-screen').classList.remove('hidden');
+     };
 }
 
 //showStarterGraphic("south", ()=>{});
@@ -788,7 +788,9 @@ function showStarterGraphic(player, cb) {
 // this is actually starting a new deal
 // start new game AND start new hand
 
-// ???? .... here is am ... i think the leader is wrong here
+// ⭐ FIXED: Dealer/Leader rotation bug
+// The dealer is advanced at the END of scoreHand().
+// For subsequent hands, leader is simply 1 step left of dealer.
 function startNewGame() {
     deal(); // deal resets hands
 
@@ -796,7 +798,7 @@ function startNewGame() {
     let dealer;
     
     if (G.firstHand) {
-	// Pick winner BEFORE spinning
+	// Pick random leader for first hand
 	leader = randomLeader();
 	
 //	leader = 'south'; //test
@@ -805,7 +807,7 @@ function startNewGame() {
 	G.firstHand = false;
 	
 	const i = PL.indexOf(leader); // first to play
-	dealer = PL[(i + 3) % 4];   // right-hand player
+	dealer = PL[(i + 3) % 4];   // right-hand player (3 steps = 1 step left in reverse)
 	
 	cLog("1st order: dealer:", dealer, " - leader: ", leader);
 
@@ -834,18 +836,16 @@ function startNewGame() {
 	});
 	
     } else {
-	// All later hands: leader is left of dealer
-        dealerIdx = PL.indexOf(G.dealer);
-        leader = PL[(dealerIdx + 1) % 4];
-
-	G.dealer = PL[(dealerIdx + 1) % 4];
+	// ⭐ FIX: For all later hands, dealer has ALREADY been advanced in scoreHand()
+	// Leader is simply 1 step left of the current dealer
+	const dealerIdx = PL.indexOf(G.dealer);
+	leader = PL[(dealerIdx + 1) % 4];
+	
+	// Do NOT re-advance dealer — it was already done at end of previous hand
+	// Just set leader based on current dealer
 	
         showStarterGraphic(leader, () => startBid());
-
-	//	cLog("previous dealer: ", dealer);
-	//	cLog("next dealer:", leader);
     }
-    //   cLog("Leader:",leader, ".  Dealer is: ",G.dealer);
     
     G.starts[G.dealer]++;
     G.leader = leader;
@@ -896,7 +896,7 @@ showStarterGraphic(leader, () => startBid());
     // Starter graphic + bidding
 //    showStarterGraphic(leader, () {
   //      startBid();
-    //});
+     //});
 }
 */
 function showStarterSpinner(winner,cb) {
