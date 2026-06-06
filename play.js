@@ -137,6 +137,9 @@ function aiFollow(player,legs,led){
 // Either startTrick looping again
 //  OR scoreHand in mainline to end the hand
 // This shows the winner of the hand.
+
+// ???? .... something is odd here because leader is set to winner of bid or trick??
+
 function resolveT(){
     const winner=twinner(G.trick,G.trump,G.hl);
 
@@ -173,7 +176,7 @@ function resolveT(){
 
     
 } //resolveT
-
+/*
 function resolveT_v2(){
     const winner=twinner(G.trick,G.trump,G.hl);
 
@@ -203,13 +206,7 @@ function resolveT_v2(){
 	setTimeout(() => cardImg.style.animation = '', 3200);
     }
     
-/*
-    const cardImg = ws.querySelector('img');
-    if (cardImg) {
-	cardImg.style.animation = 'growGlow 5.0s ease-out';
-	setTimeout(() => cardImg.style.animation = '', 5200);
-    }
-*/    
+    
 
 //    ws.style.animation='trickWin 1.0s ease'; //0.4    
 //    setTimeout(()=>{ws.style.animation=''; },400);
@@ -224,6 +221,7 @@ function resolveT_v2(){
 
     
 }
+*/
 
 const PARTNER = {
     south: "north",

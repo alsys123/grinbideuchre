@@ -791,6 +791,9 @@ function startNewGame() {
     if (G.firstHand) {
 	// Pick winner BEFORE spinning
 	leader = randomLeader();
+	
+//	leader = 'south'; //test
+	
 	G.leader = leader;
 	G.firstHand = false;
 	
