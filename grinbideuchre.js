@@ -470,6 +470,13 @@ font-weight:bold;
             alone: G.hBid.alone,
 	    exchanges: G.lastExchangeCount || 0
 	} : null,
+	// ⭐ NEW: store all bids in seat order
+	bids: {
+            south: G.bids.south ? { ...G.bids.south } : null,
+            west:  G.bids.west  ? { ...G.bids.west  } : null,
+            north: G.bids.north ? { ...G.bids.north } : null,
+            east:  G.bids.east  ? { ...G.bids.east  } : null
+	},
 	tricks: { us: G.tw.us, them: G.tw.them },
 	score: { us: G.sc.us, them: G.sc.them },
 	calc: calc,
@@ -842,6 +849,9 @@ function startNewGame() {
     
     G.starts[G.dealer]++;
     G.leader = leader;
+    
+    cLog("at end of startnewgame: dealer:", G.dealer, " - leader: ", G.leader);
+    
 } //startNewGame
 
 /*

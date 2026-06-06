@@ -174,6 +174,7 @@ function resolveT(){
 	else startTrick();	
     },1200); // was 1700
 
+    cLog("at resolvtT: dealer:", G.dealer, " - leader: ", G.leader);
     
 } //resolveT
 /*
