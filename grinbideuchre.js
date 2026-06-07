@@ -806,14 +806,14 @@ function startNewGame() {
 	G.leader = leader;
 	G.firstHand = false;
 	
-	const i = PL.indexOf(leader); // first to play
+	const i = PL.indexOf(leader); // first to bid
 	dealer = PL[(i + 3) % 4];   // right-hand player (3 steps = 1 step left in reverse)
 	
 	cLog("1st order: dealer:", dealer, " - leader: ", leader);
 
 	G.dealer = dealer;
 	
-	let leaderLabel = "";
+	let dealerLabel = "";
 	if (dealer === "north") dealerLabel = "➡️ N";
 	if (dealer === "south") dealerLabel = "➡️ S";
 	if (dealer === "east" ) dealerLabel = "➡️ E";
@@ -843,7 +843,7 @@ function startNewGame() {
 	
 	// Do NOT re-advance dealer — it was already done at end of previous hand
 	// Just set leader based on current dealer
-	
+
         showStarterGraphic(leader, () => startBid());
     }
     
@@ -896,7 +896,7 @@ showStarterGraphic(leader, () => startBid());
     // Starter graphic + bidding
 //    showStarterGraphic(leader, () {
   //      startBid();
-     //});
+      //});
 }
 */
 function showStarterSpinner(winner,cb) {
