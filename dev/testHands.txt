@@ -2,12 +2,19 @@ Hands to consider:
 
 deal id: nnnD - D is dealer:  (NSEW - north, south, east, west) optional.
 
+
+156 - 23569 - 472058548
+North ask 2 NT Low
+- display ask 2
+- code the get 2 from south
+- end game bug
+
 369 - 17661 - 235525306S
 west has 7 aces. moonshot NT high - south dealer
 
 718 - 76501 - 046555253N
 north ask for 2 cards - alone spades
-
+- North 4C instead
 
 384 - 73480 - 305215115N
 west moonshot NT high
@@ -18,8 +25,6 @@ east alone ask for 2
 732 - 90979 - 965966982W
 east should bid 5NT low .. JJ make the Q an automatic win
 
-156 - 23569 - 472058548
-North ask 2 NT Low
 
 983 - 44315 - 001751627
 East ask 2 card NT high

@@ -3,46 +3,76 @@
 // *** info box
 
 
-$('info-close').addEventListener('click', () => {
-    $('info-modal').classList.add('hidden');
-});
-
-$('info-btn').addEventListener('click', () => {
-    populateInfoModal();
-    $('info-modal').classList.remove('hidden');
-});
 
 function populateInfoModal() {
     const box = $('info-content');
     box.innerHTML = "";
 
+    box.innerHTML += header();
+    
     // NAVIGATION BAR
     box.innerHTML += `
     <div class="info-nav">
-   <button class="info-nav-btn" data-target="sec-overview">Overview</button>
-   <button class="info-nav-btn" data-target="sec-quickstart">Quick Start</button>
-   <button class="info-nav-btn" data-target="sec-section3Deck">The Deck</button>
-  <button class="info-nav-btn" data-target="sec-section4CardRanking">Card Ranking</button>
+   <button class="info-nav-btn" data-target="sec-overview">I Overview</button>
+   <button class="info-nav-btn" data-target="sec-quickstart">II Quick Start</button>
+   <button class="info-nav-btn" data-target="sec-section3Deck">III The Deck</button>
+  <button class="info-nav-btn" data-target="sec-section4CardRanking">IV Card Ranking</button>
+  <button class="info-nav-btn" data-target="sec-the-deal">V The Deal</button>
 
-  <button class="info-nav-btn" data-target="sec-deterministic">Game Tech</button>
+  <button class="info-nav-btn" data-target="sec-bidding">VI Biddding</button>
+  <button class="info-nav-btn" data-target="sec-playing">VII Playing</button>
+  <button class="info-nav-btn" data-target="sec-scoring">VIII Scoringl</button>
+  <button class="info-nav-btn" data-target="sec-winning">IX Winning</button>
 
-   <button class="info-nav-btn" data-target="sec-handSummary">Hand Summary</button>
+
+  <button class="info-nav-btn" data-target="sec-deterministic">X Game Tech</button>
+
+   <button class="info-nav-btn" data-target="sec-handSummary"
+           style="background:blue; border:1px solid #27ae60; color:white;">
+      Hand Summary
+    </button>
 
      </div>
     `;
 
-
+    
     box.innerHTML += section1();
     box.innerHTML += section2QuickStart();
     box.innerHTML += section3Deck();
     box.innerHTML += section4CardRanking();
-
+    box.innerHTML += section5TheDeal();
+    box.innerHTML += section6Bidding();
+    box.innerHTML += section7PlayingTheHand();
+    box.innerHTML += section8Scoring();
+    box.innerHTML += section9Winning();
+    
     box.innerHTML += section10DeterministicDeals();
     
     box.innerHTML += sectionHandSummary();
 
     activateInfoNav();
     activateBackToTop();   // ⭐ add this
+}
+
+function header() {
+    let html = "";
+    html = `
+     <div class="header">
+	<div class="suit-row">
+	  <span class="s">♠</span>
+	  <span class="h red">♥</span>
+	  <span class="d red">♦</span>
+	  <span class="c">♣</span>
+	</div>
+	<h1>Bid Euchre<em>Official Rules & Other Info</em></h1>
+	<p class="subtitle">4 Players · Partnership · High &amp; Low · Trick-Taking</p>
+
+     <p class="subtitle">v1.02 Jun 7, 2026</p>
+
+</div>
+
+      `;
+    return html;
 }
 
 // Overview
@@ -92,7 +122,9 @@ function section1() {
 function sectionHandSummary() {
     const bidList = buildBidList(G);
 
-    return `
+    let html = "";
+    
+    html = `
     <div class="info-section" id="sec-handSummary">
         <h3>Hand Summary</h3>
 
@@ -113,10 +145,19 @@ function sectionHandSummary() {
             <li>Deal # ${G.dealNumber}</li>
         </ul>
 
+
+    `;
+
+    html += showHistoryInfo();
+
+    html += `
       <div class="back-to-top" data-target="top">▲ Back to Top</div>
 
     </div>
+
     `;
+    
+    return html;
 }
 
 /*
@@ -204,6 +245,112 @@ function buildBidList(G) {
     html += "</ul>";
     return html;
 }
+
+
+function showHistoryInfo() {
+    let html = "";
+    
+    if (G.history.length === 0) {
+	
+        html =
+            '<div style="text-align:center; padding:32px 0; color:#999; font-style:italic;">' +
+            'No hands played yet.</div>';
+        return html;
+    }
+
+    const rows = buildHistoryRows();
+
+    html = '<table class="hist-table">' +
+        '<thead>' +
+        '<tr>' +
+        '<th>#</th>' +
+        '<th>Dealer</th>' +
+        '<th>Bid</th>' +
+        '<th>Results</th>' +
+        '<th>We</th>' +
+        '<th>Them</th>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+        rows +
+        '</tbody>' +
+        '</table>';
+    
+    return html;
+} //showHistoryInfo
+
+function buildHistoryRows() {
+    let html = "";
+
+    for (let i = 0; i < G.history.length; i++) {
+        const h = G.history[i];
+
+        const ex = h.bid?.exchanges || 0;
+        const exText = ex ? " · " + ex + " exch" : "";
+
+        const bidText = h.bid
+            ? PN[h.bid.player] + " · " + h.bid.bid + " " +
+              h.bid.trump + (h.bid.alone ? " alone" : "") + exText
+            : "No bid";
+
+        const weSide   = h.tricks.us   + " / " + h.score.us;
+        const themSide = h.tricks.them + " / " + h.score.them;
+
+        // --- ROW 1: main summary ---
+        html +=
+            '<tr class="' + (i % 2 === 0 ? 'even' : 'odd') + '">' +
+                '<td>' + (i + 1) + '</td>' +
+                '<td>' + (PN[h.dealer] || h.dealer) + '</td>' +
+                '<td>' + bidText + '</td>' +
+                '<td>' + h.calc + '</td>' +
+                '<td>' + weSide + '</td>' +
+                '<td>' + themSide + '</td>' +
+            '</tr>';
+	
+
+	    
+	const BidList = buildBidListFromHistory(h);
+	cLog("show h:",h, ", bid list: ", BidList);
+	
+	// --- ROW 2: deal number (always) ---
+        html +=
+            '<tr class="deal-num-row">' +
+                '<td colspan="6" style="font-size:11px; color:var(--gold);' +
+                'letter-spacing:1px; text-align:center; padding:2px 0;">' +
+            'Deal # ' + h.dealNumber +
+	    ', Leader: ' + PN[h.leader] +
+	    ', Bid List: ' + BidList +
+                '</td>' +
+            '</tr>';
+    }
+
+    return html;
+}
+
+// New function to format bids from history
+function buildBidListFromHistory(historyEntry) {
+    if (!historyEntry.bids) return "No bids recorded";
+    
+    const order = [];
+    const start = PL.indexOf(historyEntry.leader);
+    for (let i = 0; i < 4; i++) {
+        order.push(PL[(start + i) % 4]);
+    }
+
+    return order.map(p => {
+        const b = historyEntry.bids[p];
+        if (!b) return `${PN[p]}: —`;
+
+        const parts = [];
+        if (b.bid) parts.push(b.bid);
+        if (b.trump) parts.push(b.trump);
+        if (b.hl) parts.push(b.hl === 'high' ? 'High' : 'Low');
+        if (b.alone) parts.push('Alone');
+
+        return `${PN[p]}: ${parts.join(' ')}`;
+    }).join(', ');
+}
+
 
 function activateInfoNav() {
     const btns = document.querySelectorAll('.info-nav-btn');
@@ -886,3 +1033,12 @@ function section10DeterministicDeals() {
     `;
 }
 
+
+$('info-close').addEventListener('click', () => {
+    $('info-modal').classList.add('hidden');
+});
+
+$('info-btn').addEventListener('click', () => {
+    populateInfoModal();
+    $('info-modal').classList.remove('hidden');
+});

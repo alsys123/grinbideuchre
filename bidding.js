@@ -11,6 +11,9 @@ function startBid(){
     bIdx=0;
     nextBid();
 
+    cLog("at end of startbid: dealer:", G.dealer, " - leader: ", G.leader);
+
+
 }
 
 function nextBid(){
@@ -49,9 +52,39 @@ function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
     
 }
 
+// build a standard string of the bid
+function buildBidText(amt, trump, hl, alone, cardReq) {
+   // Build base text: "5 in ♥" or "6 NT"
+    let text = "";
+
+    text += amt;
+    
+    if (trump === "NT") {
+        text += " NT";
+    } else {
+        text += "" + trump;   // trump is already a symbol ♥ ♦ ♣ ♠
+    }
+
+    // Alone?
+    if (alone) {
+        text += " alone";
+    }
+
+    // Ask?
+    // cardReq = 0, 1, or 2
+    if (alone && (cardReq === 1 || cardReq === 2)) {
+        text += ` (ask ${cardReq})`;
+    }
+    
+    return text;
+}
 
 function showTheBid(player, amt, trump, hl, alone, cardReq) {
-
+    let text = "";
+  
+    text = buildBidText(amt, trump, hl, alone, cardReq);
+    
+   /* 
     // Build base text: "5 in ♥" or "6 NT"
     let text = amt;
 
@@ -71,7 +104,7 @@ function showTheBid(player, amt, trump, hl, alone, cardReq) {
     if (alone && (cardReq === 1 || cardReq === 2)) {
         text += ` (ask ${cardReq})`;
     }
-
+*/
     // Speak it
     speech(player, text, 1800);
 
