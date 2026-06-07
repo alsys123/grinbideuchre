@@ -1018,3 +1018,5 @@ $('history-close').addEventListener('click', () => {
 });
 
 $('scoreboard').addEventListener('click', showHistory);
+
+

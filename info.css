@@ -1,0 +1,80 @@
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.info-box {
+    width: 80%;
+    max-width: 700px;
+    max-height: 85vh;
+    background: #fff;
+    border-radius: 12px;
+    overflow-y: auto;      /* ⭐ scrollable on iPad */
+    padding: 20px;
+    position: relative;
+    color: black
+}
+
+.close-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.info-section {
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #f3f3f3;
+    border-left: 4px solid #888;
+    color: black:
+}
+
+.info-section h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: black;
+}
+
+.info-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.info-nav-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #eee;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.info-nav-btn:hover {
+    background: #ddd;
+}
+
+
+.back-to-top {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #0077cc;
+    cursor: pointer;
+    text-align: right;
+}
+
+.back-to-top:hover {
+    text-decoration: underline;
+}

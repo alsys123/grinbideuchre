@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bid Euchre</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="info.css">
   </head>
   <body>
     <div id="wrap">
@@ -154,10 +155,11 @@
       </div>
 
       <div id="top-bar">
-	<button id="rules-btn" class="top-btn">
+<!--	<button id="rules-btn" class="top-btn">
 	  Info
-	</button>
-	
+	</button> -->
+	<button id="info-btn" class="top-btn">Info</button>
+
 	<button id="concedeBtn" style="
 				       position:absolute;
 				       top:10px;
@@ -175,11 +177,22 @@
 	</button>
 
       </div>
-      
+<!--      
       <div id="rules-modal" class="hidden rules-modal">
 	<div class="rules-box">
           <button id="rules-close" class="close-btn">✖</button>
           <iframe id="rules-frame" src="info.html"></iframe>
+	</div>
+      </div>
+      -->
+      
+      <div id="info-modal" class="hidden modal-overlay">
+	<div class="info-box">
+	  <button id="info-close" class="close-btn">✖</button>
+	  
+	  <div id="info-content" class="info-content">
+	    <!-- JS will inject sections here -->
+	  </div>
 	</div>
       </div>
       
@@ -275,7 +288,9 @@
     </div>
 
     <script src="utils.js"></script>
-    <script src="info.js"></script>
+
+    <!--    <script src="info.js"></script> -->
+    <script src="info-v2.js"></script>
     <script src="exchange.js"></script>
     <script src="render.js?v=100"></script>
     <script src="grinbideuchre.js"></script>
