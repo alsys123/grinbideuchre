@@ -338,10 +338,10 @@ function finishBid() {
     G.trump = h.trump;
     G.hl = h.hl;
     
-    // If South bid 8 and requested 1 or 2 cards → do exchange FIRST
-    if (h.bid === 8 && h.player === 'south' && h.cardReq > 0) {
+    // ⭐ If ANY player bid 8 and requested 1 or 2 cards → do exchange FIRST
+    if (h.bid === 8 && h.cardReq > 0) {
         // Do NOT overwrite cardReq here
-        setTimeout(() => startExchange(h.cardReq), 300);
+        setTimeout(() => startExchange(h.cardReq, h.player), 300);
         return; // stop normal flow until exchange is done
     }
 
