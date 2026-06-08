@@ -425,7 +425,9 @@ function finishBid() {
     hud();
     msg(msg_text, 2600);
 
-    G.leader = h.player;
+    //    G.leader = h.player;  ... this is who starts the bidding
+    // h.player won the bid
+    
     G.cur = h.player;
     G.phase = 'play';
 

@@ -4,6 +4,9 @@
 // *** Going alone - asking for 1 or 2 cards ***
 // exchange the cards
 function startExchange(n, player) {
+
+    cLog("start the exchange cards: ",n,". For player (winner):", player);
+    
     // player defaults to 'south' for backward compatibility
     if (!player) player = 'south';
     
@@ -15,6 +18,8 @@ function startExchange(n, player) {
 
     const partner = partnerOf(player);
 
+    // winner of the bidding is player
+    
     if (player === 'south') {
         // Human player - show UI
         speech('south', 'Select ' + n + ' card' + (n===1?'':'s') +
@@ -26,10 +31,19 @@ function startExchange(n, player) {
             el.classList.add('exchange-select');
             el.addEventListener('click', () => pickExchangeCard(el));
         }
-    } else {
+	return;
+    } // 
+    
+    if (player === 'north') {
+    }
+
+    //else {
+    // otherwise computer is giving to computer
+    // either east --> west or west --> east
         // AI player - auto-select cards
         setTimeout(() => aiExchange(player, n), 800);
-    }
+//    }
+
 }
 
 function pickExchangeCard(el) {
@@ -49,6 +63,9 @@ function pickExchangeCard(el) {
 }
 
 function aiExchange(player, n) {
+
+    cLog("aiExchange");
+    
     // AI automatically selects N worst cards to give
     const hand = [...G.H[player]];
 
