@@ -35,7 +35,14 @@ function startExchange(n, player) {
     } // south exchange
     
     if (player === 'north') {
-	cLog("#1: North needs ",n, "cards");
+	cLog("#1: North needs ",n, "cards ",prettyHand(G.H["north"]));
+
+	// If bidder is NORTH, discard now
+//    if (G.exchangePlayer === 'north') {
+  //      aiGiveWorst('north', G.exchangeCount);
+	//    }
+	
+	cLog("#5: North cards ", prettyHand(G.H["north"]));
 
 //	setTimeout(() => aiGiveWorst(player, n), 800);
 	// Do NOT discard yet — wait for South to finish selecting
@@ -68,6 +75,8 @@ function startExchange(n, player) {
 
 }
 
+// one card at time we select the card to exchange.
+// when all are selected then finalizeExchange
 function pickExchangeCard(el) {
     if (G.exchangeGive.length >= G.exchangeCount) return;
 
@@ -80,16 +89,11 @@ function pickExchangeCard(el) {
     G.exchangeGive.push(card);
 
     if (G.exchangeGive.length === G.exchangeCount) {
-
-	// If bidder is NORTH, discard now
-	if (G.exchangePlayer === 'north') {
-            aiGiveWorst('north', G.exchangeCount);
-	    return;
-	}
    
         finalizeExchange();
     }
 }
+
 
 function aiGiveWorst(player, n) {
 
@@ -162,7 +166,8 @@ function finalizeExchange() {
     // we do not want ai to pick cards
 //    const best = aiPartnerBestCards(partner, n);
 //    G.exchangeGet = best;
-    
+
+     
     let best;
     
     if (partner === 'south') {
@@ -173,7 +178,9 @@ function finalizeExchange() {
 	best = aiPartnerBestCards(partner, n);
     }
 
-   
+    cLog("#7: North cards ", prettyHand(G.H["north"]));
+    cLog("#8: South cards ", prettyHand(G.H["south"]));
+    
     // --- REMOVE CARDS PLAYER IS GIVING ---
     G.exchangeGive.forEach(c => {
         const idx = G.H[player].findIndex(x => x.uid === c.uid);
@@ -209,6 +216,8 @@ function finalizeExchange() {
     // This will show the final bid message, set leader, and start the trick
     setTimeout(() => finishBid(), 300);
 
+
+    // ???? not quite sure we make it here...
     // --- Update visuals ---
     if (player === 'south') {
         renderHands(true, 'south');
