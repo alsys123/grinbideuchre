@@ -36,17 +36,25 @@ function startExchange(n, player) {
     
     if (player === 'north') {
 	cLog("#1: North needs ",n, "cards");
-	
+
+//	setTimeout(() => aiGiveWorst(player, n), 800);
+	// Do NOT discard yet — wait for South to finish selecting
+//	G.waitingForPartnerGive = true;
+
         speech('south', 'Select ' + n + ' card' + (n===1?'':'s') +
                ' to give your partner.', 3000);
 
         // highlight playable cards
         const hand = $('hand-south').children;
+
+	// for each card
         for (let el of hand) {
             el.classList.add('exchange-select');
-            el.addEventListener('click', () => pickExchangeCard(el));
+            el.addEventListener('click', () => pickExchangeCard(el));	       
         }
+
 	
+//	aiGiveWorst(player, n);
 	return;
 	
     }// north exchange
@@ -55,7 +63,7 @@ function startExchange(n, player) {
     // otherwise computer is giving to computer
     // either east --> west or west --> east
         // AI player - auto-select cards
-        setTimeout(() => aiExchange(player, n), 800);
+        setTimeout(() => aiGiveWorst(player, n), 800);
 //    }
 
 }
@@ -72,13 +80,20 @@ function pickExchangeCard(el) {
     G.exchangeGive.push(card);
 
     if (G.exchangeGive.length === G.exchangeCount) {
+
+	// If bidder is NORTH, discard now
+	if (G.exchangePlayer === 'north') {
+            aiGiveWorst('north', G.exchangeCount);
+	    return;
+	}
+   
         finalizeExchange();
     }
 }
 
-function aiExchange(player, n) {
+function aiGiveWorst(player, n) {
 
-    cLog("aiExchange");
+    cLog("aiGiveWorst");
     
     // AI automatically selects N worst cards to give
     const hand = [...G.H[player]];

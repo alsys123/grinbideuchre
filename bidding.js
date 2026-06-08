@@ -156,7 +156,7 @@ function showBidMod(){
 	
 //	$('modal-sub').textContent =
 //            "Current bid: " + desc + " — " + bidText; //bid at least " + min;
-	$('modal-sub').textContent = "Last bid: " + bidTextStr;
+	$('modal-sub').textContent = "Last bid -> " + bidTextStr;
     
     } else {
 	$('modal-sub').textContent = "No bids yet — minimum bid is " + min;
