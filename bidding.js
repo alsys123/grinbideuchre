@@ -53,7 +53,7 @@ function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
 }
 
 // build a standard string of the bid
-function buildBidText(amt, trump, hl, alone, cardReq) {
+function buildBidText_v1(amt, trump, hl, alone, cardReq) {
    // Build base text: "5 in ♥" or "6 NT"
     let text = "";
 
@@ -82,7 +82,7 @@ function buildBidText(amt, trump, hl, alone, cardReq) {
 function showTheBid(player, amt, trump, hl, alone, cardReq) {
     let text = "";
   
-    text = buildBidText(amt, trump, hl, alone, cardReq);
+    text = buildBidText_v1(amt, trump, hl, alone, cardReq);
     
    /* 
     // Build base text: "5 in ♥" or "6 NT"
@@ -148,8 +148,16 @@ function showBidMod(){
 	    desc += " by " + G.hBid.player.toUpperCase();
 	}
 	
-	$('modal-sub').textContent =
-            "Current bid: " + desc + " — " + bidText; //bid at least " + min;
+	const bidTextStr =
+	      buildBidText(G.hBid.player,G.hBid.bid,G.hBid.hl,G.hBid.trump,
+			   G.hBid.alone,G.hBid.cardReq);
+
+//	cLog("built this: ",bidTextStr);
+	
+//	$('modal-sub').textContent =
+//            "Current bid: " + desc + " — " + bidText; //bid at least " + min;
+	$('modal-sub').textContent = "Last bid: " + bidTextStr;
+    
     } else {
 	$('modal-sub').textContent = "No bids yet — minimum bid is " + min;
     }
@@ -453,6 +461,62 @@ function activateSouthHand() {
     }
 }
 
+// Example returns:
+//   North: Alone NT high ask 2
+//   South: 3 NT low
+//   Eash:  4 heart
+//   West:  Alone clubs
+// for suite use graphic display
+function buildBidText(player, bid, hl, trump, alone, cardReq) {
+
+//    cLog("build bid: ",player, bid, hl, trump, alone, cardReq);
+    
+    // suit symbols
+    var sym = {
+        "hearts": "♥",
+        "diamonds": "♦",
+        "clubs": "♣",
+        "spades": "♠",
+        "NT": "NT"
+    };
+
+    var t = sym[trump] || trump;   // fallback if already symbol
+
+    var s = player + ": ";
+
+    // ALONE bids
+    if (alone) {
+        s += "Alone ";
+
+        // trump display
+        if (trump === "NT") {
+            s += "NT";
+            if (hl) s += " " + hl.toLowerCase();   // high / low
+        } else {
+            s += t;   // suit symbol
+        }
+
+        // card request
+        if (cardReq === 1) s += " ask 1";
+        else if (cardReq === 2) s += " ask 2";
+
+        return s;
+    }
+
+    // NORMAL bids
+    s += bid + " ";
+
+    if (trump === "NT") {
+        s += "NT";
+        if (hl) s += " " + hl.toLowerCase();
+    } else {
+        s += t;
+    }
+
+    return s;
+}
+
+
 
 // **** Concede ****
 
@@ -498,3 +562,5 @@ $('concedeBtn').onclick = function () {
     $('concedeBtn').style.display = 'none';
 
 };
+
+// *** END of Concede 

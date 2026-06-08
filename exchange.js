@@ -23,7 +23,7 @@ function startExchange(n, player) {
     if (player === 'south') {
         // Human player - show UI
         speech('south', 'Select ' + n + ' card' + (n===1?'':'s') +
-               ' to give your partner.', 3000);
+               ' to put down.', 3000);
 
         // highlight playable cards
         const hand = $('hand-south').children;
@@ -32,10 +32,24 @@ function startExchange(n, player) {
             el.addEventListener('click', () => pickExchangeCard(el));
         }
 	return;
-    } // 
+    } // south exchange
     
     if (player === 'north') {
-    }
+	cLog("#1: North needs ",n, "cards");
+	
+        speech('south', 'Select ' + n + ' card' + (n===1?'':'s') +
+               ' to give your partner.', 3000);
+
+        // highlight playable cards
+        const hand = $('hand-south').children;
+        for (let el of hand) {
+            el.classList.add('exchange-select');
+            el.addEventListener('click', () => pickExchangeCard(el));
+        }
+	
+	return;
+	
+    }// north exchange
 
     //else {
     // otherwise computer is giving to computer
@@ -93,7 +107,8 @@ function aiExchange(player, n) {
     finalizeExchange();
 }
 
-function partnerBestCards(partner, n) {
+// this is the ai selecting 2 best cards to give away
+function aiPartnerBestCards(partner, n) {
     const hand = [...G.H[partner]];
 
     const rankVal = { 'J':1, 'Q':2, 'K':3, 'A':4 };
@@ -119,14 +134,31 @@ function partnerBestCards(partner, n) {
 }
 
 function finalizeExchange() {
-    const player = G.exchangePlayer || 'south';
+    const player = G.exchangePlayer || 'south'; // default south
+
+    
     const partner = partnerOf(player);
     const n = G.exchangeCount;
 
+    cLog("#2: winner:",player," his partner: ",partner,n);
+    
     // Partner gives best N cards
-    const best = partnerBestCards(partner, n);
-    G.exchangeGet = best;
+    // ???? ... here is the problem if partner is south then
+    // we do not want ai to pick cards
+//    const best = aiPartnerBestCards(partner, n);
+//    G.exchangeGet = best;
+    
+    let best;
+    
+    if (partner === 'south') {
+	// South (human) selects cards to give
+	best = G.exchangeGive;   // cards South clicked
+    } else {
+	// AI partner gives best cards
+	best = aiPartnerBestCards(partner, n);
+    }
 
+   
     // --- REMOVE CARDS PLAYER IS GIVING ---
     G.exchangeGive.forEach(c => {
         const idx = G.H[player].findIndex(x => x.uid === c.uid);
