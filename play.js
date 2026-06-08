@@ -5,8 +5,18 @@
 
 */
 
+function prettyHand(arr) {
+       return arr
+        .map(c => c.r + c.s + " (" + c.uid + ")")
+        .join("  ");
+}
+
 // Entry Point: startTrick --> from bidding.js
 function startTrick(){
+
+    cLog("#4 Hand of north: ",prettyHand(G.H["north"]));
+//    cLog("#4 Hand of north: ",G.H["north"]);
+    
     G.trick=[];
     
     //    G.cur=G.leader;
@@ -110,12 +120,16 @@ function aiPlay(player) {
 function aiLead(hand){
     const sc=hand.map(c=>({
 	c,s:crank(c,G.trump,esuit(c,G.trump,G.hl),G.hl)}));
+    
     if(G.hl==='high'){
 	const tr=sc.filter(x=>esuit(x.c,G.trump,G.hl)===G.trump).sort((a,b)=>b.s-a.s);
+	
 	if(tr.length>0&&Math.random()<.6)
 	    return tr[0].c;
+	
 	return sc.sort((a,b)=>b.s-a.s)[0].c;
     }
+    
     const tr=sc.filter(x=>esuit(x.c,G.trump,G.hl)===G.trump).sort((a,b)=>a.s-b.s);
     if(tr.length>0)return tr[0].c;
     return sc.sort((a,b)=>a.s-b.s)[0].c;
