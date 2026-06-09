@@ -43,3 +43,22 @@ function partnerOf(p) {
     const idx = PL.indexOf(p);
     return PL[(idx + 2) % 4];
 }
+
+function prettyHandPlain(arr) {
+       return arr
+        .map(c => c.r + c.s + " (" + c.uid + ")")
+        .join("  ");
+}
+
+function prettyHand(arr) {
+    return arr
+        .map(c => {
+            const red = (c.s === "♥" || c.s === "♦");
+            const suit = red
+                ? `<span style="color:red">${c.s}</span>`
+                : c.s;
+
+            return `${c.r}${suit} <span style="font-size:70%">(${c.uid})</span>`;
+        })
+        .join("  ");
+}

@@ -412,7 +412,12 @@ font-weight:bold;
 	tricks: { us: G.tw.us, them: G.tw.them },
 	score: { us: G.sc.us, them: G.sc.them },
 	calc: calc,
-	dealNumber: G.dealNumber
+	dealNumber: G.dealNumber,
+	cards: {south: G.H["south"],
+		west:  G.H["west"],
+		north: G.H["north"],
+		east:  G.H["east"]
+	       }
     });
     
     $('result-title').textContent=title;

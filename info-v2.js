@@ -139,12 +139,9 @@ function sectionHandSummary() {
             <li>Last bid: ${G.hBid ? PN[G.hBid.player] + ' bid ' + G.hBid.bid : '—'}</li>
             <li>Dealer rotation — S:${G.starts.south}, W:${G.starts.west}, N:${G.starts.north}, E:${G.starts.east}</li>
 
-            <li style="margin-top:10px;"><strong>Bids this hand:</strong></li>
-            ${bidList}
-
+            <li><strong>Bids:</strong> ${bidList}</li>
             <li>Deal # ${G.dealNumber}</li>
         </ul>
-
 
     `;
 
@@ -199,52 +196,6 @@ function buildBidList(G) {
 }
 */
 
-function buildBidList(G) {
-    cLog("for b:");
-
-    // Determine bidding order based on leader
-    const start = PL.indexOf(G.leader);
-    cLog("start: ", start);
-
-    const order = [];
-    for (let i = 0; i < 4; i++) {
-        order.push(PL[(start + i) % 4]);
-    }
-
-    let html = "<ul>";
-
-    for (let i = 0; i < order.length; i++) {
-        const p = order[i];
-        const b = G.bids[p];
-
-        if (!b) {
-            html += `<li>${PN[p]}: —</li>`;
-            continue;
-        }
-
-        const parts = [];
-
-        // amount (correct property)
-        parts.push(b.amt);
-
-        // trump suit
-        if (b.trump) parts.push(b.trump);
-
-        // high/low
-        if (b.hl) parts.push(b.hl === "high" ? "High" : "Low");
-
-        // alone
-        if (b.alone) parts.push("Alone");
-
-        // card request
-        if (b.cardReq) parts.push("ask " + b.cardReq);
-
-        html += `<li>${PN[p]}: ${parts.join(" ")}</li>`;
-    }
-
-    html += "</ul>";
-    return html;
-}
 
 
 function showHistoryInfo() {
@@ -281,11 +232,14 @@ function showHistoryInfo() {
 
 function buildHistoryRows() {
     let html = "";
-
+    
+	
     for (let i = 0; i < G.history.length; i++) {
         const h = G.history[i];
+	
+	cLog("history cards: ",h.cards);
 
-        const ex = h.bid?.exchanges || 0;
+       const ex = h.bid?.exchanges || 0;
         const exText = ex ? " · " + ex + " exch" : "";
 
         const bidText = h.bid
@@ -315,15 +269,101 @@ function buildHistoryRows() {
 	// --- ROW 2: deal number (always) ---
         html +=
             '<tr class="deal-num-row">' +
-                '<td colspan="6" style="font-size:11px; color:var(--gold);' +
+                '<td colspan="6" style="font-size:11px; color:black;' +
                 'letter-spacing:1px; text-align:center; padding:2px 0;">' +
             'Deal # ' + h.dealNumber +
 	    ', Leader: ' + PN[h.leader] +
 	    ', Bid List: ' + BidList +
                 '</td>' +
             '</tr>';
+
+	// pretty print hands
+       html +=
+            '<tr class="deal-num-row">' +
+                '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
+                'letter-spacing:1px; text-align:left; padding:2px 0;">' +
+            'South Hand: ' + prettyHand(h.cards.south) +
+                '</td>' +
+            '</tr>';
+	      html +=
+            '<tr class="deal-num-row">' +
+            '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
+                'letter-spacing:1px; text-align:left; padding:2px 0;">' +
+            'West Hand:   ' + prettyHand(h.cards.west) +
+                '</td>' +
+            '</tr>';
+	      html +=
+            '<tr class="deal-num-row">' +
+                '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
+                'letter-spacing:1px; text-align:left; padding:2px 0;">' +
+            'North Hand: ' + prettyHand(h.cards.north) +
+                '</td>' +
+            '</tr>';
+	      html +=
+            '<tr class="deal-num-row">' +
+                '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
+                'letter-spacing:1px; text-align:left; padding:2px 0;">' +
+            'East Hand:   ' + prettyHand(h.cards.east) +
+                '</td>' +
+            '</tr>';
+	
     }
 
+    return html;
+}
+
+function buildBidList(G) {
+//    cLog("for b:");
+
+    // Determine bidding order based on leader
+    const start = PL.indexOf(G.leader);
+//    cLog("start: ", start);
+
+    const order = [];
+    for (let i = 0; i < 4; i++) {
+        order.push(PL[(start + i) % 4]);
+    }
+
+    let html = "";
+
+    for (let i = 0; i < order.length; i++) {
+        const p = order[i];
+        const b = G.bids[p];
+
+        if (!b) {
+//            html += `<li>${PN[p]}: —</li>`;
+   //         html += `${PN[p]}: `;
+            continue;
+        }
+
+ //       const parts = [];
+
+	/*
+        // amount (correct property)
+        parts.push(b.amt);
+
+        // trump suit
+        if (b.trump) parts.push(b.trump);
+
+        // high/low
+        if (b.hl) parts.push(b.hl === "high" ? "High" : "Low");
+
+        // alone
+        if (b.alone) parts.push("Alone");
+
+        // card request
+        if (b.cardReq) parts.push("ask " + b.cardReq);
+	*/
+	
+	const textBid = buildBidText_v1(b.amt, b.trump, b.hl, b.alone, b.cardReq);
+
+//	if (!textBid) textBid = "na";
+//        html += `<li>${PN[p]}: ${parts.join(" ")}</li>`;
+  //      html += `${PN[p]}: ${parts.join(" ")}`;
+	html += `${PN[p]}: ` + textBid + ", ";
+    }
+
+ //   html += "</ul>";
     return html;
 }
 
@@ -339,7 +379,8 @@ function buildBidListFromHistory(historyEntry) {
 
     return order.map(p => {
         const b = historyEntry.bids[p];
-        if (!b) return `${PN[p]}: —`;
+//        if (!b) return `${PN[p]}: —`;
+        if (!b) return ``;
 
         const parts = [];
         if (b.bid) parts.push(b.bid);
@@ -348,6 +389,7 @@ function buildBidListFromHistory(historyEntry) {
         if (b.alone) parts.push('Alone');
 
         return `${PN[p]}: ${parts.join(' ')}`;
+	
     }).join(', ');
 }
 

@@ -5,17 +5,11 @@
 
 */
 
-function prettyHand(arr) {
-       return arr
-        .map(c => c.r + c.s + " (" + c.uid + ")")
-        .join("  ");
-}
 
 // Entry Point: startTrick --> from bidding.js
 function startTrick(){
 
-    cLog("#4 Hand of north: ",prettyHand(G.H["north"]));
-//    cLog("#4 Hand of north: ",G.H["north"]);
+//    cLog("#4 Hand of north: ",prettyHand(G.H["north"]));
     
     G.trick=[];
     
