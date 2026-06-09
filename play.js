@@ -184,7 +184,10 @@ function resolveT(){
     setTimeout(()=>{
 	clearTC();
 	G.trick=[];
-	if(G.H.south.length===0)scoreHand();
+//	if(G.H.south.length===0)scoreHand();
+		const activePlayer = lonePartner() === 'south' ? 'north' : 'south';
+if(G.H[activePlayer].length===0)scoreHand();
+	
 	else startTrick();	
     },1200); // was 1700
 
