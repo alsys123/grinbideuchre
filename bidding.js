@@ -432,8 +432,8 @@ function finishBid() {
 
     hud();
     msg(msg_text, 2600);
-
-    //    G.leader = h.player;  ... this is who starts the bidding
+	
+     G.leader = h.player;  //this is who starts the bidding but also now who leads the card
     // h.player won the bid
     
     G.cur = h.player;
