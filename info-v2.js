@@ -67,7 +67,7 @@ function header() {
 	<h1>Bid Euchre<em>Official Rules & Other Info</em></h1>
 	<p class="subtitle">4 Players · Partnership · High &amp; Low · Trick-Taking</p>
 
-     <p class="subtitle">v1.03 Jun 8, 2026</p>
+     <p class="subtitle">v1.04 Jun 9, 2026</p>
 
 </div>
 
