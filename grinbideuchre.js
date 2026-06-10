@@ -29,7 +29,9 @@ const G={
 
     phase:'deal',bids:{},hBid:null,trump:null,hl:'high',sel:null,
     firstHand: true,
-    dealNumber: null
+    dealNumber: null,
+    cards: {south:[],west:[],north:[],east:[]},
+    exchangeHistory: []
     
 };
 
@@ -225,8 +227,23 @@ function deal(){
     G.dealNumber = formatDealNumber(lastDealNumber);
     
     //    PL.forEach((p,i)=>G.H[p]=dk.slice(i*6,i*6+6));
-    PL.forEach((p,i)=>G.H[p]=dk.slice(i*8,i*8+8));
+//    PL.forEach((p,i)=>G.H[p]=dk.slice(i*8,i*8+8));
+    // Deal 8 cards to each player
+    PL.forEach((p,i) => {
+	G.H[p] = dk.slice(i*8, i*8+8);
+    });
     
+    // Store a deep copy of the full deck
+//    G.cards = dk.map(c => ({ r:c.r, s:c.s, uid:c.uid }));
+    G.cards = {
+	south: G.H.south.map(c => ({...c})),
+	west:  G.H.west.map(c => ({...c})),
+	north: G.H.north.map(c => ({...c})),
+	east:  G.H.east.map(c => ({...c}))
+    };
+
+    PL.forEach(p => sortBase(G.cards[p]));  // and now sort them
+
 
     // this is done in StartNewGame instead
     //    const di=PL.indexOf(G.dealer);
@@ -413,11 +430,31 @@ font-weight:bold;
 	score: { us: G.sc.us, them: G.sc.them },
 	calc: calc,
 	dealNumber: G.dealNumber,
-	cards: {south: G.H["south"],
-		west:  G.H["west"],
-		north: G.H["north"],
-		east:  G.H["east"]
-	       }
+	cards: {south: G.cards["south"],
+		west:  G.cards["west"],
+		north: G.cards["north"],
+		east:  G.cards["east"]
+	       },
+	
+	exchange: {
+	    bidder: G.exchangePlayer || (G.hBid ? G.hBid.player : null),
+	    count: G.lastExchangeCount || 0,
+	    
+	    // Cards South gave (deep copy)
+	    southGave: G.exchangeGive ? G.exchangeGive.map(c => ({...c})) : [],
+	    
+	    // Cards partner gave (deep copy)
+	    partnerGave: G.exchangeGet ? G.exchangeGet.map(c => ({...c})) : [],
+	    
+	    // Final hands after exchange (deep copy)
+	    finalHands: {
+		south: G.H.south.map(c => ({...c})),
+		west:  G.H.west.map(c => ({...c})),
+		north: G.H.north.map(c => ({...c})),
+		east:  G.H.east.map(c => ({...c}))
+	    }
+	}
+
     });
     
     $('result-title').textContent=title;

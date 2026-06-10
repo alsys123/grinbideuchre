@@ -117,11 +117,20 @@ function section1() {
     `;
 
     return text;
-}
+} //section1
 
 function sectionHandSummary() {
     const bidList = buildBidList(G);
 
+    const textBid =
+	  PN[G.hBid.player] + " -> " +
+	  buildBidText_v1(
+	      G.hBid.bid, G.hBid.trump, G.hBid.hl, G.hBid.alone,
+	      G.hBid.exchanges
+	  );
+
+    
+    
     let html = "";
     
     html = `
@@ -137,6 +146,9 @@ function sectionHandSummary() {
             <li>Score — Us: ${G.sc.us}, Them: ${G.sc.them}</li>
             <li>Tricks — Us: ${G.tw.us}, Them: ${G.tw.them}</li>
             <li>Last bid: ${G.hBid ? PN[G.hBid.player] + ' bid ' + G.hBid.bid : '—'}</li>
+
+           <li>Bid: ${textBid}</li>
+
             <li>Dealer rotation — S:${G.starts.south}, W:${G.starts.west}, N:${G.starts.north}, E:${G.starts.east}</li>
 
             <li><strong>Bids:</strong> ${bidList}</li>
@@ -264,7 +276,7 @@ function buildHistoryRows() {
 
 	    
 	const BidList = buildBidListFromHistory(h);
-	cLog("show h:",h, ", bid list: ", BidList);
+//	cLog("show h:",h, ", bid list: ", BidList);
 	
 	// --- ROW 2: deal number (always) ---
         html +=
@@ -289,7 +301,7 @@ function buildHistoryRows() {
             '<tr class="deal-num-row">' +
             '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
                 'letter-spacing:1px; text-align:left; padding:2px 0;">' +
-            'West Hand:   ' + prettyHand(h.cards.west) +
+            'West Hand :  ' + prettyHand(h.cards.west) +
                 '</td>' +
             '</tr>';
 	      html +=
@@ -303,7 +315,7 @@ function buildHistoryRows() {
             '<tr class="deal-num-row">' +
                 '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
                 'letter-spacing:1px; text-align:left; padding:2px 0;">' +
-            'East Hand:   ' + prettyHand(h.cards.east) +
+            'East Hand :  ' + prettyHand(h.cards.east) +
                 '</td>' +
             '</tr>';
 	
@@ -382,14 +394,18 @@ function buildBidListFromHistory(historyEntry) {
 //        if (!b) return `${PN[p]}: —`;
         if (!b) return ``;
 
-        const parts = [];
-        if (b.bid) parts.push(b.bid);
-        if (b.trump) parts.push(b.trump);
-        if (b.hl) parts.push(b.hl === 'high' ? 'High' : 'Low');
-        if (b.alone) parts.push('Alone');
+ //       const parts = [];
+ //       if (b.bid) parts.push(b.bid);
+ //       if (b.trump) parts.push(b.trump);
+ //       if (b.hl) parts.push(b.hl === 'high' ? 'High' : 'Low');
+ //       if (b.alone) parts.push('Alone');
 
-        return `${PN[p]}: ${parts.join(' ')}`;
-	
+ //       return `${PN[p]}: ${parts.join(' ')}`;
+//	...
+	const textBid = buildBidText_v1(b.amt, b.trump, b.hl,
+					b.alone, b.exchanges);
+	return `${PN[p]}: ${textBid}`;
+
     }).join(', ');
 }
 

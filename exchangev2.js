@@ -5,7 +5,7 @@
 // exchange the cards
 function startExchange(n, player) {
 
-    cLog("start the exchange cards: ",n,". For player (winner):", player);
+//    cLog("start the exchange cards: ",n,". For player (winner):", player);
     
     // player defaults to 'south' for backward compatibility
     if (!player) player = 'south';
@@ -35,7 +35,7 @@ function startExchange(n, player) {
     } // south exchange
     
     if (player === 'north') {
-        cLog("#1: North needs ",n, "cards ",prettyHand(G.H["north"]));
+//        cLog("#1: North needs ",n, "cards ",prettyHand(G.H["north"]));
 
         // North is bidder going alone.
         // South (human) picks N cards to GIVE to North.
@@ -83,7 +83,7 @@ function pickExchangeCard(el) {
 
 function aiGiveWorst(player, n) {
 
-    cLog("aiGiveWorst");
+//    cLog("aiGiveWorst");
     
     // AI automatically selects N worst cards to give
     const hand = [...G.H[player]];
@@ -143,7 +143,7 @@ function finalizeExchange() {
     const partner = partnerOf(player);
     const n       = G.exchangeCount;
 
-    cLog("#2: winner:", player, " his partner:", partner, n);
+//    cLog("#2: winner:", player, " his partner:", partner, n);
 
     // ── Determine what each side gives ───────────────────────────
     //
@@ -177,8 +177,8 @@ function finalizeExchange() {
         playerReceives  = aiPartnerBestCards(partner, n);     // South gets partner's best
     }
 
-    cLog("#7: North cards ", prettyHand(G.H["north"]));
-    cLog("#8: South cards ", prettyHand(G.H["south"]));
+//    cLog("#7: North cards ", prettyHandPlain(G.H["north"]));
+//    cLog("#8: South cards ", prettyHandPlain(G.H["south"]));
 
     // --- REMOVE CARDS SOUTH IS GIVING ---
     G.exchangeGive.forEach(c => {
@@ -214,6 +214,21 @@ function finalizeExchange() {
     sortBase(G.H[partner]);
 
     G.lastExchangeCount = n;  // save for scoring
+
+    
+    // save all the exchange data
+    // note: may not need all the elements ...??? some may be duplicate with G.
+    G.exchangeHistory.push({
+	deal: G.dealNumber,
+	bidder: player,
+	partner: partner,
+	count: n,
+	give: G.exchangeGive.map(c => ({...c})),
+	get: playerReceives.map(c => ({...c})),
+	partnerGives: partnerReceives.map(c => ({...c})),
+	southHandAfter: G.H.south.map(c => ({...c})),
+	northHandAfter: G.H.north.map(c => ({...c}))
+    });
 
     // --- CLEAR EXCHANGE STATE ---
     G.exchangeGive  = [];
