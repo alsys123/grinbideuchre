@@ -262,6 +262,7 @@ function buildHistoryRows() {
         const weSide   = h.tricks.us   + " / " + h.score.us;
         const themSide = h.tricks.them + " / " + h.score.them;
 
+	
         // --- ROW 1: main summary ---
         html +=
             '<tr class="' + (i % 2 === 0 ? 'even' : 'odd') + '">' +
@@ -274,7 +275,7 @@ function buildHistoryRows() {
             '</tr>';
 	
 
-	    
+	let data = "";
 	const BidList = buildBidListFromHistory(h);
 //	cLog("show h:",h, ", bid list: ", BidList);
 	
@@ -288,40 +289,78 @@ function buildHistoryRows() {
 	    ', Bid List: ' + BidList +
                 '</td>' +
             '</tr>';
-
+	
+/*
 	// pretty print hands
        html +=
             '<tr class="deal-num-row">' +
                 '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
                 'letter-spacing:1px; text-align:left; padding:2px 0;">' +
-            'South Hand: ' + prettyHand(h.cards.south) +
+            'South Hand: ' + prettyHandHTML(h.cards.south) +
                 '</td>' +
             '</tr>';
 	      html +=
             '<tr class="deal-num-row">' +
             '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
                 'letter-spacing:1px; text-align:left; padding:2px 0;">' +
-            'West Hand :  ' + prettyHand(h.cards.west) +
+            'West Hand :  ' + prettyHandHTML(h.cards.west) +
                 '</td>' +
             '</tr>';
 	      html +=
             '<tr class="deal-num-row">' +
                 '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
                 'letter-spacing:1px; text-align:left; padding:2px 0;">' +
-            'North Hand: ' + prettyHand(h.cards.north) +
-                '</td>' +
-            '</tr>';
-	      html +=
-            '<tr class="deal-num-row">' +
-                '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
-                'letter-spacing:1px; text-align:left; padding:2px 0;">' +
-            'East Hand :  ' + prettyHand(h.cards.east) +
+            'North Hand: ' + prettyHandHTML(h.cards.north) +
                 '</td>' +
             '</tr>';
 	
-    }
+	      html +=
+            '<tr class="deal-num-row">' +
+                '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
+                'letter-spacing:1px; text-align:left; padding:2px 0;">' +
+            'East Hand :  ' + prettyHandHTML(h.cards.east) +
+                '</td>' +
+		'</tr>';
+*/
+	
+	data = 'South Hand: ' + prettyHandHTML(h.cards.south);
+	html += addRow(data);
 
+	data = 'West Hand :  ' + prettyHandHTML(h.cards.west);
+	html += addRow(data);
+
+	data = 'North Hand: ' + prettyHandHTML(h.cards.north);
+	html += addRow(data);
+
+	data = 'East Hand :  ' + prettyHandHTML(h.cards.east);
+	html += addRow(data);
+	
+    
+	if (h.exchange.count > 0) {
+	    html += addRow("Exchanges Data");
+	}
+	
+    } // for loop of histories
+    
     return html;
+    
+}
+function addRow(data) {
+    const rowHTML =
+            '<tr class="deal-num-row">' +
+          '<td colspan="6" ' +
+          'style="font-size:11px; ' +
+          '       font-family:courier; ' +
+          '       color:black;' +
+          '       letter-spacing:1px; ' +
+          '       text-align:left; ' +
+          '       padding:2px 0;">' +
+          data  +
+          '</td>' +
+          '</tr>';
+
+    return rowHTML;
+
 }
 
 function buildBidList(G) {

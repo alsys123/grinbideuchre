@@ -50,7 +50,7 @@ function prettyHandPlain(arr) {
         .join("  ");
 }
 
-function prettyHand(arr) {
+function prettyHandHTML(arr) {
     return arr
         .map(c => {
             const red = (c.s === "♥" || c.s === "♦");
