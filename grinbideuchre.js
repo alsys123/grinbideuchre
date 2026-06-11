@@ -44,6 +44,8 @@ G.history = [];
 let lastDealNumber = 0n;   // BigInt
 let requestedDeal = null;  // null = random, BigInt = specific deal
 
+let exch = null;
+
 // GAME CORE
 
 function deck() {
@@ -408,6 +410,8 @@ font-weight:bold;
     }
 
     
+//    cLog("g.exchange.history: ", G.exchangeHistory);
+    
     G.history.push({
 	dealer: G.dealer,
 	leader: G.leader,
@@ -436,24 +440,7 @@ font-weight:bold;
 		east:  G.cards["east"]
 	       },
 	
-	exchange: {
-	    bidder: G.exchangePlayer || (G.hBid ? G.hBid.player : null),
-	    count: G.lastExchangeCount || 0,
-	    
-	    // Cards South gave (deep copy)
-	    southGave: G.exchangeGive ? G.exchangeGive.map(c => ({...c})) : [],
-	    
-	    // Cards partner gave (deep copy)
-	    partnerGave: G.exchangeGet ? G.exchangeGet.map(c => ({...c})) : [],
-	    
-	    // Final hands after exchange (deep copy)
-	    finalHands: {
-		south: G.H.south.map(c => ({...c})),
-		west:  G.H.west.map(c => ({...c})),
-		north: G.H.north.map(c => ({...c})),
-		east:  G.H.east.map(c => ({...c}))
-	    }
-	}
+	exchange: exch
 
     });
     

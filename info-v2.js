@@ -290,38 +290,6 @@ function buildHistoryRows() {
                 '</td>' +
             '</tr>';
 	
-/*
-	// pretty print hands
-       html +=
-            '<tr class="deal-num-row">' +
-                '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
-                'letter-spacing:1px; text-align:left; padding:2px 0;">' +
-            'South Hand: ' + prettyHandHTML(h.cards.south) +
-                '</td>' +
-            '</tr>';
-	      html +=
-            '<tr class="deal-num-row">' +
-            '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
-                'letter-spacing:1px; text-align:left; padding:2px 0;">' +
-            'West Hand :  ' + prettyHandHTML(h.cards.west) +
-                '</td>' +
-            '</tr>';
-	      html +=
-            '<tr class="deal-num-row">' +
-                '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
-                'letter-spacing:1px; text-align:left; padding:2px 0;">' +
-            'North Hand: ' + prettyHandHTML(h.cards.north) +
-                '</td>' +
-            '</tr>';
-	
-	      html +=
-            '<tr class="deal-num-row">' +
-                '<td colspan="6" style="font-size:11px; font-family:courier; color:black;' +
-                'letter-spacing:1px; text-align:left; padding:2px 0;">' +
-            'East Hand :  ' + prettyHandHTML(h.cards.east) +
-                '</td>' +
-		'</tr>';
-*/
 	
 	data = 'South Hand: ' + prettyHandHTML(h.cards.south);
 	html += addRow(data);
@@ -337,7 +305,29 @@ function buildHistoryRows() {
 	
     
 	if (h.exchange.count > 0) {
-	    html += addRow("Exchanges Data");
+	    html += addRow(" *** Exchanges Data");
+
+	    cLog(" *** Exchange data: ",h.exchange);
+
+	    if (h.exchange.bidder === "north") {
+		data = "Bidder is North and asks for: " + h.exchange.count +
+		    " card(s) from south.";
+		html += addRow(data);
+		
+		data = "South gives North: " + prettyHandHTML(h.exchange.give);
+		html += addRow(data);
+
+		data = "North puts down: ", prettyHandHTML(h.exchange.partnerGives);
+		html += addRow(data);
+		
+		data = 'South Hand: ' + prettyHandHTML(h.exchange.southHandAfter);
+		html += addRow(data);
+		
+		data = 'North Hand: ' + prettyHandHTML(h.exchange.northHandAfter);
+		html += addRow(data);
+
+		
+	    }
 	}
 	
     } // for loop of histories

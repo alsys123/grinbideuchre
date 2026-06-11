@@ -215,7 +215,7 @@ function finalizeExchange() {
 
     G.lastExchangeCount = n;  // save for scoring
 
-    
+ /*   
     // save all the exchange data
     // note: may not need all the elements ...??? some may be duplicate with G.
     G.exchangeHistory.push({
@@ -229,7 +229,24 @@ function finalizeExchange() {
 	southHandAfter: G.H.south.map(c => ({...c})),
 	northHandAfter: G.H.north.map(c => ({...c}))
     });
-
+ */
+    
+    // 1. Build exchange object ONCE
+    exch = {
+	deal: G.dealNumber,
+	bidder: player,
+	partner: partner,
+	count: n,
+	give: G.exchangeGive.map(c => ({...c})),
+	get: playerReceives.map(c => ({...c})),
+	partnerGives: partnerReceives.map(c => ({...c})),
+	southHandAfter: G.H.south.map(c => ({...c})),
+	northHandAfter: G.H.north.map(c => ({...c}))
+    };
+    
+    // 2. Save it permanently BEFORE clearing anything
+ //   G.exchangeHistory.push(exch);
+    
     // --- CLEAR EXCHANGE STATE ---
     G.exchangeGive  = [];
     G.exchangeGet   = [];
