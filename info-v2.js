@@ -309,15 +309,43 @@ function buildHistoryRows() {
 
 	    cLog(" *** Exchange data: ",h.exchange);
 
+	    /// ???... north and south as partners i think are the same NOW...??
+	    
 	    if (h.exchange.bidder === "north") {
-		data = "Bidder is North and asks for: " + h.exchange.count +
-		    " card(s) from south.";
+		data = "Bidder is " + h.exchange.bidder + " and asks for: " +
+		    h.exchange.count +
+		    " card(s) from " + h.exchange.partner + ".";
 		html += addRow(data);
 		
-		data = "South gives North: " + prettyHandHTML(h.exchange.give);
+		data = h.exchange.partner + " gives " + h.exchange.bidder + ": "+
+		    prettyHandHTML(h.exchange.get);  // was give but not universal
+		html += addRow(data);
+		
+		data = h.exchange.bidder + "puts down: " +
+		    prettyHandHTML(h.exchange.partnerGives);
+		html += addRow(data);
+		
+		data = h.exchange.partner + ' Hand: ' +
+		    prettyHandHTML(h.exchange.southHandAfter);
+		html += addRow(data);
+		
+		data = h.exchange.bidder + ' Hand: ' +
+		    prettyHandHTML(h.exchange.northHandAfter);
 		html += addRow(data);
 
-		data = "North puts down: ", prettyHandHTML(h.exchange.partnerGives);
+	    } // north
+
+	    if (h.exchange.bidder === "south") {
+		data = "Bidder is " + h.exchange.bidder + " and asks for: " +
+		    h.exchange.count +
+		    " card(s) from " + h.exchange.partner + ".";
+		html += addRow(data);
+		
+		data = "North gives South: " +
+		    prettyHandHTML(h.exchange.get);
+		html += addRow(data);
+		
+		data = "South puts down: " + prettyHandHTML(h.exchange.partnerGives);
 		html += addRow(data);
 		
 		data = 'South Hand: ' + prettyHandHTML(h.exchange.southHandAfter);
@@ -326,8 +354,8 @@ function buildHistoryRows() {
 		data = 'North Hand: ' + prettyHandHTML(h.exchange.northHandAfter);
 		html += addRow(data);
 
-		
-	    }
+	    } // south
+	    
 	}
 	
     } // for loop of histories
