@@ -144,10 +144,9 @@ function sectionHandSummary() {
 
         <ul style="margin-left:0; padding-left:16px; line-height:1.4;">
             <li>Dealer: ${PN[G.dealer]}</li>
-            <li>Leader: ${PN[G.leader]}</li>
             <li>Winning Bid: ${textBid}</li>
-            <li>Score — Us: ${G.sc.us}, Them: ${G.sc.them}</li>
             <li>Tricks — Us: ${G.tw.us}, Them: ${G.tw.them}</li>
+            <li>Score  — Us: ${G.sc.us}, Them: ${G.sc.them}</li>
   
              <li>Dealer rotation — S:${G.starts.south}, W:${G.starts.west}, N:${G.starts.north}, E:${G.starts.east}</li>
 

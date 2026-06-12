@@ -28,7 +28,8 @@ function startTrick(){
 //    renderHands(true);
 //    renderHands(true, 'south');   // redraw ONLY south
     
-    if(G.cur!=='south')setTimeout(()=>aiPlay(G.cur),900);
+    if(G.cur!=='south')
+	setTimeout(()=>aiPlay(G.cur),900);
 
     if (G.cur === 'south') {
 	msg("Your Move!", 2600);
@@ -112,9 +113,25 @@ function aiPlay(player) {
 }
 
 function aiLead(hand){
+
     const sc=hand.map(c=>({
 	c,s:crank(c,G.trump,esuit(c,G.trump,G.hl),G.hl)}));
-    
+
+    // ⭐ NT LOW special lead rule
+if (G.trump === 'NT' && G.hl === 'low') {
+
+    // NT-Low rank order: J > Q > K > A
+    const order = { J: 4, Q: 3, K: 2, A: 1 };
+
+    // Sort by NT-Low rank (descending)
+    const sorted = hand.slice().sort((a, b) =>
+        order[b.r] - order[a.r]
+    );
+
+    // Lead the highest NT-Low card (J first)
+    return sorted[0];
+}
+
     if(G.hl==='high'){
 	const tr=sc.filter(x=>esuit(x.c,G.trump,G.hl)===G.trump).sort((a,b)=>b.s-a.s);
 	
@@ -125,7 +142,10 @@ function aiLead(hand){
     }
     
     const tr=sc.filter(x=>esuit(x.c,G.trump,G.hl)===G.trump).sort((a,b)=>a.s-b.s);
-    if(tr.length>0)return tr[0].c;
+
+    if(tr.length>0)
+	return tr[0].c;
+
     return sc.sort((a,b)=>a.s-b.s)[0].c;
 }
 
