@@ -477,8 +477,15 @@ var sym = {
     "NT": "NT"
     };
     */
-    
-var sym = {
+    var sym = {
+    "hearts": "♥️",     // red heart emoji - fine on dark bg
+    "diamonds": "♦️",   // red diamond emoji - fine on dark bg
+    "clubs": "♣",       // U+2663, no emoji selector
+    "spades": "♠",      // U+2660, no emoji selector
+    "NT": "NT"
+};
+
+var sym2 = {
     "hearts": "♥️",     // red heart emoji
     "diamonds": "♦️",   // red diamond emoji
     "clubs": "♣️",
