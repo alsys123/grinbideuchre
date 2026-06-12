@@ -913,7 +913,7 @@ $('showScoreBoardHistory-btn').addEventListener('click', () => {
     showHistory();
 });
 
-
+/*
 // ... here take this out with all the html and css .... !!!!
 function showGameDetails() {
 
@@ -948,7 +948,7 @@ function showGameDetails() {
 
     $('details-modal').classList.remove('hidden');
 }
-
+*/
 // RUNNING History
 /*
   function showHistory() {

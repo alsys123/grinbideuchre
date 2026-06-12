@@ -84,27 +84,6 @@ function showTheBid(player, amt, trump, hl, alone, cardReq) {
   
     text = buildBidText_v1(amt, trump, hl, alone, cardReq);
     
-   /* 
-    // Build base text: "5 in ♥" or "6 NT"
-    let text = amt;
-
-    if (trump === "NT") {
-        text += " NT";
-    } else {
-        text += " in " + trump;   // trump is already a symbol ♥ ♦ ♣ ♠
-    }
-
-    // Alone?
-    if (alone) {
-        text += " alone";
-    }
-
-    // Ask?
-    // cardReq = 0, 1, or 2
-    if (alone && (cardReq === 1 || cardReq === 2)) {
-        text += ` (ask ${cardReq})`;
-    }
-*/
     // Speak it
     speech(player, text, 1800);
 
