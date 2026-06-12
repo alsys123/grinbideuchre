@@ -23,7 +23,7 @@ function startTrick(){
     }
 
 
-    setAct(G.cur);
+    setWhoIsActive(G.cur);
     
 //    renderHands(true);
 //    renderHands(true, 'south');   // redraw ONLY south
@@ -77,7 +77,7 @@ function playCard(player, card) {
         }
 
         G.cur = next;
-        setAct(G.cur);
+        setWhoIsActive(G.cur);
 
         if (G.cur !== 'south') {
             setTimeout(() => aiPlay(G.cur), 850);
@@ -154,7 +154,7 @@ function resolveT(){
     G.tw[TEAMS[winner]]++;
     G.done.push({trick:G.trick,winner});
     G.leader=winner;
-    setAct(winner);
+    setWhoIsActive(winner);
     hud();
 
     if (winner === 'north') speech(winner,'↓', 2000);
@@ -179,61 +179,15 @@ function resolveT(){
 	clearTC();
 	G.trick=[];
 //	if(G.H.south.length===0)scoreHand();
-		const activePlayer = lonePartner() === 'south' ? 'north' : 'south';
-if(G.H[activePlayer].length===0)scoreHand();
+	const activePlayer = lonePartner() === 'south' ? 'north' : 'south';
+	if(G.H[activePlayer].length===0)scoreHand();
 	
 	else startTrick();	
     },1200); // was 1700
 
-    cLog("at resolvtT: dealer:", G.dealer, " - leader: ", G.leader);
+//    cLog("at resolvtT: dealer:", G.dealer, " - leader: ", G.leader);
     
 } //resolveT
-/*
-function resolveT_v2(){
-    const winner=twinner(G.trick,G.trump,G.hl);
-
-    // Dim all other players' trick cards
-    ['north','east','south','west'].forEach(p => {
-	if (p !== winner) {
-            const el = $('ts-' + p);
-            const img = el && el.querySelector('img');
-            if (img) img.classList.add('dimCard');
-	}
-    });
-
-    G.tw[TEAMS[winner]]++;
-    G.done.push({trick:G.trick,winner});
-    G.leader=winner;
-//    msg(PN[winner]+' wins the trick!',1500);
-    setAct(winner);
-    hud();
-
-    
-    const ws=$('ts-'+winner);
-
-    
-    const cardImg = ws.querySelector('img');
-    if (cardImg) {
-	cardImg.style.animation = 'trickGlow 3.0s ease-out';
-	setTimeout(() => cardImg.style.animation = '', 3200);
-    }
-    
-    
-
-//    ws.style.animation='trickWin 1.0s ease'; //0.4    
-//    setTimeout(()=>{ws.style.animation=''; },400);
-
-    
-    setTimeout(()=>{
-	clearTC();
-	G.trick=[];
-	if(G.H.south.length===0)scoreHand();
-	else startTrick();	
-    },2500); // was 1700
-
-    
-}
-*/
 
 const PARTNER = {
     south: "north",

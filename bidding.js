@@ -11,32 +11,44 @@ function startBid(){
     bIdx=0;
     nextBid();
 
-    cLog("at end of startbid: dealer:", G.dealer, " - leader: ", G.leader);
+ //   cLog("at end of startbid: dealer:", G.dealer, " - leader: ", G.leader);
 
 
 }
 
 function nextBid(){
-    if(bIdx>=bOrder.length){
-	if(!G.hBid){
+
+    // has everyone bid yet?
+    if(bIdx>=bOrder.length) {
+
+	if(!G.hBid) {
 	    msg('All passed — dealer must bid 1!',2200);
 	    
 	    setTimeout(()=>{
 		placeBid(G.dealer,3,G.H[G.dealer][0].s,'high',false,0);
 		finishBid();
 	    }, 2300);
-
+	    
 	    return;
-	} finishBid();
-	return;
-    }
-    
-    const p=bOrder[bIdx]; setAct(p);
-    if(p==='south')
-	showBidMod();
-    else setTimeout(()=>aiBid(p),1000);
+	    
+	} // make sure someone bid
 
-}
+	finishBid();
+	return;
+	
+    } // all have bid?
+    
+    const p=bOrder[bIdx];
+
+    setWhoIsActive(p);
+    
+    if(p==='south') {
+	showBidMod();
+    } else {
+	setTimeout(()=>aiBid(p),1000);
+    }
+
+} // nextBid
 
 // record the bid
 function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
@@ -52,37 +64,12 @@ function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
     
 }
 
-// build a standard string of the bid
-function buildBidText_v1(amt, trump, hl, alone, cardReq) {
-   // Build base text: "5 in ♥" or "6 NT"
-    let text = "";
-
-    text += amt;
-    
-    if (trump === "NT") {
-        text += " NT";
-    } else {
-        text += "" + trump;   // trump is already a symbol ♥ ♦ ♣ ♠
-    }
-
-    // Alone?
-    if (alone) {
-        text += " alone";
-    }
-
-    // Ask?
-    // cardReq = 0, 1, or 2
-    if (alone && (cardReq === 1 || cardReq === 2)) {
-        text += ` (ask ${cardReq})`;
-    }
-    
-    return text;
-}
 
 function showTheBid(player, amt, trump, hl, alone, cardReq) {
     let text = "";
   
-    text = buildBidText_v1(amt, trump, hl, alone, cardReq);
+//    text = buildBidText_v1(amt, trump, hl, alone, cardReq);
+    text = buildBidText(player, amt, hl, trump, alone, cardReq);
     
     // Speak it
     speech(player, text, 1800);
@@ -95,17 +82,20 @@ function showBidMod(){
     const min = G.hBid?G.hBid.bid+1:1;
     
     $('modal-title').textContent='Your Bid';
-
+    
+/*
     let bidText = "";
     if (min === 8) {
 	bidText = "you can only go alone";
     } else {
 	bidText = "you must bid at least " + min;
     }
-
+*/
+    
     //    $('modal-sub').textContent='Min bid: '+min+(G.hBid?' (beat '+G.hBid.bid+')':'');
 
     if (G.hBid) {
+	/*
 	let desc = "";
 	
 	if (G.hBid.hl) {
@@ -126,7 +116,7 @@ function showBidMod(){
 	if (G.hBid.player) {
 	    desc += " by " + G.hBid.player.toUpperCase();
 	}
-	
+	*/
 	const bidTextStr =
 	      buildBidText(G.hBid.player,G.hBid.bid,G.hBid.hl,G.hBid.trump,
 			   G.hBid.alone,G.hBid.cardReq);
@@ -298,7 +288,8 @@ function pickTrump(){
 	    $('bid-buttons').style.display='grid';
 	    placeBid('south',pAmt,s,pHL,pAlone,pAlone?pCardReq:0);
 	    hud();
-	    bIdx++;setTimeout(nextBid,300);
+	    bIdx++;
+	    setTimeout(nextBid,300);
 	});
 	tp.appendChild(b);
 
@@ -354,9 +345,15 @@ function finishBid() {
     if (!G.hBid) return;
     const h = G.hBid;
 
+ 
         // Always set trump + HL immediately
     G.trump = h.trump;
-    G.hl = h.hl;
+    G.hl    = h.hl;
+    G.cardReq = h.cardReq;
+
+//    cLog("at start of finishBid: cardReq:", h.cardReq);
+//    cLog("at start of finishBid: hBid .. cardReq:", G.hBid.cardReq);
+//    cLog("at start ... lastExch : ", G.lastExchangeCount);
     
     // ⭐ If ANY player bid 8 and requested 1 or 2 cards → do exchange FIRST
     if (h.bid === 8 && h.cardReq > 0) {
@@ -372,7 +369,7 @@ function finishBid() {
         // If MoonShot (cardReq = 0), keep it
         // If exchange already happened, cardReq was consumed
         // If no exchange, cardReq should be 0
-        if (!h.cardReq) h.cardReq = 0;
+ //       if (!h.cardReq) h.cardReq = 0;
 
     //    h.hl = 'high'; // 8 is always high  ... alone can go high/low
     } else {
@@ -382,13 +379,14 @@ function finishBid() {
     }
 
     // Apply final bid settings
-    G.trump = h.trump;
-    G.hl = h.hl;
-    G.alone = h.alone;
-    G.cardReq = h.cardReq;
+    G.trump   = h.trump;
+    G.hl      = h.hl;
+    G.alone   = h.alone;
+//    G.cardReq = h.cardReq;
 
     //    let msg_text = PN[h.player] + ' bids ' + h.bid + ' ' + h.hl + ' — Trump: ' + h.trump;
 
+    /*
     let highLowText = ""
 
     if (h.hl) {
@@ -408,8 +406,18 @@ function finishBid() {
         msg_text += ' (ALONE' +
             (h.cardReq ? ' - ask ' + h.cardReq + ' card' + (h.cardReq === 1 ? '' : 's') : '') +
             ' - need 8 tricks)';
+    */
 
+//    cLog("at end of finishBid: cardReq:", h.cardReq);
+
+    let msg_text = buildBidText(PN[h.player], h.bid, h.hl, h.trump,
+				h.alone, G.lastExchangeCount);
+
+//    cLog("finishBid Text: ", PN[h.player], h.bid, h.hl, h.trump,
+//	 h.alone, G.cardReq);
+    
     hud();
+    
     msg(msg_text, 2600);
 	
      G.leader = h.player;  //this is who starts the bidding but also now who leads the card
@@ -451,17 +459,46 @@ function buildBidText(player, bid, hl, trump, alone, cardReq) {
 //    cLog("build bid: ",player, bid, hl, trump, alone, cardReq);
     
     // suit symbols
-    var sym = {
+    /*
+      var sym = {
         "hearts": "♥",
         "diamonds": "♦",
         "clubs": "♣",
         "spades": "♠",
         "NT": "NT"
+	};
+    */
+    /*
+var sym = {
+    "hearts": "<span class='red'>♥</span>",
+    "diamonds": "<span class='red'>♦</span>",
+    "clubs": "♣",
+    "spades": "♠",
+    "NT": "NT"
     };
-
-    var t = sym[trump] || trump;   // fallback if already symbol
-
-    var s = player + ": ";
+    */
+    
+var sym = {
+    "hearts": "♥️",     // red heart emoji
+    "diamonds": "♦️",   // red diamond emoji
+    "clubs": "♣️",
+    "spades": "♠️",
+    "NT": "NT"
+};
+    var sym1 = {
+        "♥": "♥️",
+        "♦": "♦️",
+        "♣": "♣️",
+        "♠": "♠️",
+        "NT": "NT"
+    };
+    
+    cLog("trump:",trump);
+    
+    let t = sym[trump] || trump;   // fallback if already symbol
+    t = sym1[trump] || trump; 
+    
+    let s = player + ": ";
 
     // ALONE bids
     if (alone) {
@@ -495,6 +532,35 @@ function buildBidText(player, bid, hl, trump, alone, cardReq) {
     return s;
 }
 
+/*
+// build a standard string of the bid
+// FUTURE .. delete this one///
+function buildBidText_v1(amt, trump, hl, alone, cardReq) {
+   // Build base text: "5 in ♥" or "6 NT"
+    let text = "";
+
+    text += amt;
+    
+    if (trump === "NT") {
+        text += " NT";
+    } else {
+        text += "" + trump;   // trump is already a symbol ♥ ♦ ♣ ♠
+    }
+
+    // Alone?
+    if (alone) {
+        text += " alone";
+    }
+
+    // Ask?
+    // cardReq = 0, 1, or 2
+    if (alone && (cardReq === 1 || cardReq === 2)) {
+        text += ` (ask ${cardReq})`;
+    }
+    
+    return text;
+}
+*/
 
 
 // **** Concede ****

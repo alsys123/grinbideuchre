@@ -187,6 +187,7 @@ function hud(){
     //	G.hBid.bid+' tricks':'—';
 
     if (G.hBid) {
+/*	
 	const b = G.hBid;
 	const suit = b.trump === "NT" ? "NT" : b.trump;
 //	const hl = b.hl.toUpperCase();
@@ -208,7 +209,14 @@ ${suit}
 	$('bid-info').innerHTML =
 		`${PN[b.player]}: ${b.bid} ${suitSpan} (${hl})${alone}`;
 	}
-
+*/
+	const bidTextStr =
+	      buildBidText(G.hBid.player,G.hBid.bid,G.hBid.hl,G.hBid.trump,
+			   G.hBid.alone,G.lastExchangeCount );
+//			   G.hBid.cardReq);
+	
+	$('bid-info').textContent = bidTextStr;
+	
     } else {
 	$('bid-info').textContent = '—';
     }
@@ -332,7 +340,7 @@ function speech(who,t,d=2000){
     e._t=setTimeout(()=>e.classList.add('hidden'),d);
 }
 
-function setAct(who){
+function setWhoIsActive(who){
     PL.forEach(p=>$('name-'+p).classList.toggle('active',p===who));
 }
 

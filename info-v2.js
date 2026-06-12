@@ -123,9 +123,14 @@ function sectionHandSummary() {
     const bidList = buildBidList(G);
 
     const textBid =
-	  PN[G.hBid.player] + " -> " +
-	  buildBidText_v1(
-	      G.hBid.bid, G.hBid.trump, G.hBid.hl, G.hBid.alone,
+//	  PN[G.hBid.player] + " -> " +
+//	  buildBidText_v1(
+//	      G.hBid.bid, G.hBid.trump, G.hBid.hl, G.hBid.alone,
+//	      G.hBid.exchanges
+//	  );
+	  buildBidText(
+	      PN[G.hBid.player],
+	      G.hBid.bid, G.hBid.hl, G.hBid.trump, G.hBid.alone,
 	      G.hBid.exchanges
 	  );
 
@@ -140,16 +145,11 @@ function sectionHandSummary() {
         <ul style="margin-left:0; padding-left:16px; line-height:1.4;">
             <li>Dealer: ${PN[G.dealer]}</li>
             <li>Leader: ${PN[G.leader]}</li>
-            <li>Winning Bid: ${G.hBid ? PN[G.hBid.player] : '—'}</li>
-            <li>Trump: ${G.trump ? G.trump : '—'}</li>
-            <li>High/Low call: ${G.hl}</li>
+            <li>Winning Bid: ${textBid}</li>
             <li>Score — Us: ${G.sc.us}, Them: ${G.sc.them}</li>
             <li>Tricks — Us: ${G.tw.us}, Them: ${G.tw.them}</li>
-            <li>Last bid: ${G.hBid ? PN[G.hBid.player] + ' bid ' + G.hBid.bid : '—'}</li>
-
-           <li>Bid: ${textBid}</li>
-
-            <li>Dealer rotation — S:${G.starts.south}, W:${G.starts.west}, N:${G.starts.north}, E:${G.starts.east}</li>
+  
+             <li>Dealer rotation — S:${G.starts.south}, W:${G.starts.west}, N:${G.starts.north}, E:${G.starts.east}</li>
 
             <li><strong>Bids:</strong> ${bidList}</li>
             <li>Deal # ${G.dealNumber}</li>
@@ -424,12 +424,16 @@ function buildBidList(G) {
         if (b.cardReq) parts.push("ask " + b.cardReq);
 	*/
 	
-	const textBid = buildBidText_v1(b.amt, b.trump, b.hl, b.alone, b.cardReq);
+//	const textBid = buildBidText_v1(b.amt, b.trump, b.hl, b.alone, b.cardReq);
+	const textBid = buildBidText(
+	    PN[p],b.amt, b.hl, b.trump,
+	    b.alone, b.cardReq);
 
 //	if (!textBid) textBid = "na";
 //        html += `<li>${PN[p]}: ${parts.join(" ")}</li>`;
   //      html += `${PN[p]}: ${parts.join(" ")}`;
-	html += `${PN[p]}: ` + textBid + ", ";
+//	html += `${PN[p]}: ` + textBid + ", ";
+	html += textBid + ", ";
     }
 
  //   html += "</ul>";
@@ -459,9 +463,16 @@ function buildBidListFromHistory(historyEntry) {
 
  //       return `${PN[p]}: ${parts.join(' ')}`;
 //	...
-	const textBid = buildBidText_v1(b.amt, b.trump, b.hl,
-					b.alone, b.exchanges);
-	return `${PN[p]}: ${textBid}`;
+//	const textBid = buildBidText_v1(b.amt, b.trump, b.hl,
+//					b.alone, b.exchanges);
+	const textBid =
+	      buildBidText(
+		  PN[p],
+		  b.amt, b.hl, b.trump,
+		  b.alone, b.exchanges);
+	
+//	return `${PN[p]}: ${textBid}`;
+	return `${textBid}`;
 
     }).join(', ');
 }

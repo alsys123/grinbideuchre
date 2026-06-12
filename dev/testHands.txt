@@ -32,6 +32,12 @@ East ask 2 card NT high
 988 - 31117 - 889607123W
 South ask for 1 card hearts
 
+346 - 50947 - 477163286W
+North 4NT Low
+- need to start with lowest card
+
+249 - 43780 - 041994417N
+West NT alone high -- error in info .. count not defined
 
 
 

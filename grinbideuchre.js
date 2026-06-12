@@ -317,7 +317,7 @@ function scoreHand(){
     $('concedeBtn').style.display = 'none';
 	
     G.phase='result';
-    setAct(null);
+    setWhoIsActive(null);
     hud();
     
     const h=G.hBid,bt=TEAMS[h.player],ot=bt==='us'?'them':'us';
