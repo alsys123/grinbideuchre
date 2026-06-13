@@ -158,6 +158,8 @@ function sectionHandSummary() {
 
     html += showHistoryInfo();
 
+//    cLog("showHistoryInfo: ",html);
+    
     html += `
       <div class="back-to-top" data-target="top">▲ Back to Top</div>
 
@@ -210,6 +212,9 @@ function buildBidList(G) {
 
 
 function showHistoryInfo() {
+
+//    cLog("showHistoryInfo");
+    
     let html = "";
     
     if (G.history.length === 0) {
@@ -237,19 +242,29 @@ function showHistoryInfo() {
         rows +
         '</tbody>' +
         '</table>';
+
     
     return html;
 } //showHistoryInfo
 
 function buildHistoryRows() {
+ //   cLog("at 1");
+    
     let html = "";
     
 	
     for (let i = 0; i < G.history.length; i++) {
         const h = G.history[i];
 	
-	cLog("history cards: ",h.cards);
+//	cLog("history cards: ",h.cards);
 
+	const bidText = buildBidText(
+	    PN[h.bid.player], h.bid.bid, h.bid.hl,
+	    h.bid.trump, h.bid.alone, h.bid.exchanges
+	);
+//	cLog("at 2", bidText);
+
+/*	    
        const ex = h.bid?.exchanges || 0;
         const exText = ex ? " · " + ex + " exch" : "";
 
@@ -257,7 +272,8 @@ function buildHistoryRows() {
             ? PN[h.bid.player] + " · " + h.bid.bid + " " +
               h.bid.trump + (h.bid.alone ? " alone" : "") + exText
             : "No bid";
-
+	*/
+	
         const weSide   = h.tricks.us   + " / " + h.score.us;
         const themSide = h.tricks.them + " / " + h.score.them;
 
@@ -289,6 +305,7 @@ function buildHistoryRows() {
                 '</td>' +
             '</tr>';
 	
+ //   cLog("at 3");
 	
 	data = 'South Hand: ' + prettyHandHTML(h.cards.south);
 	html += addRow(data);
@@ -302,8 +319,9 @@ function buildHistoryRows() {
 	data = 'East Hand :  ' + prettyHandHTML(h.cards.east);
 	html += addRow(data);
 	
-    
-	if (h.exchange.count > 0) {
+    if (h.exchange && h.exchange.count > 0) {
+
+//	if (h.exchange.count > 0) {
 	    html += addRow(" *** Exchanges Data");
 
 	    cLog(" *** Exchange data: ",h.exchange);
@@ -358,10 +376,13 @@ function buildHistoryRows() {
 	}
 	
     } // for loop of histories
-    
+
+//    cLog("at 4-buildHistoryRows:",html);
+
     return html;
     
-}
+} //buildHistoryRows
+
 function addRow(data) {
     const rowHTML =
             '<tr class="deal-num-row">' +
@@ -384,7 +405,8 @@ function buildBidList(G) {
 //    cLog("for b:");
 
     // Determine bidding order based on leader
-    const start = PL.indexOf(G.leader);
+//    const start = PL.indexOf(G.leader);
+    const start = PL.indexOf(G.dealer);
 //    cLog("start: ", start);
 
     const order = [];
@@ -444,7 +466,8 @@ function buildBidListFromHistory(historyEntry) {
     if (!historyEntry.bids) return "No bids recorded";
     
     const order = [];
-    const start = PL.indexOf(historyEntry.leader);
+//    const start = PL.indexOf(historyEntry.leader);
+    const start = PL.indexOf(historyEntry.dealer);
     for (let i = 0; i < 4; i++) {
         order.push(PL[(start + i) % 4]);
     }
