@@ -485,13 +485,7 @@ var sym = {
     "NT": "NT"
 };
 
-var sym2 = {
-    "hearts": "♥️",     // red heart emoji
-    "diamonds": "♦️",   // red diamond emoji
-    "clubs": "♣️",
-    "spades": "♠️",
-    "NT": "NT"
-};
+
     var sym1 = {
         "♥": "♥️",
         "♦": "♦️",
@@ -500,7 +494,15 @@ var sym2 = {
         "NT": "NT"
     };
     
-    cLog("trump:",trump);
+   var sym2 = {
+    "hearts": "♥️",     // red heart emoji
+    "diamonds": "♦️",   // red diamond emoji
+    "clubs": "♣️",
+    "spades": "♠️",
+    "NT": "NT"
+   };
+    
+//    cLog("trump:",trump);
     
     let t = sym[trump] || trump;   // fallback if already symbol
     t = sym1[trump] || trump; 

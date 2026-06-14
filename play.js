@@ -149,6 +149,8 @@ if (G.trump === 'NT' && G.hl === 'low') {
     return sc.sort((a,b)=>a.s-b.s)[0].c;
 }
 
+
+
 function aiFollow(player,legs,led){
     const cur=G.trick.map(x=>crank(x.card,G.trump,led,G.hl)),mc=Math.max(...cur);
     const pw=G.trick.length>0&&TEAMS[twinner(G.trick,G.trump,G.hl)]===TEAMS[player];
@@ -177,24 +179,12 @@ function resolveT(){
     setWhoIsActive(winner);
     hud();
 
-    if (winner === 'north') speech(winner,'↓', 2000);
-    if (winner === 'south') speech(winner,'↑', 2000);
-    if (winner === 'east')  speech(winner,'←', 2000);
-    if (winner === 'west')  speech(winner,'→', 2000);
+    if (winner === 'north') speechWinner(winner,'↓', 2000);
+    if (winner === 'south') speechWinner(winner,'↑', 2000);
+    if (winner === 'east')  speechWinner(winner,'←', 2000);
+    if (winner === 'west')  speechWinner(winner,'→', 2000);
     
-//    const ws=$('ts-'+winner);
-//    ws.style.animation = 'trickWinSoft 1.2s ease-out';
-//    setTimeout(() => { ws.style.animation = ''; }, 1300);
-
-    /* ... other samples
-    //    ws.style.animation='trickWin 1.0s ease'; //0.4    
-    //  setTimeout(()=>{ws.style.animation=''; },400);
-    //ws.style.animation = 'trickWinSmooth 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)';
-    //setTimeout(() => { ws.style.animation = ''; }, 950);
-    */
-    
-
-    
+   
     setTimeout(()=>{
 	clearTC();
 	G.trick=[];
@@ -222,3 +212,12 @@ function lonePartner() {
 }
 
 
+function twinner(trick,t,hl){
+    const led=esuit(trick[0].card,t,hl);
+    let best=trick[0];
+    
+    for(let i=1;i<trick.length;i++)
+	if(crank(trick[i].card,t,led,hl)>crank(best.card,t,led,hl))best=trick[i];
+    
+    return best.player;
+}

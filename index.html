@@ -22,21 +22,21 @@
 		  cursor:pointer;
 		  ">
       </div>
-<!-- Visible star (does NOT block clicks) -->
-<div style="
-     position:absolute;
-     top:0;
-     left:0;
-     width:40px;
-     height:40px;
-     display:flex;
-     align-items:center;
-     justify-content:center;
-     pointer-events:none;   /* star stays click‑through */
-     z-index:9998;          /* or 10000 if needed */
-">
-    <span style="color:var(--gold); font-size:18px;">★</span>
-</div>
+      <!-- Visible star (does NOT block clicks) -->
+      <div style="
+		  position:absolute;
+		  top:0;
+		  left:0;
+		  width:40px;
+		  height:40px;
+		  display:flex;
+		  align-items:center;
+		  justify-content:center;
+		  pointer-events:none;   /* star stays click‑through */
+		  z-index:9998;          /* or 10000 if needed */
+		  ">
+	<span style="color:var(--gold); font-size:18px;">★</span>
+      </div>
       
       <div id="scoreboard">
 	<div class="st"><div class="sl">You &amp; North</div>
@@ -155,10 +155,17 @@
       </div>
 
       <div id="top-bar">
-<!--	<button id="rules-btn" class="top-btn">
+	<!--	<button id="rules-btn" class="top-btn">
+		Info
+		</button> -->
+
+	<button id="info-btn"
+		style="position:absolute;
+		       z-index:9999;
+		       "
+		class="top-btn">
 	  Info
-	</button> -->
-	<button id="info-btn" class="top-btn">Info</button>
+	</button>
 
 	<button id="concedeBtn" style="
 				       position:absolute;
@@ -177,99 +184,104 @@
 	</button>
 
       </div>
-<!--      
-      <div id="rules-modal" class="hidden rules-modal">
-	<div class="rules-box">
-          <button id="rules-close" class="close-btn">✖</button>
-          <iframe id="rules-frame" src="info.html"></iframe>
-	</div>
-      </div>
-      -->
-      
-      <div id="info-modal" class="hidden modal-overlay">
-	<div class="info-box">
-	  <button id="info-close" class="close-btn">✖</button>
-	  
-	  <div id="info-content" class="info-content">
-	    <!-- JS will inject sections here -->
-	  </div>
-	</div>
-      </div>
-      
+      <!--      
+		<div id="rules-modal" class="hidden rules-modal">
+		  <div class="rules-box">
+		    <button id="rules-close" class="close-btn">✖</button>
+		    <iframe id="rules-frame" src="info.html"></iframe>
+		  </div>
+		</div>
+		-->
+		
+		<div id="info-modal" class="hidden modal-overlay">
+		  <div class="info-box">
+		    <button id="info-close" class="close-btn">✖</button>
+		    
+		    <div id="info-content" class="info-content">
+		      <!-- JS will inject sections here -->
+		    </div>
+		  </div>
+		</div>
+		
 
-      <div class="pname" id="name-south">You</div>
-      <div class="pname" id="name-north">North</div>
-      <div class="pname" id="name-west">West</div>
-      <div class="pname" id="name-east">East</div>
+		<div class="pname" id="name-south">You</div>
+		<div class="pname" id="name-north">North</div>
+		<div class="pname" id="name-west">West</div>
+		<div class="pname" id="name-east">East</div>
 
-      <div class="hand" id="hand-south"></div>
-      <div class="hand" id="hand-north"></div>
-      <div class="hand" id="hand-west"></div>
-      <div class="hand" id="hand-east"></div>
+		<div class="hand" id="hand-south"></div>
+		<div class="hand" id="hand-north"></div>
+		<div class="hand" id="hand-west"></div>
+		<div class="hand" id="hand-east"></div>
 
-      <div id="trick-area">
-	<div class="tslot" id="ts-south"></div>
-	<div class="tslot" id="ts-north"></div>
-	<div class="tslot" id="ts-west"></div>
-	<div class="tslot" id="ts-east"></div>
-      </div>
+		<div id="trick-area">
+		  <div class="tslot" id="ts-south"></div>
+		  <div class="tslot" id="ts-north"></div>
+		  <div class="tslot" id="ts-west"></div>
+		  <div class="tslot" id="ts-east"></div>
+		</div>
 
-      <div class="speech hidden" id="sp-north" ></div>
-      <div class="speech hidden" id="sp-west"  ></div>
-      <div class="speech hidden" id="sp-east"  ></div>
-      <div class="speech hidden" id="sp-south" ></div>
+		<div class="speech hidden" id="sp-north" ></div>
+		<div class="speech hidden" id="sp-west"  ></div>
+		<div class="speech hidden" id="sp-east"  ></div>
+		<div class="speech hidden" id="sp-south" ></div>
+		
+		<div class="speech hidden" id="spWinner-north" ></div>
+		<div class="speech hidden" id="spWinner-west"  ></div>
+		<div class="speech hidden" id="spWinner-east"  ></div>
+		<div class="speech hidden" id="spWinner-south" ></div>
 
-      <div id="trick-piles">
-	<div class="tpile"><span class="tpc" id="pile-us">0</span>Your Team</div>
-	<div class="tpile"><span class="tpc" id="pile-them">0</span>Opponents</div>
-      </div>
+		<div id="trick-piles">
+		  <div class="tpile"><span class="tpc" id="pile-us">0</span>Your Team</div>
+		  <div class="tpile"><span class="tpc" id="pile-them">0</span>Opponents</div>
+		</div>
 
-      <div id="message" class="hidden"></div>
-      <button id="play-btn" class="hidden">Play Selected Card</button>
+		<div id="message" class="hidden"></div>
+		<button id="play-btn" class="hidden">Play Selected Card</button>
 
-      <!-- Start Screen -->
-      <div id="start-screen">
-	<div class="sbox">
-	  <div class="stitle">♠ Bid Euchre ♥</div>
-	  <div class="ssub">You & North vs. East &amp; West</div>
-	  <button id="new-game-btn">New Game</button>
-	</div>
-      </div>
+		<!-- Start Screen -->
+		<div id="start-screen">
+		  <div class="sbox">
+		    <div class="stitle">♠ Bid Euchre ♥</div>
+		    <div class="ssub">You & North vs. East &amp; West</div>
+		    <button id="new-game-btn">New Game</button>
+		  </div>
+		</div>
 
-      <!-- Bid Modal -->
-      <div id="bid-modal" class="overlay hidden">
-	<div class="mbox">
-	  <div class="mtitle" id="modal-title">Your Bid</div>
-	  <div class="msub"   id="modal-sub">Choose a bid or pass</div>
-	  <div id="bid-buttons"></div>
-	  <div id="highlow-picker" style="display:none;"></div>
+		<!-- Bid Modal -->
+		<div id="bid-modal" class="overlay hidden">
+		  <div class="mbox">
+		    <div class="mtitle" id="modal-title">Your Bid</div>
+		    <div class="msub"   id="modal-sub">Choose a bid or pass</div>
+		    <div id="bid-buttons"></div>
+		    <div id="highlow-picker" style="display:none;"></div>
 
-	  <div id="trump-picker"   style="display:none;"></div>
-	  <div id="alone-picker" style="display:none;"></div>
-	  <div id="card-req-picker" style="display:none;"></div>
-	  
-	</div>
-      </div>
+		    <div id="trump-picker"   style="display:none;"></div>
+		    <div id="alone-picker" style="display:none;"></div>
+		    <div id="card-req-picker" style="display:none;"></div>
+		    
+		  </div>
+		</div>
 
-      <!-- Result -->
-      <div id="result-overlay" class="overlay hidden">
-	<div class="rbox">
-	  <div class="rtitle"  id="result-title">Hand Complete</div>
-	  <div class="rdetail" id="result-detail"></div>
-	  <div class="rscores">
-            <div class="rsi"><div class="rsit">You &amp; North</div>
-	      <div class="rsin" id="result-us">0</div>
-	    </div>
-            <div class="rsi"><div class="rsit">East &amp; West</div>
-	      <div class="rsin" id="result-them">0</div>
-	    </div>
-	  </div>
-	  <button id="deal-again-btn">Deal Next Hand</button>
-	  <button id="play-again-btn" class="abtn hidden">Play Again</button>
-	  <button id="showScoreBoardHistory-btn" class="abtn">Show Score</button>
+		<!-- Result -->
+		<div id="result-overlay" class="overlay hidden">
+		  <div class="rbox">
+		    <div class="rtitle"  id="result-title">Hand Complete</div>
+		    <div class="rdetail" id="result-detail"></div>
+		    <div class="rscores">
+		      <div class="rsi"><div class="rsit">You &amp; North</div>
+			<div class="rsin" id="result-us">0</div>
+		      </div>
+		      <div class="rsi"><div class="rsit">East &amp; West</div>
+			<div class="rsin" id="result-them">0</div>
+		      </div>
+		    </div>
+		    <button id="deal-again-btn">Deal Next Hand</button>
+		    <button id="play-again-btn" class="abtn hidden">Play Again</button>
+		    <button id="showScoreBoardHistory-btn" class="abtn">Show Score</button>
 
-	</div>
-      </div>
+		  </div>
+		</div>
 
     </div>
 

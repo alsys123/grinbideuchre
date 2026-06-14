@@ -5,9 +5,7 @@ deal id: nnnD - D is dealer:  (NSEW - north, south, east, west) optional.
 
 156 - 23569 - 472058548S
 North ask 2 NT Low
-- display ask 2
-- code the get 2 from south
-- end game bug
+
 
 369 - 17661 - 235525306S
 west has 7 aces. moonshot NT high - south dealer

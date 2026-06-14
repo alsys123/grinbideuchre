@@ -139,15 +139,6 @@ function crank(c,t,led,hl){
     return 0;
 }
 
-function twinner(trick,t,hl){
-    const led=esuit(trick[0].card,t,hl);
-    let best=trick[0];
-    
-    for(let i=1;i<trick.length;i++)
-	if(crank(trick[i].card,t,led,hl)>crank(best.card,t,led,hl))best=trick[i];
-    
-    return best.player;
-}
 
 function legal(hand,led,t,hl){
     if(!led)
@@ -770,7 +761,7 @@ function startNewGame() {
 	const i = PL.indexOf(leader); // first to bid
 	dealer = PL[(i + 3) % 4];   // right-hand player (3 steps = 1 step left in reverse)
 	
-	cLog("1st order: dealer:", dealer, " - leader: ", leader);
+//	cLog("1st order: dealer:", dealer, " - leader: ", leader);
 
 	G.dealer = dealer;
 	
@@ -811,7 +802,7 @@ function startNewGame() {
     G.starts[G.dealer]++;
     G.leader = leader;
     
-    cLog("at end of startnewgame: dealer:", G.dealer, " - leader: ", G.leader);
+//    cLog("at end of startnewgame: dealer:", G.dealer, " - leader: ", G.leader);
     
 } //startNewGame
 

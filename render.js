@@ -340,6 +340,96 @@ function speech(who,t,d=2000){
     e._t=setTimeout(()=>e.classList.add('hidden'),d);
 }
 
+// The speech bubble - displays with a timer
+// show winner of the trick
+function speechWinner(who,t,d=2000){
+    const e=$('spWinner-'+who);
+
+    if(!e)return;
+
+    const rect = e.getBoundingClientRect();
+
+    if (who === "south") {
+	e.style.bottom = "180px"; // below card
+    }
+    
+    if (who === "west") {
+	e.style.top  = "250px"; 
+	e.style.left = "280px"; 
+    }
+      if (who === "east") {
+	e.style.top  = "250px"; 
+	e.style.right = "270px"; 
+    }
+    
+
+    
+    e.style.transform = "translateX(-50%)";
+    
+    //   const e  = document.getElementById("spWinner-" + who);
+
+    // ???... try and customize where the winner indicators goes
+    
+/*
+    const ts = document.getElementById("ts-" + who);
+ //   const e  = document.getElementById("spWinner-" + who);
+
+    
+    // center horizontally
+    const centerX = r.left + r.width / 2;
+    
+    // center vertically
+    const centerY = r.top + r.height / 2;
+    
+    if (who === "north") {
+	//    e.style.left = centerX + "px";
+	e.style.top  = (r.top - 20) + "px";   // above card
+    }
+    
+
+    
+    if (who === "east") {
+	e.style.left = (r.right + 20) + "px";  // right of card
+	e.style.top  = (r.top + 250)  + "px";
+    }
+    
+    if (who === "west") {
+	e.style.left = (r.left + 200) + "px";   // left of card
+//	e.style.top  = (r.top + 20) + "px";
+    }
+    */
+    
+    /*
+    // find out where the card is
+    const ts = document.getElementById("ts-"+who);
+    const r = ts.getBoundingClientRect();
+    //console.log("ts-north:", r.left, r.top);
+    //now move the element to a good place relative to the card
+    e.style.position = "absolute";
+    if (who === "north") {
+//	e.style.left = r.left + r.width / 2 + "px";
+	e.style.top  = r.top - 20 + "px";   // 20px above the card
+    }
+    if (who === "south") {
+//	e.style.left = r.left + r.width / 2 + "px";
+	e.style.top  = r.bottom - 50 + "px";
+    }
+    if (who === "east") {
+    e.style.left = (r.right + 20) + "px";  // right of card
+    e.style.top  = centerY + "px";
+//	e.style.left = r.left + r.width / 2 + "px";
+//	e.style.top  = r.bottom - 50 + "px";
+    }
+
+    
+    e.style.transform = "translateX(-50%)";
+    */
+    e.textContent=t;
+    e.classList.remove('hidden');
+    clearTimeout(e._t);
+    e._t=setTimeout(()=>e.classList.add('hidden'),d);
+}
+
 function setWhoIsActive(who){
     PL.forEach(p=>$('name-'+p).classList.toggle('active',p===who));
 }
