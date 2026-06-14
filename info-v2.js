@@ -120,6 +120,9 @@ function section1() {
 } //section1
 
 function sectionHandSummary() {
+
+    if (!G.hBid) return;  // not set yet
+    
     const bidList = buildBidList(G);
 
     const textBid =

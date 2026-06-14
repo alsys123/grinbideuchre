@@ -440,13 +440,15 @@ function activateSouthHand() {
 
     for (let el of hand) {
         el.classList.remove('dimCard', 'exchange-select', 'selected');
+	
         el.onclick = () => {
             const cid = parseInt(el.dataset.cid);
             const card = G.H.south.find(c => c.uid === cid);
-            if (card) playCard('south', card);
+// ... was this???            if (card) playCard('south', card);
+	    if (card) selCard(card, el);   // ✅ go through legality check
         };
     }
-}
+}//activateSouthHand
 
 // Example returns:
 //   North: Alone NT high ask 2

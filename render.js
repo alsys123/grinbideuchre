@@ -290,22 +290,26 @@ function renderHands(canPlay, onlyPlayer = null) {
 
 	
     });
-}
+}//renderHands
 
 function selCard(card,el){
 
-    //  cLog("select a card");
+ //     cLog("select a card");
     
     if(G.cur!=='south'||G.phase!=='play')
 	return;
-
+    
+//    cLog("at 1:");
+    
     if(G.trick.length>0){
 	const led=esuit(G.trick[0].card,G.trump,G.hl);
+	
+//	cLog("at 2:");
 	
 	if(!legal(G.H.south,led,G.trump,G.hl).find(c=>cid(c)===cid(card))){
 	    
 	    msg('Must follow suit!',1600);
-	    
+//	    cLog("at 3:");
 	    return;
 	}
     }
@@ -317,7 +321,7 @@ function selCard(card,el){
     playCard('south', card);
 
 
-    renderHands(true, "south");   // <‑‑ FIX FOR IPAD
+ //   renderHands(true, "south");   // <‑‑ FIX FOR IPAD
 
     
 } //selCard

@@ -92,7 +92,7 @@ function playCard(player, card) {
         setTimeout(resolveT, 950);
 	
     }
-}
+}//playCard
 
 // *** AI PLAYING
 
@@ -167,9 +167,7 @@ function aiFollow(player,legs,led){
 // Either startTrick looping again
 //  OR scoreHand in mainline to end the hand
 // This shows the winner of the hand.
-
-// ???? .... something is odd here because leader is set to winner of bid or trick??
-
+// leader is set to winner
 function resolveT(){
     const winner=twinner(G.trick,G.trump,G.hl);
 

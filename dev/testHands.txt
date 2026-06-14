@@ -37,6 +37,12 @@ North 4NT Low
 249 - 43780 - 041994417N
 West NT alone high -- error in info .. count not defined
 
+242 - 86490 - 540582010W
+West ask 2 -- there was an earlier bid
+
+190 - 61264 - 703367786E
+North Moonshot .. does not make it
+
 
 
 
