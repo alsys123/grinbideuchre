@@ -120,8 +120,24 @@ function section1() {
 } //section1
 
 function sectionHandSummary() {
+    let html = "";
+    
+    if (!G.hBid) {
 
-    if (!G.hBid) return;  // not set yet
+	html = `
+       <div class="info-section" id="sec-handSummary">
+          <h3>No Information Yet!</h3>
+       `;
+	
+	html += `
+      <div class="back-to-top" data-target="top">▲ Back to Top</div>
+      </div>
+       `;
+    
+	return html;
+	
+    }
+    
     
     const bidList = buildBidList(G);
 
@@ -139,7 +155,7 @@ function sectionHandSummary() {
 
     
     
-    let html = "";
+    
     
     html = `
     <div class="info-section" id="sec-handSummary">

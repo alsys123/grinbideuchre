@@ -82,6 +82,8 @@ function showBidMod(){
     const min = G.hBid?G.hBid.bid+1:1;
     
     $('modal-title').textContent='Your Bid';
+
+//    cLog("showBidMod:",G.hBid,G.cardReq);
     
 /*
     let bidText = "";
@@ -95,28 +97,7 @@ function showBidMod(){
     //    $('modal-sub').textContent='Min bid: '+min+(G.hBid?' (beat '+G.hBid.bid+')':'');
 
     if (G.hBid) {
-	/*
-	let desc = "";
-	
-	if (G.hBid.hl) {
-	    desc = G.hBid.bid + " " + G.hBid.hl + " in " + G.hBid.trump;
-	} else {
-	    desc = G.hBid.bid + " " + G.hBid.trump;
-	}
-	
-	
-	if (G.hBid.alone) {
-            desc += " alone";
-            if (G.hBid.cardReq > 0) {
-		desc += " (ask " + G.hBid.cardReq + ")";
-            }
-	}
 
-	// show who made the bid
-	if (G.hBid.player) {
-	    desc += " by " + G.hBid.player.toUpperCase();
-	}
-	*/
 	const bidTextStr =
 	      buildBidText(G.hBid.player,G.hBid.bid,G.hBid.hl,G.hBid.trump,
 			   G.hBid.alone,G.hBid.cardReq);
@@ -132,7 +113,8 @@ function showBidMod(){
     }
     
     
-    const bb=$('bid-buttons'); bb.innerHTML='';
+    const bb=$('bid-buttons');
+    bb.innerHTML='';
     bb.style.display='grid';
     
     $('trump-picker').style.display='none';
@@ -146,55 +128,80 @@ function showBidMod(){
     pAlone=null;
     pCardReq=null;
 
-    for(let b=1;b<=8;b++){
-	const btn=document.createElement('button');
-	btn.className='bbtn';
-
-	if (b < 8) {
-	    btn.textContent = b;
-	} else {
-	    // for buttons when 8 ticks is wanted
-	    btn.textContent = "MoonShot";
-	    btn.style.background = "gold"
-	    btn.style.color      = "black";
-	}
+    // for buttons 1 to 7
+    for(let b=1;b<8;b++) {
 	
+/*	const btn=document.createElement('button');
+	btn.className='bbtn';
+	btn.textContent = b;
+
 	if (b<min) btn.disabled=true;
 	else btn.addEventListener('click',()=>pickAmt(b));
-
+	
 	bb.appendChild(btn);
+*/
+	const bEnabled = b>=min;
+	addABidButton(bb,b,"","",b,bEnabled);
+	
+    }//1 to 7 buttons
+
+
+    // 9 and 10 are artificial. 9 is chose 1.  10 is chose 2
+    if (!G.hBid.alone) {
+	addABidButton(bb,"Ask 2 Cards","blue","white",10,true);
+	addABidButton(bb,"Ask 1 Cards","blue","white",9,true);
+	addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true);
     }
-
-    // add buttons for pick 1 or 2 cards
-    // pick 1 card .. artificial 9 tick call
-    const btn1=document.createElement('button');
-    btn1.className='bbtn';
-    btn1.textContent = "Ask 1 Card";
-    btn1.style.background = "blue"
-    btn1.style.color      = "white";
-
-    btn1.addEventListener('click',()=>pickAmt(9));
-    bb.appendChild(btn1);
-    // pick 2 card .. artificial 10 tick call
-    const btn2=document.createElement('button');
-    btn2.className='bbtn';
-    btn2.textContent = "Ask 2 Cards";
-    btn2.style.background = "blue"
-    btn2.style.color      = "white";
-
-    btn2.addEventListener('click',()=>pickAmt(10));
-    bb.appendChild(btn2);
     
+    if (G.hBid.alone && G.hBid.cardReq === 0) {
+	addABidButton(bb,"Ask 2 Cards","blue","white",10,false);
+	addABidButton(bb,"Ask 1 Cards","blue","white",9,false);
+	addABidButton(bb,"✨MoonShot✨",   "gold","black",8,false);
+     }
+    if (G.hBid.alone && G.hBid.cardReq === 1) {
+	addABidButton(bb,"Ask 2 Cards","blue","white",10,false);
+	addABidButton(bb,"Ask 1 Cards","blue","white",9,false);
+	addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true);
+    }
+    if (G.hBid.alone && G.hBid.cardReq === 2) {
+	addABidButton(bb,"Ask 2 Cards","blue","white",10,false);
+	addABidButton(bb,"Ask 1 Cards","blue","white",9,true);
+	addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true);
+     }
     
+   
+ 
     const pb=document.createElement('button');pb.className='bbtn pbtn';
     pb.textContent='Pass';
-    pb.addEventListener('click',()=>{$('bid-modal').classList.add('hidden');
-				     bIdx++;
-				     setTimeout(nextBid,300);});
+    pb.addEventListener('click',()=>{
+	$('bid-modal').classList.add('hidden');
+	bIdx++;
+	setTimeout(nextBid,300);
+    });
+    
     bb.appendChild(pb);
     $('bid-modal').classList.remove('hidden');
 }//showBidMod
 
+function addABidButton(bidButtons,bText,bBackground,bColor,bAmount,bEnable) {
+
+    const btnE=document.createElement('button');
+    
+    btnE.className        ='bbtn';
+    btnE.textContent      = bText;
+    btnE.style.background = bBackground;
+    btnE.style.color      = bColor;
+    
+    btnE.addEventListener('click',()=>pickAmt(bAmount));
+
+    if (!bEnable) {
+	btnE.disabled=true;
+    }
+    
+    bidButtons.appendChild(btnE);
+      
+}
+    
 // this was picking high/low but we do not need this anymore
 function pickAmt(amt){
 
@@ -459,35 +466,15 @@ function activateSouthHand() {
 function buildBidText(player, bid, hl, trump, alone, cardReq) {
 
 //    cLog("build bid: ",player, bid, hl, trump, alone, cardReq);
-    
-    // suit symbols
-    /*
-      var sym = {
-        "hearts": "♥",
-        "diamonds": "♦",
-        "clubs": "♣",
-        "spades": "♠",
-        "NT": "NT"
-	};
-    */
-    /*
-var sym = {
-    "hearts": "<span class='red'>♥</span>",
-    "diamonds": "<span class='red'>♦</span>",
-    "clubs": "♣",
-    "spades": "♠",
-    "NT": "NT"
-    };
-    */
+       
     var sym = {
-    "hearts": "♥️",     // red heart emoji - fine on dark bg
-    "diamonds": "♦️",   // red diamond emoji - fine on dark bg
-    "clubs": "♣",       // U+2663, no emoji selector
-    "spades": "♠",      // U+2660, no emoji selector
-    "NT": "NT"
-};
-
-
+	"hearts":   "♥️",     // red heart emoji - fine on dark bg
+	"diamonds": "♦️",   // red diamond emoji - fine on dark bg
+	"clubs":    "♣",       // U+2663, no emoji selector
+	"spades":   "♠",      // U+2660, no emoji selector
+	"NT":       "NT"
+    };
+    
     var sym1 = {
         "♥": "♥️",
         "♦": "♦️",
@@ -496,21 +483,33 @@ var sym = {
         "NT": "NT"
     };
     
-   var sym2 = {
-    "hearts": "♥️",     // red heart emoji
-    "diamonds": "♦️",   // red diamond emoji
-    "clubs": "♣️",
-    "spades": "♠️",
-    "NT": "NT"
-   };
+    var sym2 = {
+	"hearts":   "♥️",     // red heart emoji
+	"diamonds": "♦️",   // red diamond emoji
+	"clubs":    "♣️",
+	"spades":   "♠️",
+	"NT":       "NT"
+    };
+    
+    var sym3 = {
+	"♥": "♥️",
+	"♦": "♦️",
+        "♣": "♣",
+        "♠": "♠",
+        "NT": "NT"
+    };
     
 //    cLog("trump:",trump);
     
     let t = sym[trump] || trump;   // fallback if already symbol
-    t = sym1[trump] || trump; 
+//    t = sym1[trump] || trump; 
+    t = sym3[trump] || trump; 
     
-    let s = player + ": ";
-
+//    let s = player + ": ";
+//    let s = "<i>" + player + "</i>" + ": ";
+    
+    let s = italicize(player) + ": ";
+    
     // ALONE bids
     if (alone) {
         s += "Alone ";
@@ -542,36 +541,6 @@ var sym = {
 
     return s;
 }
-
-/*
-// build a standard string of the bid
-// FUTURE .. delete this one///
-function buildBidText_v1(amt, trump, hl, alone, cardReq) {
-   // Build base text: "5 in ♥" or "6 NT"
-    let text = "";
-
-    text += amt;
-    
-    if (trump === "NT") {
-        text += " NT";
-    } else {
-        text += "" + trump;   // trump is already a symbol ♥ ♦ ♣ ♠
-    }
-
-    // Alone?
-    if (alone) {
-        text += " alone";
-    }
-
-    // Ask?
-    // cardReq = 0, 1, or 2
-    if (alone && (cardReq === 1 || cardReq === 2)) {
-        text += ` (ask ${cardReq})`;
-    }
-    
-    return text;
-}
-*/
 
 
 // **** Concede ****
