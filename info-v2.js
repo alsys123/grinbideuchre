@@ -67,7 +67,7 @@ function header() {
 	<h1>Bid Euchre<em>Official Rules & Other Info</em></h1>
 	<p class="subtitle">4 Players · Partnership · High &amp; Low · Trick-Taking</p>
 
-     <p class="subtitle">v1.05 Jun 12, 2026</p>
+     <p class="subtitle">v1.06 Jun 16, 2026</p>
 
 </div>
 
@@ -126,7 +126,7 @@ function sectionHandSummary() {
 
 	html = `
        <div class="info-section" id="sec-handSummary">
-          <h3>No Information Yet!</h3>
+          <h3>No Information about the hand yet!</h3>
        `;
 	
 	html += `
@@ -319,7 +319,7 @@ function buildHistoryRows() {
                 '<td colspan="6" style="font-size:11px; color:black;' +
                 'letter-spacing:1px; text-align:center; padding:2px 0;">' +
             'Deal # ' + h.dealNumber +
-	    ', Leader: ' + PN[h.leader] +
+//	    ', Leader: ' + PN[h.leader] +
 	    ', Bid List: ' + BidList +
                 '</td>' +
             '</tr>';
@@ -357,7 +357,7 @@ function buildHistoryRows() {
 		    prettyHandHTML(h.exchange.get);  // was give but not universal
 		html += addRow(data);
 		
-		data = h.exchange.bidder + "puts down: " +
+		data = h.exchange.bidder + " puts down: " +
 		    prettyHandHTML(h.exchange.partnerGives);
 		html += addRow(data);
 		
@@ -425,7 +425,7 @@ function buildBidList(G) {
 
     // Determine bidding order based on leader
 //    const start = PL.indexOf(G.leader);
-    const start = PL.indexOf(G.dealer);
+    const start = (PL.indexOf(G.dealer) + 1);
 //    cLog("start: ", start);
 
     const order = [];
@@ -440,30 +440,11 @@ function buildBidList(G) {
         const b = G.bids[p];
 
         if (!b) {
-//            html += `<li>${PN[p]}: —</li>`;
-   //         html += `${PN[p]}: `;
-            continue;
-        }
-
- //       const parts = [];
-
-	/*
-        // amount (correct property)
-        parts.push(b.amt);
-
-        // trump suit
-        if (b.trump) parts.push(b.trump);
-
-        // high/low
-        if (b.hl) parts.push(b.hl === "high" ? "High" : "Low");
-
-        // alone
-        if (b.alone) parts.push("Alone");
-
-        // card request
-        if (b.cardReq) parts.push("ask " + b.cardReq);
-	*/
-	
+	    const noBid = buildBidText(PN[p],0,null,null,null,null);
+	    html += noBid + ",";
+	    continue;
+	};
+ 	
 //	const textBid = buildBidText_v1(b.amt, b.trump, b.hl, b.alone, b.cardReq);
 	const textBid = buildBidText(
 	    PN[p],b.amt, b.hl, b.trump,
@@ -486,7 +467,7 @@ function buildBidListFromHistory(historyEntry) {
     
     const order = [];
 //    const start = PL.indexOf(historyEntry.leader);
-    const start = PL.indexOf(historyEntry.dealer);
+    const start = (PL.indexOf(historyEntry.dealer) + 1 );
     for (let i = 0; i < 4; i++) {
         order.push(PL[(start + i) % 4]);
     }
@@ -494,7 +475,10 @@ function buildBidListFromHistory(historyEntry) {
     return order.map(p => {
         const b = historyEntry.bids[p];
 //        if (!b) return `${PN[p]}: —`;
-        if (!b) return ``;
+        if (!b) {
+	    const noBid = buildBidText(PN[p],0,null,null,null,null);
+	    return noBid;
+	};
 
  //       const parts = [];
  //       if (b.bid) parts.push(b.bid);

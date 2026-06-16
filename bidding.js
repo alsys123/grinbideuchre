@@ -11,11 +11,12 @@ function startBid(){
     bIdx=0;
     nextBid();
 
- //   cLog("at end of startbid: dealer:", G.dealer, " - leader: ", G.leader);
+    //   cLog("at end of startbid: dealer:", G.dealer, " - leader: ", G.leader);
 
 
 }
 
+// Entry Point: possible coming from aiBid or internally here
 function nextBid(){
 
     // has everyone bid yet?
@@ -53,10 +54,11 @@ function nextBid(){
 // record the bid
 function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
 
-//    cLog("Place bid: ",player,amt,trump,hl,alone,cardReq);
+    //    cLog("Place bid: ",player,amt,trump,hl,alone,cardReq);
     
     G.bids[player]={amt,trump,hl,alone,cardReq};
 
+    // ???? .... We also need to check for alone levels: pick 2, pick 1, pick 0
     if(!G.hBid||amt>G.hBid.bid)
 	G.hBid={player,bid:amt,trump,hl,alone,cardReq};
 
@@ -67,8 +69,8 @@ function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
 
 function showTheBid(player, amt, trump, hl, alone, cardReq) {
     let text = "";
-  
-//    text = buildBidText_v1(amt, trump, hl, alone, cardReq);
+    
+    //    text = buildBidText_v1(amt, trump, hl, alone, cardReq);
     text = buildBidText(player, amt, hl, trump, alone, cardReq);
     
     // Speak it
@@ -83,16 +85,16 @@ function showBidMod(){
     
     $('modal-title').textContent='Your Bid';
 
-//    cLog("showBidMod:",G.hBid,G.cardReq);
+    //    cLog("showBidMod:",G.hBid,G.cardReq);
     
-/*
-    let bidText = "";
-    if (min === 8) {
-	bidText = "you can only go alone";
-    } else {
-	bidText = "you must bid at least " + min;
-    }
-*/
+    /*
+      let bidText = "";
+      if (min === 8) {
+      bidText = "you can only go alone";
+      } else {
+      bidText = "you must bid at least " + min;
+      }
+    */
     
     //    $('modal-sub').textContent='Min bid: '+min+(G.hBid?' (beat '+G.hBid.bid+')':'');
 
@@ -102,12 +104,12 @@ function showBidMod(){
 	      buildBidText(G.hBid.player,G.hBid.bid,G.hBid.hl,G.hBid.trump,
 			   G.hBid.alone,G.hBid.cardReq);
 
-//	cLog("built this: ",bidTextStr);
+	//	cLog("built this: ",bidTextStr);
 	
-//	$('modal-sub').textContent =
-//            "Current bid: " + desc + " — " + bidText; //bid at least " + min;
+	//	$('modal-sub').textContent =
+	//            "Current bid: " + desc + " — " + bidText; //bid at least " + min;
 	$('modal-sub').textContent = "Last bid -> " + bidTextStr;
-    
+	
     } else {
 	$('modal-sub').textContent = "No bids yet — minimum bid is " + min;
     }
@@ -118,7 +120,7 @@ function showBidMod(){
     bb.style.display='grid';
     
     $('trump-picker').style.display='none';
-//    hideAllPickers();
+    //    hideAllPickers();
     $('highlow-picker').style.display='none';
     $('alone-picker').style.display='none';
     $('card-req-picker').style.display='none';
@@ -131,46 +133,58 @@ function showBidMod(){
     // for buttons 1 to 7
     for(let b=1;b<8;b++) {
 	
-/*	const btn=document.createElement('button');
-	btn.className='bbtn';
-	btn.textContent = b;
+	/*	const btn=document.createElement('button');
+		btn.className='bbtn';
+		btn.textContent = b;
 
-	if (b<min) btn.disabled=true;
-	else btn.addEventListener('click',()=>pickAmt(b));
-	
-	bb.appendChild(btn);
-*/
+		if (b<min) btn.disabled=true;
+		else btn.addEventListener('click',()=>pickAmt(b));
+		
+		bb.appendChild(btn);
+	*/
 	const bEnabled = b>=min;
-	addABidButton(bb,b,"","",b,bEnabled);
+	addABidButton(bb,b,"","",b,bEnabled,true);
 	
     }//1 to 7 buttons
 
-
-    // 9 and 10 are artificial. 9 is chose 1.  10 is chose 2
-    if (!G.hBid.alone) {
-	addABidButton(bb,"Ask 2 Cards","blue","white",10,true);
-	addABidButton(bb,"Ask 1 Cards","blue","white",9,true);
-	addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true);
+    addABidButton(bb,"","","",0,false,false); // add a blank space
+    
+    // if there is no bid yet just add all the buttons
+    if (!G.hbid) {
+	addABidButton(bb,"Ask 2 Cards","blue","white",10,true,true);
+	addABidButton(bb,"Ask 1 Cards","blue","white", 9,true,true);
+	addABidButton(bb,"","","",0,false,false); // add a blank space
+	addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true,true);
+    } else {
+	// 9 and 10 are artificial. 9 is chose 1.  10 is chose 2
+	if (!G.hBid.alone) {
+	    addABidButton(bb,"Ask 2 Cards","blue","white",10,true,true);
+	    addABidButton(bb,"Ask 1 Cards","blue","white", 9,true,true);
+	    addABidButton(bb,"","","",0,false,false); // add a blank space
+	    addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true,true);
+	}
+	
+	if (G.hBid.alone && G.hBid.cardReq === 0) {
+	    addABidButton(bb,"Ask 2 Cards","blue","white",10,false,true);
+	    addABidButton(bb,"Ask 1 Cards","blue","white", 9,false,true);
+	    addABidButton(bb,"","","",0,false,false); // add a blank space
+	    addABidButton(bb,"✨MoonShot✨",   "gold","black",8,false,true);
+	}
+	if (G.hBid.alone && G.hBid.cardReq === 1) {
+	    addABidButton(bb,"Ask 2 Cards","blue","white",10,false,true);
+	    addABidButton(bb,"Ask 1 Cards","blue","white", 9,false,true);
+	    addABidButton(bb,"","","",0,false,false); // add a blank space
+	    addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true,true);
+	}
+	if (G.hBid.alone && G.hBid.cardReq === 2) {
+	    addABidButton(bb,"Ask 2 Cards","blue","white",10,false,true);
+	    addABidButton(bb,"Ask 1 Cards","blue","white", 9,true,true);
+	    addABidButton(bb,"","","",0,false,false); // add a blank space
+	    addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true,true);
+	}
     }
     
-    if (G.hBid.alone && G.hBid.cardReq === 0) {
-	addABidButton(bb,"Ask 2 Cards","blue","white",10,false);
-	addABidButton(bb,"Ask 1 Cards","blue","white",9,false);
-	addABidButton(bb,"✨MoonShot✨",   "gold","black",8,false);
-     }
-    if (G.hBid.alone && G.hBid.cardReq === 1) {
-	addABidButton(bb,"Ask 2 Cards","blue","white",10,false);
-	addABidButton(bb,"Ask 1 Cards","blue","white",9,false);
-	addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true);
-    }
-    if (G.hBid.alone && G.hBid.cardReq === 2) {
-	addABidButton(bb,"Ask 2 Cards","blue","white",10,false);
-	addABidButton(bb,"Ask 1 Cards","blue","white",9,true);
-	addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true);
-     }
     
-   
- 
     const pb=document.createElement('button');pb.className='bbtn pbtn';
     pb.textContent='Pass';
     pb.addEventListener('click',()=>{
@@ -183,7 +197,8 @@ function showBidMod(){
     $('bid-modal').classList.remove('hidden');
 }//showBidMod
 
-function addABidButton(bidButtons,bText,bBackground,bColor,bAmount,bEnable) {
+function addABidButton(bidButtons,bText,bBackground,bColor,bAmount,
+		       bEnable,bShow) {
 
     const btnE=document.createElement('button');
     
@@ -198,10 +213,14 @@ function addABidButton(bidButtons,bText,bBackground,bColor,bAmount,bEnable) {
 	btnE.disabled=true;
     }
     
-    bidButtons.appendChild(btnE);
-      
-}
+    if (!bShow) {
+	btnE.style.visibility = "hidden";
+    }
     
+    bidButtons.appendChild(btnE);
+    
+}
+
 // this was picking high/low but we do not need this anymore
 function pickAmt(amt){
 
@@ -256,8 +275,8 @@ function hideAllPickers() {
 
 // from going alone. Pick 1 or 2 cards or Moonshot.
 function pickCardReq(){
-        hideAllPickers();   // ⭐ ALWAYS reset first
-//    $('alone-picker').style.display='none';
+    hideAllPickers();   // ⭐ ALWAYS reset first
+    //    $('alone-picker').style.display='none';
     $('modal-sub').textContent='Ask partner for cards?';
     
     const cp=$('card-req-picker');
@@ -303,7 +322,7 @@ function pickTrump(){
     });  // append the suit selection buttons
 
     // Add NT button - no trump LOW button option
-//    pHL = 'low';
+    //    pHL = 'low';
     const ntLow = document.createElement('button');
     ntLow.className = 'tbtn ntbtnLow';
     ntLow.textContent = 'NT low';
@@ -312,7 +331,7 @@ function pickTrump(){
 	$('bid-modal').classList.add('hidden');
 	$('bid-buttons').style.display='grid';
 
-//	cLog("placing low bid:",pHL);
+	//	cLog("placing low bid:",pHL);
 	
 	placeBid('south', pAmt, 'NT', hl, pAlone, pAlone ? pCardReq : 0);
 
@@ -327,7 +346,7 @@ function pickTrump(){
 
     
     // Add NT button - no trump HIGH button option
-  //  pHL = 'High';
+    //  pHL = 'High';
     const ntHigh = document.createElement('button');
     ntHigh.className = 'tbtn ntbtnHigh';
     ntHigh.textContent = 'NT high';
@@ -352,15 +371,15 @@ function finishBid() {
     if (!G.hBid) return;
     const h = G.hBid;
 
- 
-        // Always set trump + HL immediately
+    
+    // Always set trump + HL immediately
     G.trump = h.trump;
     G.hl    = h.hl;
     G.cardReq = h.cardReq;
 
-//    cLog("at start of finishBid: cardReq:", h.cardReq);
-//    cLog("at start of finishBid: hBid .. cardReq:", G.hBid.cardReq);
-//    cLog("at start ... lastExch : ", G.lastExchangeCount);
+    //    cLog("at start of finishBid: cardReq:", h.cardReq);
+    //    cLog("at start of finishBid: hBid .. cardReq:", G.hBid.cardReq);
+    //    cLog("at start ... lastExch : ", G.lastExchangeCount);
     
     // ⭐ If ANY player bid 8 and requested 1 or 2 cards → do exchange FIRST
     if (h.bid === 8 && h.cardReq > 0) {
@@ -376,9 +395,9 @@ function finishBid() {
         // If MoonShot (cardReq = 0), keep it
         // If exchange already happened, cardReq was consumed
         // If no exchange, cardReq should be 0
- //       if (!h.cardReq) h.cardReq = 0;
+	//       if (!h.cardReq) h.cardReq = 0;
 
-    //    h.hl = 'high'; // 8 is always high  ... alone can go high/low
+	//    h.hl = 'high'; // 8 is always high  ... alone can go high/low
     } else {
         // All other bids cannot go alone
         h.alone = false;
@@ -389,45 +408,45 @@ function finishBid() {
     G.trump   = h.trump;
     G.hl      = h.hl;
     G.alone   = h.alone;
-//    G.cardReq = h.cardReq;
+    //    G.cardReq = h.cardReq;
 
     //    let msg_text = PN[h.player] + ' bids ' + h.bid + ' ' + h.hl + ' — Trump: ' + h.trump;
 
     /*
-    let highLowText = ""
+      let highLowText = ""
 
-    if (h.hl) {
-	highLowText = h.hl;
-    }
+      if (h.hl) {
+      highLowText = h.hl;
+      }
 
-    // ???? here ... clean this up more ...
-    
-    let msg_text = PN[h.player] +
-	' bids ' +
-	h.bid + ' ' +
-	highLowText +
-	(h.trump === "NT" ? " — No Trump" : " — Trump: " +
-	 h.trump);
-    
-    if (h.alone)
-        msg_text += ' (ALONE' +
-            (h.cardReq ? ' - ask ' + h.cardReq + ' card' + (h.cardReq === 1 ? '' : 's') : '') +
-            ' - need 8 tricks)';
+      // ???? here ... clean this up more ...
+      
+      let msg_text = PN[h.player] +
+      ' bids ' +
+      h.bid + ' ' +
+      highLowText +
+      (h.trump === "NT" ? " — No Trump" : " — Trump: " +
+      h.trump);
+      
+      if (h.alone)
+      msg_text += ' (ALONE' +
+      (h.cardReq ? ' - ask ' + h.cardReq + ' card' + (h.cardReq === 1 ? '' : 's') : '') +
+      ' - need 8 tricks)';
     */
 
-//    cLog("at end of finishBid: cardReq:", h.cardReq);
+    //    cLog("at end of finishBid: cardReq:", h.cardReq);
 
     let msg_text = buildBidText(PN[h.player], h.bid, h.hl, h.trump,
 				h.alone, G.lastExchangeCount);
 
-//    cLog("finishBid Text: ", PN[h.player], h.bid, h.hl, h.trump,
-//	 h.alone, G.cardReq);
+    //    cLog("finishBid Text: ", PN[h.player], h.bid, h.hl, h.trump,
+    //	 h.alone, G.cardReq);
     
     hud();
     
     msg(msg_text, 2600);
-	
-     G.leader = h.player;  //this is who starts the bidding but also now who leads the card
+    
+    G.leader = h.player;  //this is who starts the bidding but also now who leads the card
     // h.player won the bid
     
     G.cur = h.player;
@@ -435,7 +454,7 @@ function finishBid() {
 
     updateConcedeButton();
 
-//    renderHands(true, 'south');  // ??? Somehow we need this otherwise we cannot select
+    //    renderHands(true, 'south');  // ??? Somehow we need this otherwise we cannot select
 
     activateSouthHand();
     
@@ -451,7 +470,7 @@ function activateSouthHand() {
         el.onclick = () => {
             const cid = parseInt(el.dataset.cid);
             const card = G.H.south.find(c => c.uid === cid);
-// ... was this???            if (card) playCard('south', card);
+	    // ... was this???            if (card) playCard('south', card);
 	    if (card) selCard(card, el);   // ✅ go through legality check
         };
     }
@@ -465,8 +484,13 @@ function activateSouthHand() {
 // for suite use graphic display
 function buildBidText(player, bid, hl, trump, alone, cardReq) {
 
-//    cLog("build bid: ",player, bid, hl, trump, alone, cardReq);
-       
+    //    cLog("build bid: ",player, bid, hl, trump, alone, cardReq);
+    // no bid pass
+    if (bid === 0) {
+	const noBid = italicize(player) + ": pass";
+	return noBid;
+    }
+    
     var sym = {
 	"hearts":   "♥️",     // red heart emoji - fine on dark bg
 	"diamonds": "♦️",   // red diamond emoji - fine on dark bg
@@ -499,14 +523,14 @@ function buildBidText(player, bid, hl, trump, alone, cardReq) {
         "NT": "NT"
     };
     
-//    cLog("trump:",trump);
+    //    cLog("trump:",trump);
     
     let t = sym[trump] || trump;   // fallback if already symbol
-//    t = sym1[trump] || trump; 
+    //    t = sym1[trump] || trump; 
     t = sym3[trump] || trump; 
     
-//    let s = player + ": ";
-//    let s = "<i>" + player + "</i>" + ": ";
+    //    let s = player + ": ";
+    //    let s = "<i>" + player + "</i>" + ": ";
     
     let s = italicize(player) + ": ";
     
@@ -574,7 +598,7 @@ $('concedeBtn').onclick = function () {
     const ot = bt === 'us' ? 'them' : 'us'; // defenders
 
     // When conceding, the bidding team gets all 8 tricks.
-	// gets what they bid only - all 8 was roo high.
+    // gets what they bid only - all 8 was roo high.
     G.tw[bt] = bid.bid; //8;
     G.tw[ot] = 0;
 

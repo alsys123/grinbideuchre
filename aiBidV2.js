@@ -283,10 +283,14 @@ function aiBid(player) {
         // Cap at 7 (8 is alone territory)
         const bidAmt = Math.min(safeBid, 7);
         placeBid(player, bidAmt, bc.trump, bc.hl, false, 0);
-        bIdx++; setTimeout(nextBid, 300);
+        bIdx++;
+	setTimeout(nextBid, 300);
         return;
     }
 
     // ── Pass ──
-    bIdx++; setTimeout(nextBid, 300);
+    speech(player, "Pass", 1800);
+    
+    bIdx++;
+    setTimeout(nextBid, 300);
 }
