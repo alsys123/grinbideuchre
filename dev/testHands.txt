@@ -49,3 +49,7 @@ lots of bids.  Norh ask 1 NT low
 112 - 91913 - 280044494W
 South bid ask 2 Hearts
 - hud is wrong
+
+882 - 43176 - 790156265E
+West bid ask 1 after, I bid ask 1 diamond
+

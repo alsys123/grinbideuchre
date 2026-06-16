@@ -150,7 +150,8 @@ function sectionHandSummary() {
 	  buildBidText(
 	      PN[G.hBid.player],
 	      G.hBid.bid, G.hBid.hl, G.hBid.trump, G.hBid.alone,
-	      G.hBid.exchanges
+	      //	      G.hBid.exchanges
+	      G.lastExchangeCount
 	  );
 
     

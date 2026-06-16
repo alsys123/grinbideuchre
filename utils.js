@@ -78,3 +78,8 @@ function italicize(str) {
     };
     return str.replace(/[A-Za-z0-9]/g, c => map[c] || c);
 }
+
+function whoCalledMe() {
+    const stack = new Error().stack.split("\n");
+    return stack[2].trim();   // line 0 = Error, 1 = this function, 2 = caller
+}

@@ -254,8 +254,12 @@ function finalizeExchange() {
     G.exchangePlayer = null;
 
     // --- IMPORTANT: exchange is done, so cardReq must be 0 ---
+    // ???? ... see if this will work so we do not corrupt cardreq
+    // therefor no flag that exchange was done
+    // BUT taking this out does not work... we need a different check!
     G.hBid.cardReq = 0;
-
+//    G.exchangeDone = true;
+    
     // --- Return to normal bidding flow ---
     setTimeout(() => finishBid(), 300);
 

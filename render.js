@@ -161,6 +161,7 @@ function removeCardFromDOM(player, card) {
 }
 
 function hud(){
+    
     $('score-us').textContent=G.sc.us;
     $('score-them').textContent=G.sc.them;
     
@@ -188,6 +189,10 @@ function hud(){
     //	G.hBid.bid+' tricks':'—';
 
     if (G.hBid) {
+
+//	cLog(whoCalledMe(), G.lastExchangeCount);
+	
+	
 /*	
 	const b = G.hBid;
 	const suit = b.trump === "NT" ? "NT" : b.trump;

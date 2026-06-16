@@ -75,6 +75,7 @@ function placeBid(player, amt, trump, hl, alone=false, cardReq=0) {
         : -1;
 
     if (!G.hBid || newStrength > oldStrength) {
+	G.lastExchangeCount = cardReq; // this is new ... we need a permanent count
         G.hBid = { player, bid: amt, trump, hl, alone, cardReq };
     }
 
@@ -334,7 +335,7 @@ function pickTrump(){
     $('modal-sub').textContent='Choose Trump Suit';
     const tp=$('trump-picker');
     tp.style.display='flex'; tp.innerHTML='';
-    
+
     SUITS.forEach(s=>{
 	pHL = null;
 	const b=document.createElement('button');
@@ -343,7 +344,12 @@ function pickTrump(){
 	b.addEventListener('click',()=>{
 	    $('bid-modal').classList.add('hidden');
 	    $('bid-buttons').style.display='grid';
+
+//	    
 	    placeBid('south',pAmt,s,pHL,pAlone,pAlone?pCardReq:0);
+
+//	    cLog("pickTrump Listener: pAlone, pCardReq",pAlone,pCardReq);
+	    
 	    hud();
 	    bIdx++;
 	    setTimeout(nextBid,300);
@@ -395,7 +401,7 @@ function pickTrump(){
 
     tp.appendChild(ntHigh);
 
-    
+   
 } //pickTrump
 
 function finishBid() {
@@ -414,6 +420,8 @@ function finishBid() {
     
     // ⭐ If ANY player bid 8 and requested 1 or 2 cards → do exchange FIRST
     if (h.bid === 8 && h.cardReq > 0) {
+//    if (h.bid === 8 && !G.exchangeDone) {
+	
         // Do NOT overwrite cardReq here
         setTimeout(() => startExchange(h.cardReq, h.player), 300);
         return; // stop normal flow until exchange is done
@@ -431,7 +439,7 @@ function finishBid() {
 	//    h.hl = 'high'; // 8 is always high  ... alone can go high/low
     } else {
         // All other bids cannot go alone
-        h.alone = false;
+        h.alone   = false;
         h.cardReq = 0;
     }
 
@@ -466,7 +474,8 @@ function finishBid() {
     */
 
     //    cLog("at end of finishBid: cardReq:", h.cardReq);
-
+//    cLog("exchange: G:", G, h);
+    
     let msg_text = buildBidText(PN[h.player], h.bid, h.hl, h.trump,
 				h.alone, G.lastExchangeCount);
 

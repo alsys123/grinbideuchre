@@ -32,7 +32,7 @@ const G={
     dealNumber: null,
     cards: {south:[],west:[],north:[],east:[]},
     exchangeHistory: []
-    
+//    exchangeDone: false
 };
 
 // how many hands have each player dealt
