@@ -46,5 +46,6 @@ North Moonshot .. does not make it
 626 - 24633 - 393184479W
 lots of bids.  Norh ask 1 NT low
 
-
-
+112 - 91913 - 280044494W
+South bid ask 2 Hearts
+- hud is wrong

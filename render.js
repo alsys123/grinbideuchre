@@ -163,9 +163,10 @@ function removeCardFromDOM(player, card) {
 function hud(){
     $('score-us').textContent=G.sc.us;
     $('score-them').textContent=G.sc.them;
-    $('tricks-us').textContent=G.tw.us+
-	' tricks';
-    $('tricks-them').textContent=G.tw.them+' tricks';
+    
+    $('tricks-us').textContent   = G.tw.us   + ' tricks';
+    $('tricks-them').textContent = G.tw.them + ' tricks';
+    
     $('pile-us').textContent=G.tw.us;
     $('pile-them').textContent=G.tw.them;
     
@@ -210,9 +211,14 @@ ${suit}
 		`${PN[b.player]}: ${b.bid} ${suitSpan} (${hl})${alone}`;
 	}
 */
+
+	// ???? ... we need to fix cardreq because it was also used for a countdown
+	// when exhanging... cardReq needs to be a fixed global amount never changig
+	// fix in exchange .. to use a temp instead.
 	const bidTextStr =
 	      buildBidText(G.hBid.player,G.hBid.bid,G.hBid.hl,G.hBid.trump,
-			   G.hBid.alone,G.lastExchangeCount );
+			   G.hBid.alone,
+			   G.lastExchangeCount );
 //			   G.hBid.cardReq);
 	
 	$('bid-info').textContent = bidTextStr;

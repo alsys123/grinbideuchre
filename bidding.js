@@ -50,7 +50,7 @@ function nextBid(){
     }
 
 } // nextBid
-
+/*
 // record the bid
 function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
 
@@ -59,11 +59,37 @@ function placeBid(player,amt,trump,hl,alone=false,cardReq=0){
     G.bids[player]={amt,trump,hl,alone,cardReq};
 
     // ???? .... We also need to check for alone levels: pick 2, pick 1, pick 0
-    if(!G.hBid||amt>G.hBid.bid)
+    if(!G.hBid || amt>G.hBid.bid)
 	G.hBid={player,bid:amt,trump,hl,alone,cardReq};
 
     showTheBid(player,amt,trump,hl,alone,cardReq);
-    
+*/
+
+function placeBid(player, amt, trump, hl, alone=false, cardReq=0) {
+
+    G.bids[player] = { amt, trump, hl, alone, cardReq };
+
+    const newStrength = bidStrength(amt, alone, cardReq);
+    const oldStrength = G.hBid
+        ? bidStrength(G.hBid.bid, G.hBid.alone, G.hBid.cardReq)
+        : -1;
+
+    if (!G.hBid || newStrength > oldStrength) {
+        G.hBid = { player, bid: amt, trump, hl, alone, cardReq };
+    }
+
+    showTheBid(player, amt, trump, hl, alone, cardReq);
+
+} //placeBid
+
+// for placeBid order only
+function bidStrength(amt, alone, cardReq) {
+    if (!alone) return amt;  // normal bids 1–7
+
+    // alone bids override normal bids
+    if (cardReq === 2) return 8;
+    if (cardReq === 1) return 9;
+    return 10; // cardReq 0 → highest (Moonshot)
 }
 
 
@@ -85,8 +111,9 @@ function showBidMod(){
     
     $('modal-title').textContent='Your Bid';
 
-    //    cLog("showBidMod:",G.hBid,G.cardReq);
-    
+//    cLog("showBidMod:",G.hBid,G.cardReq);
+//    cLog("#1 alone 2:",   G.hBid.alone,G.hBid.cardReq);
+
     /*
       let bidText = "";
       if (min === 8) {
@@ -148,9 +175,13 @@ function showBidMod(){
     }//1 to 7 buttons
 
     addABidButton(bb,"","","",0,false,false); // add a blank space
+
+    
+ //   cLog("#2 alone 2:", G.hBid, G.hBid.alone,G.hBid.cardReq);
+ //   cLog("#2 a  G.hBid:",G.hBid);
     
     // if there is no bid yet just add all the buttons
-    if (!G.hbid) {
+    if (!G.hBid) {
 	addABidButton(bb,"Ask 2 Cards","blue","white",10,true,true);
 	addABidButton(bb,"Ask 1 Cards","blue","white", 9,true,true);
 	addABidButton(bb,"","","",0,false,false); // add a blank space
@@ -178,7 +209,7 @@ function showBidMod(){
 	}
 	if (G.hBid.alone && G.hBid.cardReq === 2) {
 	    addABidButton(bb,"Ask 2 Cards","blue","white",10,false,true);
-	    addABidButton(bb,"Ask 1 Cards","blue","white", 9,true,true);
+	    addABidButton(bb,"Ask 1 Cards","blue","white", 9,true, true);
 	    addABidButton(bb,"","","",0,false,false); // add a blank space
 	    addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true,true);
 	}
