@@ -268,7 +268,7 @@ function showHistoryInfo() {
 } //showHistoryInfo
 
 function buildHistoryRows() {
- //   cLog("at 1");
+//    cLog("at 1");
     
     let html = "";
     
@@ -276,12 +276,16 @@ function buildHistoryRows() {
     for (let i = 0; i < G.history.length; i++) {
         const h = G.history[i];
 	
-//	cLog("history cards: ",h.cards);
+//	cLog("history: ",h);
 
 	const bidText = buildBidText(
 	    PN[h.bid.player], h.bid.bid, h.bid.hl,
 	    h.bid.trump, h.bid.alone, h.bid.exchanges
 	);
+
+//	cLog("data at h:", PN[h.bid.player], h.bid.bid, h.bid.hl,
+//	     h.bid.trump, h.bid.alone, h.bid.exchanges);
+	
 //	cLog("at 2", bidText);
 
 /*	    
@@ -496,6 +500,8 @@ function buildBidListFromHistory(historyEntry) {
 		  PN[p],
 		  b.amt, b.hl, b.trump,
 		  b.alone, b.exchanges);
+
+//???? here i think...	h.bid.exchanges
 	
 //	return `${PN[p]}: ${textBid}`;
 	return `${textBid}`;

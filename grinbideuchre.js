@@ -400,6 +400,8 @@ font-weight:bold;
 	calc = `(❌set → −${h.bid})`;
     }
 
+ //   cLog("history push -- before -- : ", G);
+ //   cLog(" -- last lastExchangeCount: ", G.lastExchangeCount);
     
 //    cLog("g.exchange.history: ", G.exchangeHistory);
     
@@ -434,6 +436,8 @@ font-weight:bold;
 	exchange: exch
 
     });
+
+ //   cLog("history push -- after -- : ", G);
     
     $('result-title').textContent=title;
     $('result-detail').textContent=detail+extra;
