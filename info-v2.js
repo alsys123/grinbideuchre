@@ -301,12 +301,12 @@ function buildHistoryRows() {
         // --- ROW 1: main summary ---
         html +=
             '<tr class="' + (i % 2 === 0 ? 'even' : 'odd') + '">' +
-                '<td>' + (i + 1) + '</td>' +
-                '<td>' + (PN[h.dealer] || h.dealer) + '</td>' +
-                '<td>' + bidText + '</td>' +
-                '<td>' + h.calc + '</td>' +
-                '<td>' + weSide + '</td>' +
-                '<td>' + themSide + '</td>' +
+            '<td>' + (i + 1) + '</td>' +
+            '<td>' + (PN[h.dealer] || h.dealer) + '</td>' +
+            '<td>' + '<span style="font-size:12px">' + bidText + '</span></td>' +
+            '<td>' + '<span style="font-size:12px">' + h.calc + '</span></td>' +
+            '<td>' + weSide + '</td>' +
+            '<td>' + themSide + '</td>' +
             '</tr>';
 	
 

@@ -378,8 +378,8 @@ tr:last-child td { border-bottom: none; }
     section { page-break-inside: avoid; }
 }
 
-/* all about the modal screen */
 
+/* all about the modal screen */
 
 .info-topbar {
     position: sticky;

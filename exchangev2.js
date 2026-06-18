@@ -106,7 +106,8 @@ function aiGiveWorst(player, n) {
             if (aTrump !== bTrump) return bTrump - aTrump;  // trump first
             return rankVal[b.r] - rankVal[a.r];              // strongest rank
         }
-    });
+	
+    }); // hand sort
 
     G.exchangeGive = hand.slice(0, n);  // worst N cards
     finalizeExchange();
