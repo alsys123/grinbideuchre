@@ -56,7 +56,7 @@ function startExchange(n, player) {
     // Otherwise computer is giving to computer
     // either east --> west or west --> east
     setTimeout(() => aiGiveWorst(player, n), 800);
-}
+}//startExchange
 
 // One card at a time we select the card to exchange.
 // When all are selected then finalizeExchange.
@@ -80,7 +80,7 @@ function pickExchangeCard(el) {
     }
 }
 
-
+/*
 function aiGiveWorst(player, n) {
 
 //    cLog("aiGiveWorst");
@@ -112,6 +112,8 @@ function aiGiveWorst(player, n) {
     G.exchangeGive = hand.slice(0, n);  // worst N cards
     finalizeExchange();
 }
+*/
+
 
 // This is the AI selecting N best cards to give away to the bidder
 function aiPartnerBestCards(partner, n) {
@@ -280,6 +282,7 @@ function finalizeExchange() {
     }
 }
 
+/*
 // ── Helper: AI gives its N worst cards (returns array, does NOT mutate) ──
 // Separate from aiGiveWorst which writes to G.exchangeGive
 function aiGiveWorstCards(player, n) {
@@ -302,6 +305,135 @@ function aiGiveWorstCards(player, n) {
 
     return hand.slice(0, n);
 }
+*/
 
+function suitKey(s) {
+    return { '♠':'S', '♥':'H', '♦':'D', '♣':'C' }[s];
+}
 
-// **** End of Exchange
+function aiGiveWorst(player, n) {
+    G.exchangeGive = aiGiveWorstCards(player, n);
+    finalizeExchange();
+}
+
+// also be away there is a copy with aiGiveWorstCards that leaves out the
+// last two lines
+function aiGiveWorstCards(player, n) {
+    
+    const hand = [...G.H[player]];
+    let trump = G.trump;   // null for NT
+    const mode  = G.hl;      // "high", "low", or null
+
+    if (trump === "NT") trump = null;
+    
+//    cLog("aiGiveWorstCards. hand:",hand,trump,mode);
+    
+    // Group cards by suit
+    const suits = { S:[], H:[], D:[], C:[] };
+    hand.forEach(c => suits[suitKey(c.s)].push(c));
+
+//    hand.forEach(c => suits[c.s].push(c));
+
+    // Sort each suit strongest → weakest depending on mode
+    const rankHigh = ['A','K','Q','J'];   // strongest → weakest
+    const rankLow  = ['J','Q','K','A'];   // strongest → weakest in LOW
+
+    function strength(c) {
+        const order = (mode === 'low') ? rankLow : rankHigh;
+        return order.indexOf(c.r);
+    }
+
+    for (let s of ['S','H','D','C']) {
+        suits[s].sort((a,b) => strength(a) - strength(b)); // strongest → weakest
+    }
+
+    // Build list of candidate cards to give away
+    let candidates = [];
+
+    if (trump) {
+
+//	cLog("trump");
+	
+        // SUIT MODE — give away lowest OFF-SUIT cards
+        for (let s of ['S','H','D','C']) {
+            if (s === trump) continue; // skip trump suit
+
+            const suitCards = suits[s];
+
+            // Walk from weakest → strongest
+            for (let i = suitCards.length - 1; i >= 0; i--) {
+                const card = suitCards[i];
+
+                // Check protection
+                if (isProtected(card, suitCards, "high")) continue;
+
+                candidates.push(card);
+            }
+        }
+    } else {
+        // NO TRUMP MODE
+        const giveLow = (mode === 'high');
+        const giveHigh = (mode === 'low');
+
+        for (let s of ['S','H','D','C']) {
+            const suitCards = suits[s];
+
+            if (giveLow) {
+
+//		cLog("giveLow");
+		
+                // give lowest cards first
+                for (let i = suitCards.length - 1; i >= 0; i--) {
+                    const card = suitCards[i];
+                    if (isProtected(card, suitCards, "high")) continue;
+                    candidates.push(card);
+                }
+            }
+
+            if (giveHigh) {
+		
+//		cLog("giveHigh");
+		
+                // give highest cards first
+                for (let i = 0; i < suitCards.length; i++) {
+                    const card = suitCards[i];
+                    if (isProtected(card, suitCards, "low")) continue;
+                    candidates.push(card);
+		    
+                }
+            }
+        }
+    }
+    
+    return candidates.slice(0, n);
+    
+    // Pick the first n candidates
+//    G.exchangeGive = candidates.slice(0, n);
+
+  //  finalizeExchange();
+} //aiGiveWorstCards
+
+// for aiGiveWorst routine
+function isProtected(card, suitCards, mode) {
+    // suitCards = all cards of this suit sorted strongest → weakest
+    // mode = "high" or "low"
+
+    const ranksHigh = ['A','K','Q','J'];   // strongest → weakest
+    const ranksLow  = ['J','Q','K','A'];   // strongest → weakest in LOW mode
+
+    const order = (mode === 'low') ? ranksLow : ranksHigh;
+
+    // Count how many copies of each rank exist
+    const counts = {};
+    suitCards.forEach(c => counts[c.r] = (counts[c.r] || 0) + 1);
+
+    // Walk from strongest downward until we reach this card
+    for (let r of order) {
+        if (r === card.r) break;
+
+        // If ANY stronger rank does NOT have 2 copies → card is NOT protected
+        if ((counts[r] || 0) < 2) return false;
+    }
+
+    return true; // protected
+} //isProtected

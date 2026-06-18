@@ -5,9 +5,10 @@ deal id: nnnD - D is dealer:  (NSEW - north, south, east, west) optional.
 
 156 - 23569 - 472058548S
 North ask 2 NT Low
-- give J and Q of diamonds
-? should keep Q of clubs because of J + J of clubs -- Q is a winner
+- South give away J and Q of diamonds
 
+
+=== FIXED UP TO HERE ====
 
 369 - 17661 - 235525306S
 west has 7 aces. moonshot NT high - south dealer
