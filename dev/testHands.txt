@@ -53,3 +53,10 @@ South bid ask 2 Hearts
 882 - 43176 - 790156265E
 West bid ask 1 after, I bid ask 1 diamond
 
+889 - 28582 - 653949311E
+South ask 1 Diamond
+
+- then West ask 2 ... not allowed must be higher only
+- also i put down J Clubs ... North needs to give me J hearts
+
+

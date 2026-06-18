@@ -491,24 +491,24 @@ font-style:italic;">No hands played yet.</div>`;
 
 	//	cLog("history h=", i, h);
 	
-	//        const bidText = h.bid
-	//            ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}`
-	//            : "No bid";
+//-	const ex = h.bid?.exchanges || 0;
+//-	const exText = ex ? ` · ${ex} exch` : "";
 
-	const ex = h.bid?.exchanges || 0;
-	const exText = ex ? ` · ${ex} exch` : "";
-
-	const bidText = h.bid
-	      ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}${exText}`
-	      : "No bid";
+//-	const bidText = h.bid
+//-	      ? `${PN[h.bid.player]} · ${h.bid.bid} ${h.bid.trump}${h.bid.alone ? " alone" : ""}${exText}`
+//-	      : "No bid";
+	
+	//	???? .... here Use standard bid builder for text....
+    const bidText =
+	  buildBidText(
+	      PN[h.bid.player],
+	      h.bid.bid,
+	      h.bid.hl,
+	      h.bid.trump, h.bid.alone,
+	      h.bid.exchanges
+	  );
 
 	
-	//       const scoreDelta = h.score.us !== 0 || h.score.them !== 0
-	//           ? `<span class="hist-delta ${h.score.us > h.score.them ? 'us' : 'them'}">
-	//                +${h.score.us > 0 ? h.score.us : h.score.them}
-	//              </span>`
-	//           : "";
-
 	const weSide   = `${h.tricks.us}   /  ${h.score.us}`;
 	const themSide = `${h.tricks.them} /  ${h.score.them}`;
 	
@@ -548,7 +548,7 @@ font-style:italic;">No hands played yet.</div>`;
 
     $('history-modal').classList.remove('hidden');
     
-}
+} //showHistory
 
 
 /*
@@ -604,56 +604,7 @@ function randomLeader() {
     return PL[i]; // PL = ["north","east","south","west"]
 }
 
-/*
-  function endGame() {
 
-  $('result-overlay').classList.remove('hidden');
-
-  speech("north",
-  "Game over — all players have started twice!",
-  5000);
-
-  // here we start a new game
-  G.sc={us:0,them:0};
-
-  //    btn.textContent='Game over - start New Game';
-  //    btn.onclick=nextHand;
-  $('start-screen').classList.remove('hidden');
-  
-  startNewGame();
-
-  // or show a proper overlay if you want
-  }
-*/
-/*
-  function endGame() {
-
-  // Show final result overlay
-  $('result-overlay').classList.remove('hidden');
-
-  speech("north",
-  "Game over — all players have started twice!",
-  5000
-  );
-
-  // ⭐ Wait 3 seconds so player can see the final score
-  setTimeout(() => {
-
-  // Hide result overlay
-  $('result-overlay').classList.add('hidden');
-
-  // Show start screen
-  $('start-screen').classList.remove('hidden');
-
-  // Reset score for the next game
-  G.sc = { us: 0, them: 0 };
-
-  // Prepare a fresh game but DO NOT start dealing yet
-  startNewGame();
-
-  }, 3000); // adjust delay if you want
-
-  } */
 function endGame() {
 
     $('concedeBtn').style.display = 'none';

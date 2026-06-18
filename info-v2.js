@@ -67,7 +67,7 @@ function header() {
 	<h1>Bid Euchre<em>Official Rules & Other Info</em></h1>
 	<p class="subtitle">4 Players · Partnership · High &amp; Low · Trick-Taking</p>
 
-     <p class="subtitle">v1.06 Jun 16, 2026</p>
+     <p class="subtitle">v1.07 Jun 18, 2026</p>
 
 </div>
 
@@ -113,6 +113,7 @@ function section1() {
 
         <div class="back-to-top" data-target="top">▲ Back to Top</div>
 
+
       </div>
     `;
 
@@ -142,11 +143,6 @@ function sectionHandSummary() {
     const bidList = buildBidList(G);
 
     const textBid =
-//	  PN[G.hBid.player] + " -> " +
-//	  buildBidText_v1(
-//	      G.hBid.bid, G.hBid.trump, G.hBid.hl, G.hBid.alone,
-//	      G.hBid.exchanges
-//	  );
 	  buildBidText(
 	      PN[G.hBid.player],
 	      G.hBid.bid, G.hBid.hl, G.hBid.trump, G.hBid.alone,
@@ -1052,25 +1048,29 @@ function section10DeterministicDeals() {
     return `
     <div class="info-section" id="sec-deterministic">
 
-        <h3><span class="section-num">X</span> Deterministic Deals</h3>
+        <h3><span class="section-num">X</span> Game Tech</h3>
 
         <p><strong>Number of Possible Deals:</strong>
             A double–deck JQKA game has an enormous number of possible card combinations —
             far beyond what a human could ever encounter naturally.
             Even with only four ranks and four suits, the number of unique 8‑card hands
-            dealt to four players is measured in <em>quintillions</em> (that's a 1 followed by 18 zeros).
-            This means that almost every deal you see is effectively unique in the lifetime of the universe.
+            dealt to four players is measured in <em>quintillions</em> (that's a 1
+            followed by 18 zeros).
+            This means that almost every deal you see is effectively unique in the
+            lifetime of the universe.
         </p>
 
         <p><strong>What "Quintillions" Means:</strong>
             If you played one new deal every second, nonstop, it would take millions of years
             to see even a tiny fraction of all possible combinations.
-            In practical terms: no two games will ever be the same unless you intentionally replay one.
+            In practical terms: no two games will ever be the same unless you intentionally
+            replay one.
         </p>
 
         <p><strong>How This Game Generates Deals:</strong>
             This implementation uses a deterministic deal generator.
-            Each deal is produced from a 17‑digit number called the <strong>Deal Number</strong>.
+            Each deal is produced from a 17‑digit number called the
+            <strong>Deal Number</strong>.
             The same deal number will always produce the exact same shuffle,
             the same hands, the same dealer, and the same starting conditions.
         </p>
@@ -1115,10 +1115,12 @@ function section10DeterministicDeals() {
             This means:
         </p>
 
-        <ul>
+        
+          <ul style="margin-left:20px; color:var(--ink-light)">
             <li>The same deal number always produces the exact same shuffle</li>
             <li>You can replay any specific hand by entering its deal number</li>
-            <li>You can share a deal number with someone else and they will get the identical hand</li>
+            <li>You can share a deal number with someone else and they will get
+                the identical hand</li>
             <li>
                 Example: <code>163 - 51530 - 379312803</code>  
                 Entering this loads that exact game.
@@ -1139,9 +1141,10 @@ function section10DeterministicDeals() {
 
         <h4>Scale of the Deal Numbers (fun fact!)</h4>
 
-        <p>The size of the deal number gives a sense of how vast the space of possible games is:</p>
+        <p>The size of the deal number gives a sense of how vast the space of possible
+           games is:</p>
 
-        <ul>
+        <ul style="margin-left:20px; color:var(--ink-light)">
             <li>
                 <strong>9 digits</strong> — 1 billion<br>
                 &nbsp;&nbsp;• roughly the world's population<br>
@@ -1173,11 +1176,12 @@ function section10DeterministicDeals() {
             These tools allow developers to:
         </p>
 
-        <ul>
+        <ul style="margin-left:20px; color:var(--ink-light)">
             <li>Inspect all hands to verify trick‑taking logic</li>
             <li>Reproduce bugs by replaying the exact same deal</li>
             <li>Test AI decisions with full visibility</li>
-            <li>Confirm that the deterministic shuffle is stable across browsers and devices</li>
+            <li>Confirm that the deterministic shuffle is stable across browsers
+                and devices</li>
         </ul>
 
         <p>
