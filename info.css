@@ -377,3 +377,32 @@ tr:last-child td { border-bottom: none; }
     h2 { page-break-after: avoid; }
     section { page-break-inside: avoid; }
 }
+
+/* all about the modal screen */
+
+
+.info-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(0,0,0,.72);
+    color: white;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #555;
+}
+
+.info-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.info-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+}
