@@ -499,7 +499,7 @@ function buildBidListFromHistory(historyEntry) {
 	      buildBidText(
 		  PN[p],
 		  b.amt, b.hl, b.trump,
-		  b.alone, b.exchanges);
+		  b.alone, b.cardReq);  // was exchanges
 
 //???? here i think...	h.bid.exchanges
 	
