@@ -451,7 +451,7 @@ font-weight:bold;
 
     // we done saving this.  Clear for next time.
     G.lastExchangeCount = 0;
-
+	exch = null;
     // Here we go to new game if done
     // all players have dealt twice.
     //    if(G.sc.us>=32||G.sc.them>=32){
