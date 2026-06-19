@@ -226,7 +226,92 @@ function bestContract(hand) {
 }
 
 // ── main AI bidding function ──────────────────────────────────
+function aiBid(player) {
 
+ //   cLog("aiBid start...:",player);
+ 
+    const hand      = G.H[player];
+    const partner   = partnerOf(player);
+    const partnerBid = G.bids[partner];
+    const minBid    = G.hBid ? G.hBid.bid + 1 : 1;
+
+    const currentStrength = G.hBid
+        ? bidStrength(G.hBid.bid, G.hBid.alone, G.hBid.cardReq)
+        : -1;
+
+    // Evaluate best contract
+    const bc = bestContract(hand);
+    const est = bc.score;
+
+    // Conservative safe bid
+    const safeBid = Math.max(1, Math.floor(est - 0.4));
+
+    // Compute projected strengths
+    function proj(amt, alone, cardReq) {
+        return bidStrength(amt, alone, cardReq);
+    }
+
+    // Partner has high bid — only outbid if we are clearly stronger
+    if (G.hBid && G.hBid.player === partner) {
+        const myStrength = proj(safeBid, false, 0);
+
+        if (myStrength <= currentStrength) {
+            // Let partner keep the contract
+	    speech(player, "Pass", 1800); 
+            bIdx++; setTimeout(nextBid, 300);
+            return;
+        }
+    }
+
+    // Consider Alone bids
+    if (est >= 7.2) {
+        const myStrength = proj(8, true, 0);
+        if (myStrength > currentStrength) {
+            placeBid(player, 8, bc.trump, bc.hl, true, 0);
+            bIdx++; setTimeout(nextBid, 300);
+            return;
+        }
+    }
+
+    if (est >= 6.5) {
+        const myStrength = proj(8, true, 1);
+        if (myStrength > currentStrength) {
+            placeBid(player, 8, bc.trump, bc.hl, true, 1);
+            bIdx++; setTimeout(nextBid, 300);
+            return;
+        }
+    }
+
+    if (est >= 6.0) {
+        const myStrength = proj(8, true, 2);
+        if (myStrength > currentStrength) {
+            placeBid(player, 8, bc.trump, bc.hl, true, 2);
+            bIdx++; setTimeout(nextBid, 300);
+            return;
+        }
+    }
+
+    // Standard bid
+    if (safeBid >= minBid) {
+        const bidAmt = Math.min(safeBid, 7);
+        const myStrength = proj(bidAmt, false, 0);
+
+        if (myStrength > currentStrength) {
+            placeBid(player, bidAmt, bc.trump, bc.hl, false, 0);
+            bIdx++; setTimeout(nextBid, 300);
+            return;
+        }
+    }
+
+ //   cLog("aiBid pass:",player);
+    
+    // Pass
+    speech(player, "Pass", 1800);     //was 1800
+    bIdx++; setTimeout(nextBid, 300); //was 300
+    
+} //aiBid
+
+/*
 function aiBid(player) {
     const hand      = G.H[player];
     const partner   = partnerOf(player);
@@ -294,3 +379,4 @@ function aiBid(player) {
     bIdx++;
     setTimeout(nextBid, 300);
 }
+*/

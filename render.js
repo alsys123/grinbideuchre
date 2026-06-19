@@ -349,9 +349,14 @@ $('play-btn').addEventListener('click',()=>{
 
 // The speech bubble - displays with a timer
 function speech(who,t,d=2000){
-    const e=$('sp-'+who);if(!e)return;
-    e.textContent=t;e.classList.remove('hidden');
+    const e=$('sp-'+who);
+
+    if(!e)return;
+
+    e.textContent=t;
+    e.classList.remove('hidden');
     clearTimeout(e._t);
+
     e._t=setTimeout(()=>e.classList.add('hidden'),d);
 }
 

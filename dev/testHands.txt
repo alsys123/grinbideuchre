@@ -6,25 +6,30 @@ deal id: nnnD - D is dealer:  (NSEW - north, south, east, west) optional.
 156 - 23569 - 472058548S
 North ask 2 NT Low
 - South give away J and Q of diamonds
-
-
-=== FIXED UP TO HERE ====
+- fixed
 
 369 - 17661 - 235525306S
 west has 7 aces. moonshot NT high - south dealer
 ? North should not bid 𝑁𝑜𝑟𝑡ℎ: Alone NT low ask 2 since West is higher
-
+-fixed
 
 718 - 76501 - 046555253N
 north ask for 2 cards - alone spades
-?North bids 4C instead.  should be the lone hand instead
+?North bids 4C,
+  instead, should be the lone hand instead S ask 2 - maybe?
+- not fixed but might be okay
 
 
 384 - 73480 - 305215115N
 west moonshot NT high
+-fixed
+
+======= FIXED UP TO HERE ========
 
 163 - 51530 - 379312803E
 east alone ask for 2
+- show exchanges
+- ends up with 10 cards?
 
 732 - 90979 - 965966982W
 east should bid 5NT low .. JJ make the Q an automatic win
