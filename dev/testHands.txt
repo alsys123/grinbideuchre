@@ -24,16 +24,20 @@ north ask for 2 cards - alone spades
 west moonshot NT high
 -fixed
 
-======= FIXED UP TO HERE ========
+
 
 163 - 51530 - 379312803E
 east alone ask for 2
 - show exchanges
 - ends up with 10 cards?
 
+
+
 732 - 90979 - 965966982W
 east should bid 5NT low .. JJ make the Q an automatic win
+- ask 2 Low
 
+======= FIXED UP TO HERE ========
 
 983 - 44315 - 001751627
 East ask 2 card NT high

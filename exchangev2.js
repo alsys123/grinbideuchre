@@ -5,7 +5,7 @@
 // exchange the cards
 function startExchange(n, player) {
 
-    cLog("start the exchange cards: ",n,". For player (winner):", player);
+//    cLog("start the exchange cards: ",n,". For player (winner):", player);
     
     // player defaults to 'south' for backward compatibility
     if (!player) player = 'south';
@@ -146,7 +146,7 @@ function finalizeExchange() {
     const partner = partnerOf(player);             // partner of bidder
     const n       = G.exchangeCount;
 
-    cLog("finalizeExchange: bidder=", player, " partner=", partner, " n=", n);
+//    cLog("finalizeExchange: bidder=", player, " partner=", partner, " n=", n);
 
     let playerReceives = [];
     let partnerReceives = [];
@@ -195,8 +195,8 @@ function finalizeExchange() {
         partnerReceives = bidderGives;
     }
 
-    cLog("#EXCHANGE: playerReceives=", playerReceives,
-         " partnerReceives=", partnerReceives);
+ //   cLog("#EXCHANGE: playerReceives=", playerReceives,
+   //      " partnerReceives=", partnerReceives);
 
     // ────────────────────────────────────────────────
     // REMOVE CARDS
@@ -256,11 +256,20 @@ function finalizeExchange() {
         give: G.exchangeGive.map(c => ({...c})),
         get: playerReceives.map(c => ({...c})),
         partnerGives: partnerReceives.map(c => ({...c})),
-        southHandAfter: G.H.south.map(c => ({...c})),
-        northHandAfter: G.H.north.map(c => ({...c}))
+	//       southHandAfter: G.H.south.map(c => ({...c})),
+	//       northHandAfter: G.H.north.map(c => ({...c})),
+	//	eastHandAfter: G.H.east.map(c => ({...c})),
+	//	westHandAfter: G.H.west.map(c => ({...c})),
+	handsAfter: {
+	    south: G.H.south.map(c => ({...c})),
+	    west:  G.H.west.map(c => ({...c})),
+	    north: G.H.north.map(c => ({...c})),
+	    east:  G.H.east.map(c => ({...c}))
+	}
+	
     };
 
-    cLog("#EXCHANGE RECORD:", exch);
+ //   cLog("#EXCHANGE RECORD:", exch);
 
     // Clear state
     G.exchangeGive  = [];
@@ -468,7 +477,7 @@ function aiGiveWorstCards(player, n) {
 
     if (trump === "NT") trump = null;
     
-    cLog("aiGiveWorstCards. hand:",hand,trump,mode);
+ //   cLog("aiGiveWorstCards. hand:",hand,trump,mode);
     
     // Group cards by suit
     const suits = { S:[], H:[], D:[], C:[] };
