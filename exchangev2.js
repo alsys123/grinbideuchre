@@ -5,7 +5,7 @@
 // exchange the cards
 function startExchange(n, player) {
 
-//    cLog("start the exchange cards: ",n,". For player (winner):", player);
+    cLog("start the exchange cards: ",n,". For player (winner):", player);
     
     // player defaults to 'south' for backward compatibility
     if (!player) player = 'south';
@@ -142,11 +142,157 @@ function aiPartnerBestCards(partner, n) {
 }
 
 function finalizeExchange() {
+    const player  = G.exchangePlayer || 'south';   // bidder
+    const partner = partnerOf(player);             // partner of bidder
+    const n       = G.exchangeCount;
+
+    cLog("finalizeExchange: bidder=", player, " partner=", partner, " n=", n);
+
+    let playerReceives = [];
+    let partnerReceives = [];
+
+    const southInvolved = (player === 'south' || partner === 'south');
+
+    // ────────────────────────────────────────────────
+    // CASE 1 — SOUTH is bidder (normal human exchange)
+    // ────────────────────────────────────────────────
+    if (player === 'south') {
+        // South gives → partner receives
+        partnerReceives = [...G.exchangeGive];
+
+        // Partner gives best → South receives
+        playerReceives = aiPartnerBestCards(partner, n);
+    }
+
+    // ────────────────────────────────────────────────
+    // CASE 2 — NORTH is bidder going alone
+    // SOUTH clicks cards to give to NORTH
+    // ────────────────────────────────────────────────
+    else if (player === 'north' && partner === 'south') {
+        // South gives → North receives
+        playerReceives = [...G.exchangeGive];
+
+        // North gives worst → South receives
+        partnerReceives = aiGiveWorstCards('north', n);
+    }
+
+    // ────────────────────────────────────────────────
+    // CASE 3 — EAST or WEST is bidder
+    // SOUTH is NOT involved at all
+    // AI ↔ AI exchange
+    // ────────────────────────────────────────────────
+    else {
+        // Bidder gives worst cards
+        const bidderGives = aiGiveWorstCards(player, n);
+
+        // Partner gives best cards
+        const partnerGives = aiPartnerBestCards(partner, n);
+
+        // Bidder receives partner's best
+        playerReceives = partnerGives;
+
+        // Partner receives bidder's worst
+        partnerReceives = bidderGives;
+    }
+
+    cLog("#EXCHANGE: playerReceives=", playerReceives,
+         " partnerReceives=", partnerReceives);
+
+    // ────────────────────────────────────────────────
+    // REMOVE CARDS
+    // ────────────────────────────────────────────────
+
+    // SOUTH gave cards only if SOUTH clicked
+    if (southInvolved && G.exchangeGive.length > 0) {
+        G.exchangeGive.forEach(c => {
+            const idx = G.H['south'].findIndex(x => x.uid === c.uid);
+            if (idx >= 0) G.H['south'].splice(idx, 1);
+        });
+    }
+
+    // Bidder gives cards (AI case)
+    if (!southInvolved) {
+        partnerReceives.forEach(c => {
+            const idx = G.H[player].findIndex(x => x.uid === c.uid);
+            if (idx >= 0) G.H[player].splice(idx, 1);
+        });
+    }
+
+    // Partner gives cards
+    if (!(player === 'north' && partner === 'south')) {
+        // Normal partner removal
+        playerReceives.forEach(c => {
+            const idx = G.H[partner].findIndex(x => x.uid === c.uid);
+            if (idx >= 0) G.H[partner].splice(idx, 1);
+        });
+    } else {
+        // NORTH alone case: remove from NORTH
+        partnerReceives.forEach(c => {
+            const idx = G.H['north'].findIndex(x => x.uid === c.uid);
+            if (idx >= 0) G.H['north'].splice(idx, 1);
+        });
+    }
+
+    // ────────────────────────────────────────────────
+    // ADD RECEIVED CARDS
+    // ────────────────────────────────────────────────
+
+    G.H[player].push(...playerReceives);
+    G.H[partner].push(...partnerReceives);
+
+    // Sort both hands
+    sortBase(G.H[player]);
+    sortBase(G.H[partner]);
+
+    // Save count
+    G.lastExchangeCount = n;
+
+    // Build exchange record
+    exch = {
+        deal: G.dealNumber,
+        bidder: player,
+        partner: partner,
+        count: n,
+        give: G.exchangeGive.map(c => ({...c})),
+        get: playerReceives.map(c => ({...c})),
+        partnerGives: partnerReceives.map(c => ({...c})),
+        southHandAfter: G.H.south.map(c => ({...c})),
+        northHandAfter: G.H.north.map(c => ({...c}))
+    };
+
+    cLog("#EXCHANGE RECORD:", exch);
+
+    // Clear state
+    G.exchangeGive  = [];
+    G.exchangeGet   = [];
+    G.exchangeCount = 0;
+    G.exchangePlayer = null;
+
+    // Reset cardReq
+    G.hBid.cardReq = 0;
+
+    // Continue bidding
+    setTimeout(() => finishBid(), 300);
+
+    // Update visuals
+    if (southInvolved) {
+        renderHands(true,  'south');
+        renderHands(false, partner);
+        speech('south', 'Exchange complete.', 2000);
+    } else {
+        // AI ↔ AI
+        renderHands(false, player);
+        renderHands(false, partner);
+    }
+} //finalizeExchange
+
+/*
+function finalizeExchange() {
     const player  = G.exchangePlayer || 'south';
     const partner = partnerOf(player);
     const n       = G.exchangeCount;
 
-//    cLog("#2: winner:", player, " his partner:", partner, n);
+    cLog("finalizeExchange #2: winner:", player, " his partner:", partner, n);
 
     // ── Determine what each side gives ───────────────────────────
     //
@@ -182,7 +328,14 @@ function finalizeExchange() {
 
 //    cLog("#7: North cards ", prettyHandPlain(G.H["north"]));
 //    cLog("#8: South cards ", prettyHandPlain(G.H["south"]));
+    cLog("#7: East cards: ", prettyHandPlain(G.H["east"]),
+	);
+    cLog("#8: West cards: ", prettyHandPlain(G.H["west"]),
+	);
 
+    cLog("#9: playerReceives: ",playerReceives, ", partnerReceives: ",partnerReceives);
+    
+    
     // --- REMOVE CARDS SOUTH IS GIVING ---
     G.exchangeGive.forEach(c => {
         const idx = G.H['south'].findIndex(x => x.uid === c.uid);
@@ -212,27 +365,13 @@ function finalizeExchange() {
         G.H[partner].push(...partnerReceives);  // Partner gets South's picks
     }
 
+   
     // --- SORT BOTH HANDS ---
     sortBase(G.H[player]);
     sortBase(G.H[partner]);
 
     G.lastExchangeCount = n;  // save for scoring
 
- /*   
-    // save all the exchange data
-    // note: may not need all the elements ...??? some may be duplicate with G.
-    G.exchangeHistory.push({
-	deal: G.dealNumber,
-	bidder: player,
-	partner: partner,
-	count: n,
-	give: G.exchangeGive.map(c => ({...c})),
-	get: playerReceives.map(c => ({...c})),
-	partnerGives: partnerReceives.map(c => ({...c})),
-	southHandAfter: G.H.south.map(c => ({...c})),
-	northHandAfter: G.H.north.map(c => ({...c}))
-    });
- */
     
     // 1. Build exchange object ONCE
     exch = {
@@ -246,6 +385,8 @@ function finalizeExchange() {
 	southHandAfter: G.H.south.map(c => ({...c})),
 	northHandAfter: G.H.north.map(c => ({...c}))
     };
+
+    cLog("#11: exch record: ",exch);
     
     // 2. Save it permanently BEFORE clearing anything
  //   G.exchangeHistory.push(exch);
@@ -281,6 +422,7 @@ function finalizeExchange() {
         renderHands(false, partner);
     }
 }
+*/
 
 /*
 // ── Helper: AI gives its N worst cards (returns array, does NOT mutate) ──
@@ -326,7 +468,7 @@ function aiGiveWorstCards(player, n) {
 
     if (trump === "NT") trump = null;
     
-//    cLog("aiGiveWorstCards. hand:",hand,trump,mode);
+    cLog("aiGiveWorstCards. hand:",hand,trump,mode);
     
     // Group cards by suit
     const suits = { S:[], H:[], D:[], C:[] };
