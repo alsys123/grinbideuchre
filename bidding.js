@@ -587,8 +587,8 @@ function buildBidText(player, bid, hl, trump, alone, cardReq) {
         }
 
         // card request
-        if (cardReq === 1) s += " ask 1";
-        else if (cardReq === 2) s += " ask 2";
+        if (cardReq === 1) s += " Call for 1";
+        else if (cardReq === 2) s += " Call for 2";
 
         return s;
     }
