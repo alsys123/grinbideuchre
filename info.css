@@ -402,9 +402,11 @@ tr:last-child td { border-bottom: none; }
 */
 
 .info-close {
-    background: none;
     border: none;
     color: red;
     font-size: 22px;
     cursor: pointer;
+	background: white;
 }
+
+
