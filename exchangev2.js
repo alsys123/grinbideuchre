@@ -201,15 +201,18 @@ function aiPartnerBestCards(partner, n) {
 */
 
 function aiPartnerBestCards(partner, n) {
+
+ //   cLog("dump G:", G);
+    
     const hand = [...G.H[partner]];
 
     // Convert suit symbols to letters
     function L(c) { return suitKey(c.s); }
 
-    const trump = G.trump;        // 'S','H','D','C' or 'NT'
-    const hl    = G.hl;           // 'high' or 'low'
+    const trump = suitKey(G.hBid.trump);        // 'S','H','D','C' or 'NT'
+    const hl    = G.hBid.hl;           // 'high' or 'low'
 
-    cLog("trump: ", trump);
+ //   cLog("trump: ", trump);
     
     const rankHigh = { 'A':4, 'K':3, 'Q':2, 'J':1 };
     const rankLow  = { 'J':1, 'Q':2, 'K':3, 'A':4 };
@@ -401,7 +404,7 @@ function finalizeExchange() {
     G.hBid.cardReq = 0;
 
     // Continue bidding
-    setTimeout(() => finishBid(), 300);
+//    setTimeout(() => finishBid(), 300);
 
     // Update visuals
     if (southInvolved) {
@@ -412,7 +415,14 @@ function finalizeExchange() {
         // AI ↔ AI
         renderHands(false, player);
         renderHands(false, partner);
+	speech(partner,'Exchange complete.', 2000);
     }
+
+//    cLog("playerReceives:", playerReceives);
+    
+        // Continue bidding
+    setTimeout(() => finishBid(), 1000); // was 300
+
 } //finalizeExchange
 
 /*
@@ -579,7 +589,7 @@ function aiGiveWorstCards(player, n) {
 */
 
 function suitKey(s) {
-    return { '♠':'S', '♥':'H', '♦':'D', '♣':'C' }[s];
+    return { '♠':'S', '♥':'H', '♦':'D', '♣':'C', 'NT':'NT' }[s];
 }
 
 function aiGiveWorst(player, n) {

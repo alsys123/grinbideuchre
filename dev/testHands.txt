@@ -41,32 +41,39 @@ east should bid 5NT low .. JJ make the Q an automatic win
 - S call for 2 in Hearts.
 - North should give good hearts to S
 
-======= FIXED UP TO HERE ========
+
 567 - 34321 - 703165419E
 call 1 in clubs
 - should get left bower from North
 
-983 - 44315 - 001751627
+
+983 - 44315 - 001751627N
 East ask 2 card NT high
+
 
 988 - 31117 - 889607123W
 South ask for 1 card hearts
+
 
 346 - 50947 - 477163286W
 North 4NT Low
 - need to start with lowest card
 
+
 249 - 43780 - 041994417N
 West NT alone high -- error in info .. count not defined
 
+
 242 - 86490 - 540582010W
-West ask 2 -- there was an earlier bid
+West ask 2 -- east needs to give ace then king
+
+======= FIXED UP TO HERE ========
 
 190 - 61264 - 703367786E
-North Moonshot .. does not make it
+North Moonshot .. does not make it  .. ends with a K heart as looser why?
 
 626 - 24633 - 393184479W
-lots of bids.  Norh ask 1 NT low
+lots of bids.  North ask 1 NT low
 
 112 - 91913 - 280044494W
 South bid ask 2 Hearts
@@ -77,7 +84,6 @@ West bid ask 1 after, I bid ask 1 diamond
 
 889 - 28582 - 653949311E
 South ask 1 Diamond
-
 - then West ask 2 ... not allowed must be higher only
 - also i put down J Clubs ... North needs to give me J hearts
 
