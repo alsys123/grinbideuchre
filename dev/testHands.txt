@@ -67,8 +67,6 @@ West NT alone high -- error in info .. count not defined
 242 - 86490 - 540582010W
 West ask 2 -- east needs to give ace then king
 
-======= FIXED UP TO HERE ========
-
 190 - 61264 - 703367786E
 North Moonshot .. does not make it  .. ends with a K heart as looser why?
 
@@ -87,5 +85,6 @@ South ask 1 Diamond
 - then West ask 2 ... not allowed must be higher only
 - also i put down J Clubs ... North needs to give me J hearts
 
+======= FIXED UP TO HERE ========
 
 
