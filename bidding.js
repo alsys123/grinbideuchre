@@ -180,39 +180,43 @@ function showBidMod(){
     
  //   cLog("#2 alone 2:", G.hBid, G.hBid.alone,G.hBid.cardReq);
  //   cLog("#2 a  G.hBid:",G.hBid);
+
+    const call1 = "Call for 1";
+    const call2 = "Call for 2";
+    const moonshotBack = "black";
     
     // if there is no bid yet just add all the buttons
     if (!G.hBid) {
-	addABidButton(bb,"Ask 2 Cards","blue","white",10,true,true);
-	addABidButton(bb,"Ask 1 Cards","blue","white", 9,true,true);
+	addABidButton(bb,call2,"blue","white",10,true,true);
+	addABidButton(bb,call1,"blue","white", 9,true,true);
 	addABidButton(bb,"","","",0,false,false); // add a blank space
-	addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true,true);
+	addABidButton(bb,"✨MoonShot✨",   moonshotBack,"gold",8,true,true);
     } else {
 	// 9 and 10 are artificial. 9 is chose 1.  10 is chose 2
 	if (!G.hBid.alone) {
-	    addABidButton(bb,"Ask 2 Cards","blue","white",10,true,true);
-	    addABidButton(bb,"Ask 1 Cards","blue","white", 9,true,true);
+	    addABidButton(bb,call2,"blue","white",10,true,true);
+	    addABidButton(bb,call1,"blue","white", 9,true,true);
 	    addABidButton(bb,"","","",0,false,false); // add a blank space
-	    addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true,true);
+	    addABidButton(bb,"✨MoonShot✨",   moonshotBack,"gold",8,true,true);
 	}
 	
 	if (G.hBid.alone && G.hBid.cardReq === 0) {
-	    addABidButton(bb,"Ask 2 Cards","blue","white",10,false,true);
-	    addABidButton(bb,"Ask 1 Cards","blue","white", 9,false,true);
+	    addABidButton(bb,"blue","white",10,false,true);
+	    addABidButton(bb,call1,"blue","white", 9,false,true);
 	    addABidButton(bb,"","","",0,false,false); // add a blank space
-	    addABidButton(bb,"✨MoonShot✨",   "gold","black",8,false,true);
+	    addABidButton(bb,"✨MoonShot✨",moonshotBack,"gold",8,false,true);
 	}
 	if (G.hBid.alone && G.hBid.cardReq === 1) {
-	    addABidButton(bb,"Ask 2 Cards","blue","white",10,false,true);
-	    addABidButton(bb,"Ask 1 Cards","blue","white", 9,false,true);
+	    addABidButton(bb,call2,"blue","white",10,false,true);
+	    addABidButton(bb,call1,"blue","white", 9,false,true);
 	    addABidButton(bb,"","","",0,false,false); // add a blank space
-	    addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true,true);
+	    addABidButton(bb,"✨MoonShot✨",   moonshotBack,"gold",8,true,true);
 	}
 	if (G.hBid.alone && G.hBid.cardReq === 2) {
-	    addABidButton(bb,"Ask 2 Cards","blue","white",10,false,true);
-	    addABidButton(bb,"Ask 1 Cards","blue","white", 9,true, true);
+	    addABidButton(bb,call2,"blue","white",10,false,true);
+	    addABidButton(bb,call1,"blue","white", 9,true, true);
 	    addABidButton(bb,"","","",0,false,false); // add a blank space
-	    addABidButton(bb,"✨MoonShot✨",   "gold","black",8,true,true);
+	    addABidButton(bb,"✨MoonShot✨",   moonshotBack,"gold",8,true,true);
 	}
     }
     
@@ -576,19 +580,20 @@ function buildBidText(player, bid, hl, trump, alone, cardReq) {
     
     // ALONE bids
     if (alone) {
-        s += "Alone ";
+	if (cardReq === 0) s += "✨MoonShot✨";
+        if (cardReq > 0  ) s += "Call for " + cardReq;
 
+//	s += " in ";
+	
         // trump display
         if (trump === "NT") {
-            s += "NT";
+            s += " NT";
             if (hl) s += " " + hl.toLowerCase();   // high / low
         } else {
-            s += t;   // suit symbol
+            s += " in " + t;   // suit symbol
         }
 
         // card request
-        if (cardReq === 1) s += " Call for 1";
-        else if (cardReq === 2) s += " Call for 2";
 
         return s;
     }

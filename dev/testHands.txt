@@ -37,7 +37,14 @@ east alone ask for 2
 east should bid 5NT low .. JJ make the Q an automatic win
 - ask 2 Low
 
+155 - 33764 - 063212507E
+- S call for 2 in Hearts.
+- North should give good hearts to S
+
 ======= FIXED UP TO HERE ========
+567 - 34321 - 703165419E
+call 1 in clubs
+- should get left bower from North
 
 983 - 44315 - 001751627
 East ask 2 card NT high
@@ -73,5 +80,6 @@ South ask 1 Diamond
 
 - then West ask 2 ... not allowed must be higher only
 - also i put down J Clubs ... North needs to give me J hearts
+
 
 

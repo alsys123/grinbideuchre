@@ -114,7 +114,7 @@ function aiGiveWorst(player, n) {
 }
 */
 
-
+/*
 // This is the AI selecting N best cards to give away to the bidder
 function aiPartnerBestCards(partner, n) {
     const hand = [...G.H[partner]];
@@ -140,6 +140,126 @@ function aiPartnerBestCards(partner, n) {
 
     return hand.slice(0, n);
 }
+*/
+/*
+function aiPartnerBestCards(partner, n) {
+    const hand = [...G.H[partner]];
+
+    // Rank order for HIGH mode
+    const rankHigh = { 'A':4, 'K':3, 'Q':2, 'J':1 };
+    // Rank order for LOW mode
+    const rankLow  = { 'J':1, 'Q':2, 'K':3, 'A':4 };
+
+    // NT logic (simple)
+    if (G.trump === 'NT') {
+        const rank = (G.hl === 'high') ? rankHigh : rankLow;
+
+        hand.sort((a,b) => rank[b.r] - rank[a.r]);
+        return hand.slice(0, n);
+    }
+
+    // SUIT logic
+    const trump = suitKey(G.trump);
+    
+    
+    const sameColor = (trump === 'S' || trump === 'C') ? ['S','C'] : ['H','D'];
+
+ //   cLog("trump:",trump);
+
+    function isRightBower(c) {
+        return c.r === 'J' && c.s === trump;
+    }
+
+    function isLeftBower(c) {
+        return c.r === 'J' && sameColor.includes(c.s) && c.s !== trump;
+    }
+
+
+    // Sort by your rules
+    hand.sort((a,b) => {
+        // 1. Right Bower first
+        if (isRightBower(a) && !isRightBower(b)) return -1;
+        if (isRightBower(b) && !isRightBower(a)) return 1;
+
+        // 2. Left Bower second
+        if (isLeftBower(a) && !isLeftBower(b)) return -1;
+        if (isLeftBower(b) && !isLeftBower(a)) return 1;
+
+        // 3. Trump cards next (highest first)
+        const aTrump = (a.s === trump);
+        const bTrump = (b.s === trump);
+        if (aTrump !== bTrump) return bTrump - aTrump;
+
+        // 4. Non‑trump cards (highest first)
+        return rankHigh[b.r] - rankHigh[a.r];
+    });
+
+    cLog("hand sorted: ", hand);
+    
+    return hand.slice(0, n);
+}//aiPartnerBestCards
+*/
+
+function aiPartnerBestCards(partner, n) {
+    const hand = [...G.H[partner]];
+
+    // Convert suit symbols to letters
+    function L(c) { return suitKey(c.s); }
+
+    const trump = G.trump;        // 'S','H','D','C' or 'NT'
+    const hl    = G.hl;           // 'high' or 'low'
+
+    cLog("trump: ", trump);
+    
+    const rankHigh = { 'A':4, 'K':3, 'Q':2, 'J':1 };
+    const rankLow  = { 'J':1, 'Q':2, 'K':3, 'A':4 };
+
+    // ───────────────────────────────────────────────
+    // 1. NO‑TRUMP CONTRACT
+    // ───────────────────────────────────────────────
+    if (trump === 'NT') {
+        const rank = (hl === 'high') ? rankHigh : rankLow;
+
+        hand.sort((a,b) => rank[b.r] - rank[a.r]);
+        return hand.slice(0, n);
+    }
+
+    // ───────────────────────────────────────────────
+    // 2. SUIT CONTRACT
+    // ───────────────────────────────────────────────
+
+    // Determine same-color suits
+    const sameColor = (trump === 'S' || trump === 'C') ? ['S','C'] : ['H','D'];
+
+    function isRightBower(c) {
+        return c.r === 'J' && L(c) === trump;
+    }
+
+    function isLeftBower(c) {
+        return c.r === 'J' && sameColor.includes(L(c)) && L(c) !== trump;
+    }
+
+    hand.sort((a,b) => {
+
+        // 1. Right Bower first
+        if (isRightBower(a) && !isRightBower(b)) return -1;
+        if (isRightBower(b) && !isRightBower(a)) return 1;
+
+        // 2. Left Bower second
+        if (isLeftBower(a) && !isLeftBower(b)) return -1;
+        if (isLeftBower(b) && !isLeftBower(a)) return 1;
+
+        // 3. Trump cards next (highest first)
+        const aT = (L(a) === trump);
+        const bT = (L(b) === trump);
+        if (aT !== bT) return bT - aT;
+
+        // 4. Non‑trump cards (highest first)
+        return rankHigh[b.r] - rankHigh[a.r];
+    });
+
+    return hand.slice(0, n);
+} //aiPartnerBestCards
 
 function finalizeExchange() {
     const player  = G.exchangePlayer || 'south';   // bidder
