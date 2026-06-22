@@ -302,6 +302,24 @@ function sortBase(hand) {
     });
 }
 
+/* .. maybe for the future!!
+   
+function setExtraText(iPlayer,madeIt) {
+    
+    if (iPlayer === 'south' || iPlayer === 'north') {
+	if (madeIt) return "You Made it!";
+	else return "Sorry, you did not make it!";
+    }
+    
+    if (iPlayer === 'east' || iPlayer === 'west') {
+	if (madeIt) return "They made it!";
+	else return "You beat them!";
+    }
+
+    // else
+    return "";
+}//setExtraText
+*/
 // SCORE
 function scoreHand(){
     //    cLog("score: ", G);
@@ -321,6 +339,8 @@ function scoreHand(){
     const isLone = h.alone === true;
     const ex = G.lastExchangeCount || 0;   // 0,1,2
     const lonePts = [24, 18, 12];
+
+    let extra='';
     
     if (isLone) {
 	// Lone hand scoring
@@ -329,39 +349,46 @@ function scoreHand(){
             pts = lonePts[ex];
             G.sc[bt] += pts;
             detail = PN[h.player] + " made a lone hand! +" + pts + " pts.";
+//	    extra = setExtraText(PN[h.player], true);
 	} else {
             // Failed lone hand
             pts = lonePts[ex];
             G.sc[bt] -= pts;
             detail = PN[h.player] + " failed the lone hand! −" + pts + " pts.";
+//	    extra = setExtraText(PN[h.player], false);
 	}
     } else {
 	if(btw>=h.bid){
 	    G.sc[bt]+=btw;
 	    detail=PN[h.player]+"'s team made it! +"+btw+' pts.';
+//	    extra = setExtraText(PN[h.player], true);
 	}
 	else{
 	    G.sc[bt]-=h.bid;
 	    detail=PN[h.player]+"'s team went set! \u2212"+h.bid+' pts.';
+//	    extra = setExtraText(PN[h.player], false);
 	}
 	
     }
     
     G.sc[ot]+=otw;
-    let title='Hand Complete',extra='';
+    let title='Hand Complete';
+ //   let extra='';
+
+    /*
     if(G.sc.us>=32||G.sc.them>=32){
 	if(G.sc.us>G.sc.them){
 	    title='Victory!';
 	    extra=' You & North win!';
 	}else
 	    if(G.sc.them>G.sc.us){
-		title='Defeated!';
+		title='They Won!';
 		extra=' East & West win.';
 	    }else{
 		title='Tie Game!';
 	    }
     }
-
+*/
     //calc code
     let calc = "";
     // lone hand made
@@ -464,8 +491,11 @@ font-weight:bold;
 	btn.textContent='Deal Next Hand';
 	btn.onclick=nextHand;
     }
-
-    hud();
+    
+    // might not need this.
+    // Also, problem because G.lastExchangeCount has been cleared
+    //   hud();
+    
 } //scoreHand
 
 function showHistory() {

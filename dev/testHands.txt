@@ -2,6 +2,10 @@ Hands to consider:
 
 deal id: nnnD - D is dealer:  (NSEW - north, south, east, west) optional.
 
+941 - 46814 - 005293879W
+- West bids call for 1 - but hud shows Moonshot
+
+======= FIXED UP BELOW HERE ========
 
 156 - 23569 - 472058548S
 North ask 2 NT Low
@@ -24,14 +28,10 @@ north ask for 2 cards - alone spades
 west moonshot NT high
 -fixed
 
-
-
 163 - 51530 - 379312803E
 east alone ask for 2
 - show exchanges
 - ends up with 10 cards?
-
-
 
 732 - 90979 - 965966982W
 east should bid 5NT low .. JJ make the Q an automatic win
@@ -85,6 +85,6 @@ South ask 1 Diamond
 - then West ask 2 ... not allowed must be higher only
 - also i put down J Clubs ... North needs to give me J hearts
 
-======= FIXED UP TO HERE ========
+
 
 
