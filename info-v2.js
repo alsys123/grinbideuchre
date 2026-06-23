@@ -1,8 +1,8 @@
+/*
 
+  Info Box
 
-// *** info box
-
-
+*/
 
 function populateInfoModal() {
     const box = $('info-content');
@@ -84,7 +84,7 @@ function section1() {
         <p>
           Bid Euchre is a partnership trick-taking game blending Euchre-style
           trump rules with competitive auction bidding. Players bid contracts
-          specifying the number of tricks they'll win, a trump suit, No Trump high
+          specifying the number of tricks they will win, a trump suit, No Trump high
           or No Trump low. The team that wins the bid then tries to fulfill — or
           exceed — their contract, while the defenders try to stop them.
         </p>
@@ -139,7 +139,6 @@ function sectionHandSummary() {
 	
     }
     
-    
     const bidList = buildBidList(G);
 
     const textBid =
@@ -148,11 +147,7 @@ function sectionHandSummary() {
 	      G.hBid.bid, G.hBid.hl, G.hBid.trump, G.hBid.alone,
 	      //	      G.hBid.exchanges
 	      G.lastExchangeCount
-	  );
-
-    
-    
-    
+	  );    
     
     html = `
     <div class="info-section" id="sec-handSummary">
@@ -174,6 +169,8 @@ function sectionHandSummary() {
 
     html += showHistoryInfo();
 
+    html += showHistoryInfoPrev();
+    
     //    cLog("showHistoryInfo: ",html);
     
     html += `
@@ -344,7 +341,7 @@ function buildHistoryRows() {
 	    //	if (h.exchange.count > 0) {
 	    html += addRow(" *** Exchanges Data");
 
-//	    cLog(" *** Exchange data: ",h.exchange);
+	    //	    cLog(" *** Exchange data: ",h.exchange);
 
 	    /*
 	   /// ???... north and south as partners i think are the same NOW...??
@@ -397,7 +394,7 @@ function buildHistoryRows() {
 	    // generic .. should work for north and south as well
 	    //	if (h.exchange.bidder === "east" || h.exchange.bidder=== "west" ) {
 	    
-	    data = "Bidder is " + h.exchange.bidder + " and asks for: " +
+	    data = "Bidder is " + h.exchange.bidder + " and calls for: " +
 		h.exchange.count +
 		" card(s) from " + h.exchange.partner + ".";
 	    html += addRow(data);
@@ -412,12 +409,12 @@ function buildHistoryRows() {
 	    
 	    data = h.exchange.bidder + ' Hand: ' +
 		prettyHandHTML(h.exchange.handsAfter[h.exchange.bidder]);
-		//???		prettyHandHTML(h.exchange.southHandAfter);
+	    //???		prettyHandHTML(h.exchange.southHandAfter);
 	    html += addRow(data);
 	    
 	    data = h.exchange.partner + ' Hand: ' +
 		prettyHandHTML(h.exchange.handsAfter[h.exchange.partner]);
-		//???		prettyHandHTML(h.exchange.northHandAfter);
+	    //???		prettyHandHTML(h.exchange.northHandAfter);
 	    html += addRow(data);
 	    
 	    //	} // generic
@@ -432,150 +429,150 @@ function buildHistoryRows() {
     return html;
     
 } //buildHistoryRows
+
+function addRow(data) {
+    const rowHTML =
+          '<tr class="deal-num-row">' +
+          '<td colspan="6" ' +
+          'style="font-size:11px; ' +
+          '       font-family:courier; ' +
+          '       color:black;' +
+          '       letter-spacing:1px; ' +
+          '       text-align:left; ' +
+          '       padding:2px 0;">' +
+          data  +
+          '</td>' +
+          '</tr>';
+
+    return rowHTML;
+
+}
+
+function buildBidList(G) {
+    //    cLog("for b:");
+
+    // Determine bidding order based on leader
+    //    const start = PL.indexOf(G.leader);
+    const start = (PL.indexOf(G.dealer) + 1);
+    //    cLog("start: ", start);
+
+    const order = [];
+    for (let i = 0; i < 4; i++) {
+        order.push(PL[(start + i) % 4]);
+    }
+
+    let html = "";
+
+    for (let i = 0; i < order.length; i++) {
+        const p = order[i];
+        const b = G.bids[p];
+
+        if (!b) {
+	    const noBid = buildBidText(PN[p],0,null,null,null,null);
+	    html += noBid + ",";
+	    continue;
+	};
+ 	
+	//	const textBid = buildBidText_v1(b.amt, b.trump, b.hl, b.alone, b.cardReq);
+	const textBid = buildBidText(
+	    PN[p],b.amt, b.hl, b.trump,
+	    b.alone, b.cardReq);
+
+	//	if (!textBid) textBid = "na";
+	//        html += `<li>${PN[p]}: ${parts.join(" ")}</li>`;
+	//      html += `${PN[p]}: ${parts.join(" ")}`;
+	//	html += `${PN[p]}: ` + textBid + ", ";
+	html += textBid + ", ";
+    }
+
+    //   html += "</ul>";
+    return html;
+}
+
+// New function to format bids from history
+function buildBidListFromHistory(historyEntry) {
+    if (!historyEntry.bids) return "No bids recorded";
     
-    function addRow(data) {
-	const rowHTML =
-              '<tr class="deal-num-row">' +
-              '<td colspan="6" ' +
-              'style="font-size:11px; ' +
-              '       font-family:courier; ' +
-              '       color:black;' +
-              '       letter-spacing:1px; ' +
-              '       text-align:left; ' +
-              '       padding:2px 0;">' +
-              data  +
-              '</td>' +
-              '</tr>';
-
-	return rowHTML;
-
+    const order = [];
+    //    const start = PL.indexOf(historyEntry.leader);
+    const start = (PL.indexOf(historyEntry.dealer) + 1 );
+    for (let i = 0; i < 4; i++) {
+        order.push(PL[(start + i) % 4]);
     }
 
-    function buildBidList(G) {
-	//    cLog("for b:");
+    return order.map(p => {
+        const b = historyEntry.bids[p];
+	//        if (!b) return `${PN[p]}: —`;
+        if (!b) {
+	    const noBid = buildBidText(PN[p],0,null,null,null,null);
+	    return noBid;
+	};
 
-	// Determine bidding order based on leader
-	//    const start = PL.indexOf(G.leader);
-	const start = (PL.indexOf(G.dealer) + 1);
-	//    cLog("start: ", start);
+	//       const parts = [];
+	//       if (b.bid) parts.push(b.bid);
+	//       if (b.trump) parts.push(b.trump);
+	//       if (b.hl) parts.push(b.hl === 'high' ? 'High' : 'Low');
+	//       if (b.alone) parts.push('Alone');
 
-	const order = [];
-	for (let i = 0; i < 4; i++) {
-            order.push(PL[(start + i) % 4]);
-	}
+	//       return `${PN[p]}: ${parts.join(' ')}`;
+	//	...
+	//	const textBid = buildBidText_v1(b.amt, b.trump, b.hl,
+	//					b.alone, b.exchanges);
+	const textBid =
+	      buildBidText(
+		  PN[p],
+		  b.amt, b.hl, b.trump,
+		  b.alone, b.cardReq);  // was exchanges
 
-	let html = "";
-
-	for (let i = 0; i < order.length; i++) {
-            const p = order[i];
-            const b = G.bids[p];
-
-            if (!b) {
-		const noBid = buildBidText(PN[p],0,null,null,null,null);
-		html += noBid + ",";
-		continue;
-	    };
- 	    
-	    //	const textBid = buildBidText_v1(b.amt, b.trump, b.hl, b.alone, b.cardReq);
-	    const textBid = buildBidText(
-		PN[p],b.amt, b.hl, b.trump,
-		b.alone, b.cardReq);
-
-	    //	if (!textBid) textBid = "na";
-	    //        html += `<li>${PN[p]}: ${parts.join(" ")}</li>`;
-	    //      html += `${PN[p]}: ${parts.join(" ")}`;
-	    //	html += `${PN[p]}: ` + textBid + ", ";
-	    html += textBid + ", ";
-	}
-
-	//   html += "</ul>";
-	return html;
-    }
-
-    // New function to format bids from history
-    function buildBidListFromHistory(historyEntry) {
-	if (!historyEntry.bids) return "No bids recorded";
+	//???? here i think...	h.bid.exchanges
 	
-	const order = [];
-	//    const start = PL.indexOf(historyEntry.leader);
-	const start = (PL.indexOf(historyEntry.dealer) + 1 );
-	for (let i = 0; i < 4; i++) {
-            order.push(PL[(start + i) % 4]);
-	}
+	//	return `${PN[p]}: ${textBid}`;
+	return `${textBid}`;
 
-	return order.map(p => {
-            const b = historyEntry.bids[p];
-	    //        if (!b) return `${PN[p]}: —`;
-            if (!b) {
-		const noBid = buildBidText(PN[p],0,null,null,null,null);
-		return noBid;
-	    };
-
-	    //       const parts = [];
-	    //       if (b.bid) parts.push(b.bid);
-	    //       if (b.trump) parts.push(b.trump);
-	    //       if (b.hl) parts.push(b.hl === 'high' ? 'High' : 'Low');
-	    //       if (b.alone) parts.push('Alone');
-
-	    //       return `${PN[p]}: ${parts.join(' ')}`;
-	    //	...
-	    //	const textBid = buildBidText_v1(b.amt, b.trump, b.hl,
-	    //					b.alone, b.exchanges);
-	    const textBid =
-		  buildBidText(
-		      PN[p],
-		      b.amt, b.hl, b.trump,
-		      b.alone, b.cardReq);  // was exchanges
-
-	    //???? here i think...	h.bid.exchanges
-	    
-	    //	return `${PN[p]}: ${textBid}`;
-	    return `${textBid}`;
-
-	}).join(', ');
-    }
+    }).join(', ');
+}
 
 
-    function activateInfoNav() {
-	const btns = document.querySelectorAll('.info-nav-btn');
+function activateInfoNav() {
+    const btns = document.querySelectorAll('.info-nav-btn');
 
-	btns.forEach(btn => {
-            btn.addEventListener('click', () => {
-		const target = btn.getAttribute('data-target');
-		const el = document.getElementById(target);
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+	    const target = btn.getAttribute('data-target');
+	    const el = document.getElementById(target);
 
-		if (el) {
-                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-		}
-            });
-	});
-    }
-    /*
-      function activateBackToTop() {
-      const btns = document.querySelectorAll('.back-to-top');
+	    if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	    }
+        });
+    });
+}
+/*
+  function activateBackToTop() {
+  const btns = document.querySelectorAll('.back-to-top');
 
-      btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-      const box = $('info-content');
-      box.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-      });
-      }
-    */
-    function activateBackToTop() {
-	const btns = document.querySelectorAll('.back-to-top');
+  btns.forEach(btn => {
+  btn.addEventListener('click', () => {
+  const box = $('info-content');
+  box.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  });
+  }
+*/
+function activateBackToTop() {
+    const btns = document.querySelectorAll('.back-to-top');
 
-	btns.forEach(btn => {
-            btn.addEventListener('click', () => {
-		const box = document.querySelector('.info-box');
-		box.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-	});
-    }
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+	    const box = document.querySelector('.info-box');
+	    box.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+}
 
 
-    function section2QuickStart() {
-	return `
+function section2QuickStart() {
+    return `
     <div class="info-section" id="sec-quickstart">
 
       <h3><span class="section-num">II</span> Quick Start</h3>
@@ -636,10 +633,10 @@ function buildHistoryRows() {
 
     </div>
     `;
-    }
+}
 
-    function section3Deck() {
-	return `
+function section3Deck() {
+    return `
     <div class="info-section" id="sec-section3Deck">
 
         <h3><span class="section-num">III</span> The Deck</h3>
@@ -657,10 +654,10 @@ function buildHistoryRows() {
 
     </div>
     `;
-    }
+}
 
-    function section4CardRanking() {
-	return `
+function section4CardRanking() {
+    return `
     <div class="info-section" id="sec-section4CardRanking">
 
         <h3><span class="section-num">IV</span> Card Ranking</h3>
@@ -739,10 +736,10 @@ function buildHistoryRows() {
 
     </div>
     `;
-    }
+}
 
-    function section5TheDeal() {
-	return `
+function section5TheDeal() {
+    return `
     <div class="info-section" id="sec-the-deal">
 
         <h3><span class="section-num">V</span> The Deal</h3>
@@ -758,10 +755,10 @@ function buildHistoryRows() {
 
     </div>
     `;
-    }
+}
 
-    function section6Bidding() {
-	return `
+function section6Bidding() {
+    return `
     <div class="info-section" id="sec-bidding">
 
         <h3><span class="section-num">VI</span> Bidding</h3>
@@ -791,7 +788,8 @@ function buildHistoryRows() {
             </li>
 
             <li style="margin-bottom:4px">
-                <strong>Going Alone</strong> — Ask for 2 cards, ask for 1 card, or ask for no cards
+                <strong>Going Alone</strong> — Call for 2 cards, call for 1 card,
+             or call for no cards
             </li>
         </ol>
 
@@ -799,8 +797,8 @@ function buildHistoryRows() {
             <span class="bid-tag">4 Clubs</span>
             <span class="bid-tag">5 No Trump High</span>
             <span class="bid-tag">6 Hearts</span>
-            <span class="bid-tag">Alone in Spades</span>
-            <span class="bid-tag">Alone in Hearts, ask 1</span>
+            <span class="bid-tag">Moonshot in Spades</span>
+            <span class="bid-tag">Call for 1 in Hearts</span>
             <span class="bid-tag">3 No Trump Low</span>
         </div>
 
@@ -820,7 +818,7 @@ function buildHistoryRows() {
                 <span class="bid-tag">5 No Trump High ✓</span>
                 <span class="bid-tag invalid">4 Spades High</span>
                 <span class="bid-tag invalid">4 No Trump Low</span>
-                <span class="bid-tag">Alone Ask for 1 card ✓</span>
+                <span class="bid-tag">Call for 1 card ✓</span>
             </div>
         </div>
 
@@ -846,11 +844,11 @@ function buildHistoryRows() {
             </li>
 
             <li>
-                A lone bid of a 2‑card ask can be countered with a 1‑card ask or a Moonshot.
+                A lone bid of a 2‑card call can be countered with a 1‑card call or a Moonshot.
             </li>
 
             <li>
-                A lone bid of a 1‑card ask can be countered with a Moonshot only.
+                A lone bid of a 1‑card call can be countered with a Moonshot only.
             </li>
         </ul>
 
@@ -880,10 +878,10 @@ function buildHistoryRows() {
 
     </div>
     `;
-    }
+}
 
-    function section7PlayingTheHand() {
-	return `
+function section7PlayingTheHand() {
+    return `
     <div class="info-section" id="sec-playing">
 
         <h3><span class="section-num">VII</span> Playing the Hand</h3>
@@ -943,10 +941,10 @@ function buildHistoryRows() {
 
     </div>
     `;
-    }
+}
 
-    function section8Scoring() {
-	return `
+function section8Scoring() {
+    return `
     <div class="info-section" id="sec-scoring">
 
         <h3><span class="section-num">VIII</span> Scoring</h3>
@@ -991,13 +989,13 @@ function buildHistoryRows() {
                 </tr>
 
                 <tr>
-                    <td>Lone — asked for 1‑card</td>
+                    <td>Lone — Call for 1‑card</td>
                     <td>Success</td>
                     <td class="score-positive">18 points</td>
                 </tr>
 
                 <tr>
-                    <td>Lone — asked for 2‑card</td>
+                    <td>Lone — Call for 2‑card</td>
                     <td>Success</td>
                     <td class="score-positive">12 points</td>
                 </tr>
@@ -1048,10 +1046,10 @@ function buildHistoryRows() {
 
     </div>
     `;
-    }
+}
 
-    function section9Winning() {
-	return `
+function section9Winning() {
+    return `
     <div class="info-section" id="sec-winning">
 
         <h3><span class="section-num">IX</span> Winning the Game</h3>
@@ -1071,11 +1069,11 @@ function buildHistoryRows() {
 
     </div>
     `;
-    }
+}
 
 
-    function section10DeterministicDeals() {
-	return `
+function section10DeterministicDeals() {
+    return `
     <div class="info-section" id="sec-deterministic">
 
         <h3><span class="section-num">X</span> Game Tech</h3>
@@ -1223,14 +1221,163 @@ function buildHistoryRows() {
 
     </div>
     `;
+}
+
+
+$('info-close').addEventListener('click', () => {
+    $('info-modal').classList.add('hidden');
+});
+
+$('info-btn').addEventListener('click', () => {
+    populateInfoModal();
+    $('info-modal').classList.remove('hidden');
+});
+
+// *** show the previous full game if there is one
+
+function showHistoryInfoPrev() {
+    
+    let html = "";
+    
+    if (G.historyPrev.length === 0) {
+	return html;
     }
+    
+    html += "<h3>Previous Game details</h3>";
+ 
+    const rows = buildHistoryRowsPrev();
 
+    html += '<table class="hist-table">' +
+        '<thead>' +
+        '<tr>' +
+        '<th>#</th>' +
+        '<th>Dealer</th>' +
+        '<th>Bid</th>' +
+        '<th>Results</th>' +
+        '<th>We</th>' +
+        '<th>Them</th>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+        rows +
+        '</tbody>' +
+        '</table>';
 
-    $('info-close').addEventListener('click', () => {
-	$('info-modal').classList.add('hidden');
-    });
+    
+    return html;
+    
+} //showHistoryInfoPrev
 
-    $('info-btn').addEventListener('click', () => {
-	populateInfoModal();
-	$('info-modal').classList.remove('hidden');
-    });
+function buildHistoryRowsPrev() {
+    //    cLog("at 1");
+    
+    let html = "";
+    
+    
+    for (let i = 0; i < G.historyPrev.length; i++) {
+        const h = G.historyPrev[i];
+	
+	//	cLog("history: ",h);
+
+	const bidText = buildBidText(
+	    PN[h.bid.player], h.bid.bid, h.bid.hl,
+	    h.bid.trump, h.bid.alone, h.bid.exchanges
+	);
+
+	//	cLog("data at h:", PN[h.bid.player], h.bid.bid, h.bid.hl,
+	//	     h.bid.trump, h.bid.alone, h.bid.exchanges);
+	
+	//	cLog("at 2", bidText);
+
+	
+        const weSide   = h.tricks.us   + " / " + h.score.us;
+        const themSide = h.tricks.them + " / " + h.score.them;
+
+	
+        // --- ROW 1: main summary ---
+        html +=
+            '<tr class="' + (i % 2 === 0 ? 'even' : 'odd') + '">' +
+            '<td>' + (i + 1) + '</td>' +
+            '<td>' + (PN[h.dealer] || h.dealer) + '</td>' +
+            '<td>' + '<span style="font-size:12px">' + bidText + '</span></td>' +
+            '<td>' + '<span style="font-size:12px">' + h.calc + '</span></td>' +
+            '<td>' + weSide + '</td>' +
+            '<td>' + themSide + '</td>' +
+            '</tr>';
+	
+
+	let data = "";
+	const BidList = buildBidListFromHistory(h);
+	//	cLog("show h:",h, ", bid list: ", BidList);
+	
+	// --- ROW 2: deal number (always) ---
+        html +=
+            '<tr class="deal-num-row">' +
+            '<td colspan="6" style="font-size:11px; color:black;' +
+            'letter-spacing:1px; text-align:center; padding:2px 0;">' +
+            'Deal # ' + h.dealNumber +
+	    //	    ', Leader: ' + PN[h.leader] +
+	', Bid List: ' + BidList +
+            '</td>' +
+            '</tr>';
+	
+	//   cLog("at 3");
+	
+	data = 'South Hand: ' + prettyHandHTML(h.cards.south);
+	html += addRow(data);
+
+	data = 'West Hand :  ' + prettyHandHTML(h.cards.west);
+	html += addRow(data);
+
+	data = 'North Hand: ' + prettyHandHTML(h.cards.north);
+	html += addRow(data);
+
+	data = 'East Hand :  ' + prettyHandHTML(h.cards.east);
+	html += addRow(data);
+	
+	if (h.exchange && h.exchange.count > 0) {
+
+	    //	if (h.exchange.count > 0) {
+	    html += addRow(" *** Exchanges Data");
+
+	    //	    cLog(" *** Exchange data: ",h.exchange);
+
+	    // generic .. should work for north and south as well
+	    //	if (h.exchange.bidder === "east" || h.exchange.bidder=== "west" ) {
+	    
+	    data = "Bidder is " + h.exchange.bidder + " and calls for: " +
+		h.exchange.count +
+		" card(s) from " + h.exchange.partner + ".";
+	    html += addRow(data);
+	    
+	    data = h.exchange.partner + " gives " + h.exchange.bidder + ": " +
+		prettyHandHTML(h.exchange.get);
+	    html += addRow(data);
+	    
+	    data = h.exchange.bidder + " puts down: " +
+		prettyHandHTML(h.exchange.partnerGives);
+	    html += addRow(data);
+	    
+	    data = h.exchange.bidder + ' Hand: ' +
+		prettyHandHTML(h.exchange.handsAfter[h.exchange.bidder]);
+	    //???		prettyHandHTML(h.exchange.southHandAfter);
+	    html += addRow(data);
+	    
+	    data = h.exchange.partner + ' Hand: ' +
+		prettyHandHTML(h.exchange.handsAfter[h.exchange.partner]);
+	    //???		prettyHandHTML(h.exchange.northHandAfter);
+	    html += addRow(data);
+	    
+	    //	} // generic
+	    
+	    
+	} // exchange data
+	
+    } // for loop of histories
+    
+    //    cLog("at 4-buildHistoryRows:",html);
+    
+    return html;
+    
+} //buildHistoryRowsPrev
+

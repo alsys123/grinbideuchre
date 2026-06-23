@@ -39,7 +39,8 @@ const G={
 G.starts = { north:0, east:0, south:0, west:0 };
 //G.starts = { north:2, east:2, south:2, west:2 }; //**** testing ONLY!
 
-G.history = [];
+G.history     = [];
+G.historyPrev = [];
 
 let lastDealNumber = 0n;   // BigInt
 let requestedDeal = null;  // null = random, BigInt = specific deal
@@ -673,7 +674,11 @@ function endGame() {
 	 G.sc = { us: 0, them: 0 };
 	 G.starts = { north: 0, east: 0, south: 0, west: 0 };
 	 G.firstHand = true;   // ← makes the spinner run again on hand 1
-	 G.history = [];       // ← optional: clear history for fresh game
+
+//	G.historyPrev = G.history; // Save the previous game for info
+//	G.history     = [];       
+	G.historyPrev = JSON.parse(JSON.stringify(G.history));
+	G.history = [];
 	
          // Reset game state
          startNewGame();
