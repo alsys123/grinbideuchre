@@ -361,12 +361,12 @@ function scoreHand(){
     } else {
 	if(btw>=h.bid){
 	    G.sc[bt]+=btw;
-	    detail=PN[h.player]+"'s team made it! +"+btw+' pts.';
+	    detail=PN[h.player]+" made it! +"+btw+' pts.';
 //	    extra = setExtraText(PN[h.player], true);
 	}
 	else{
 	    G.sc[bt]-=h.bid;
-	    detail=PN[h.player]+"'s team went set! \u2212"+h.bid+' pts.';
+	    detail=PN[h.player]+" did not make it! \u2212"+h.bid+' pts.';
 //	    extra = setExtraText(PN[h.player], false);
 	}
 	
