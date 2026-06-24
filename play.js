@@ -9,7 +9,7 @@
 // Entry Point: startTrick --> from bidding.js
 function startTrick(){
 
-//    cLog("#4 Hand of north: ",prettyHand(G.H["north"]));
+    //    cLog("#4 Hand of north: ",prettyHand(G.H["north"]));
     
     G.trick=[];
     
@@ -25,8 +25,8 @@ function startTrick(){
 
     setWhoIsActive(G.cur);
     
-//    renderHands(true);
-//    renderHands(true, 'south');   // redraw ONLY south
+    //    renderHands(true);
+    //    renderHands(true, 'south');   // redraw ONLY south
     
     if(G.cur!=='south')
 	setTimeout(()=>aiPlay(G.cur),900);
@@ -58,11 +58,11 @@ function playCard(player, card) {
 
     // Only redraw south’s hand (no flicker)
     if (player === 'south') {
-//	renderHands(true);
-// -- do not redraw...	    renderHands(true, 'south');
+	//	renderHands(true);
+	// -- do not redraw...	    renderHands(true, 'south');
     }
     
-//    renderHands(G.phase === 'play' && G.cur === 'south');
+    //    renderHands(G.phase === 'play' && G.cur === 'south');
 
     const needed = G.alone ? 3 : 4;
 
@@ -118,19 +118,19 @@ function aiLead(hand){
 	c,s:crank(c,G.trump,esuit(c,G.trump,G.hl),G.hl)}));
 
     // ⭐ NT LOW special lead rule
-if (G.trump === 'NT' && G.hl === 'low') {
+    if (G.trump === 'NT' && G.hl === 'low') {
 
-    // NT-Low rank order: J > Q > K > A
-    const order = { J: 4, Q: 3, K: 2, A: 1 };
+	// NT-Low rank order: J > Q > K > A
+	const order = { J: 4, Q: 3, K: 2, A: 1 };
 
-    // Sort by NT-Low rank (descending)
-    const sorted = hand.slice().sort((a, b) =>
-        order[b.r] - order[a.r]
-    );
+	// Sort by NT-Low rank (descending)
+	const sorted = hand.slice().sort((a, b) =>
+            order[b.r] - order[a.r]
+	);
 
-    // Lead the highest NT-Low card (J first)
-    return sorted[0];
-}
+	// Lead the highest NT-Low card (J first)
+	return sorted[0];
+    }
 
     if(G.hl==='high'){
 	const tr=sc.filter(x=>esuit(x.c,G.trump,G.hl)===G.trump).sort((a,b)=>b.s-a.s);
@@ -152,17 +152,25 @@ if (G.trump === 'NT' && G.hl === 'low') {
 
 
 function aiFollow(player,legs,led){
-    const cur=G.trick.map(x=>crank(x.card,G.trump,led,G.hl)),mc=Math.max(...cur);
-    const pw=G.trick.length>0&&TEAMS[twinner(G.trick,G.trump,G.hl)]===TEAMS[player];
+
+    cLog("aiFollow:",player,legs,led);
+    cLog("aiFollow..tricks: ", G.trick);
+    
+    const cur = G.trick.map(x=>crank(x.card,G.trump,led,G.hl));
+    const mc  = Math.max(...cur);
+    const pw  = G.trick.length>0&&TEAMS[twinner(G.trick,G.trump,G.hl)]===TEAMS[player];
+    
     if(pw&&G.hl==='high')
 	return legs.sort((a,b)=>crank(a,G.trump,led,G.hl)-crank(b,G.trump,led,G.hl))[0];
+    
     const win=legs.filter(c=>crank(c,G.trump,led,G.hl)>mc);
     
     if(win.length>0)
 	return win.sort((a,b)=>crank(a,G.trump,led,G.hl)-crank(b,G.trump,led,G.hl))[0];
     
     return legs.sort((a,b)=>crank(a,G.trump,led,G.hl)-crank(b,G.trump,led,G.hl))[0];
-}
+    
+}//aiFollow
 
 // Either startTrick looping again
 //  OR scoreHand in mainline to end the hand
@@ -182,18 +190,18 @@ function resolveT(){
     if (winner === 'east')  speechWinner(winner,'←', 2000);
     if (winner === 'west')  speechWinner(winner,'→', 2000);
     
-   
+    
     setTimeout(()=>{
 	clearTC();
 	G.trick=[];
-//	if(G.H.south.length===0)scoreHand();
+	//	if(G.H.south.length===0)scoreHand();
 	const activePlayer = lonePartner() === 'south' ? 'north' : 'south';
 	if(G.H[activePlayer].length===0)scoreHand();
 	
 	else startTrick();	
     },1200); // was 1700
 
-//    cLog("at resolvtT: dealer:", G.dealer, " - leader: ", G.leader);
+    //    cLog("at resolvtT: dealer:", G.dealer, " - leader: ", G.leader);
     
 } //resolveT
 
