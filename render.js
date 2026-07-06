@@ -448,8 +448,47 @@ function speechWinner(who,t,d=2000){
     e.classList.remove('hidden');
     clearTimeout(e._t);
     e._t=setTimeout(()=>e.classList.add('hidden'),d);
-}
+} //speechWinner
 
+// The speech bubble - displays with a timer
+// show winner of the trick
+function speechBid(who, t ){
+    const e=$('spBidder-'+who);
+
+    if(!e)return;
+
+    const rect = e.getBoundingClientRect();
+
+    if (who === "south") {
+	e.style.bottom = "180px"; // below card
+    }
+    
+    if (who === "north") {
+	e.style.top = "100px";
+//	e.style.z-index = 99999;
+    }
+    
+    if (who === "west") {
+	e.style.top  = "200px"; 
+	e.style.left = "200px"; 
+    }
+    
+    if (who === "east") {
+	e.style.top  = "250px"; 
+	e.style.right = "270px"; 
+    }
+    
+    e.style.transform = "translateX(-50%)";
+    
+    e.textContent=t;
+    e.classList.remove('hidden');
+    clearTimeout(e._t);
+    const d = 1800;
+    e._t=setTimeout(()=>e.classList.add('hidden'),d);
+    
+} //speechBid
+
+    
 function setWhoIsActive(who){
     PL.forEach(p=>$('name-'+p).classList.toggle('active',p===who));
 }

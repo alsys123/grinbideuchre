@@ -257,7 +257,7 @@ function aiBid(player) {
 
         if (myStrength <= currentStrength) {
             // Let partner keep the contract
-	    speech(player, "Pass", 1800); 
+	    speechBid(player, "Pass"); 
             bIdx++; setTimeout(nextBid, 300);
             return;
         }
@@ -306,7 +306,7 @@ function aiBid(player) {
  //   cLog("aiBid pass:",player);
     
     // Pass
-    speech(player, "Pass", 1800);     //was 1800
+    speechBid(player, "Pass" );     //was 1800
     bIdx++; setTimeout(nextBid, 300); //was 300
     
 } //aiBid

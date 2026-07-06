@@ -101,7 +101,7 @@ function showTheBid(player, amt, trump, hl, alone, cardReq) {
     text = buildBidText(player, amt, hl, trump, alone, cardReq);
     
     // Speak it
-    speech(player, text, 1800);
+    speechBid(player, text);
 
 
 } // showTheBid

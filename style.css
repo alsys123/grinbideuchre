@@ -308,6 +308,12 @@ html,body { width:100%; height:100%; overflow:hidden; background:#061a0b;
 #spWinner-east   { right:150px;  top:50%;  transform:translateY(-50%); }
 #spWinner-south  { bottom:122px; left:50%; transform:translateY(-50%); }
 
+#spBidder-north  { top:178px;    left:50%; transform:translateX(-50%);
+		 }
+#spBidder-west   { left:150px;   top:50%;  transform:translateY(-50%); }
+#spBidder-east   { right:150px;  top:50%;  transform:translateY(-50%); }
+#spBidder-south  { bottom:122px; left:50%; transform:translateY(-50%); }
+
 /* OVERLAYS — absolute inside #wrap, not fixed */
 .overlay {
     position:absolute;
